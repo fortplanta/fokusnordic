@@ -76,6 +76,15 @@ export const Preloader = ({ onComplete }: PreloaderProps) => {
     const at = (ms: number, fn: () => void) =>
       timers.push(setTimeout(fn, ms));
 
+    // If the window is resized mid-animation all pixel positions are stale —
+    // skip straight to completion rather than showing broken layout.
+    const onResize = () => {
+      timers.forEach(clearTimeout);
+      animate(scope.current, { opacity: 0 }, { duration: 0.3 });
+      setTimeout(() => onCompleteRef.current(), 300);
+    };
+    window.addEventListener("resize", onResize, { once: true });
+
     // ── Initial state (instant) ──────────────────────────────────────────
     imgs.forEach((img, i) => {
       const { w, h } = getSize(i, vw, vh);
@@ -135,7 +144,10 @@ export const Preloader = ({ onComplete }: PreloaderProps) => {
       onCompleteRef.current();
     });
 
-    return () => timers.forEach(clearTimeout);
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
