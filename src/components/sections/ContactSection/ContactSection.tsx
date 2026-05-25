@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { ContactSectionConfig as ContactSectionType } from "../../../types/sections";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
+import { fadeUp, stagger, slowTransition, cardTransition, viewport } from "../../../lib/motion";
 
 export const ContactSection: React.FC<ContactSectionType> = ({
   headline,
@@ -28,60 +30,91 @@ export const ContactSection: React.FC<ContactSectionType> = ({
   return (
     <section className="w-full bg-cream-50 py-20 md:py-32">
       <div className="max-w-6xl mx-auto px-8">
-        {headline && (
-          <h2 className="text-4xl md:text-5xl font-serif font-light text-navy-900 mb-4">
-            {headline}
-          </h2>
-        )}
-        {intro && (
-          <p className="text-base md:text-lg font-serif text-text-primary max-w-2xl mb-12">
-            {intro}
-          </p>
-        )}
+
+        {/* Section header */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="mb-12"
+        >
+          {headline && (
+            <motion.h2
+              className="text-4xl md:text-5xl font-serif font-light text-navy-900 mb-4"
+              variants={fadeUp}
+              transition={slowTransition}
+            >
+              {headline}
+            </motion.h2>
+          )}
+          {intro && (
+            <motion.p
+              className="text-base md:text-lg font-serif text-text-primary max-w-2xl"
+              variants={fadeUp}
+              transition={slowTransition}
+            >
+              {intro}
+            </motion.p>
+          )}
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+
           {/* Contact info */}
-          <div>
-            <h3 className="text-2xl font-serif font-light text-navy-900 mb-6">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+          >
+            <motion.h3
+              className="text-2xl font-serif font-light text-navy-900 mb-6"
+              variants={fadeUp}
+              transition={slowTransition}
+            >
               Get in touch
-            </h3>
+            </motion.h3>
 
             {address && (
-              <p className="text-sm font-serif text-text-primary mb-4">
+              <motion.p
+                className="text-sm font-serif text-text-primary mb-4"
+                variants={fadeUp}
+                transition={slowTransition}
+              >
                 <span className="font-medium">Address:</span>
                 <br />
                 {address}
-              </p>
+              </motion.p>
             )}
 
             {phone && (
-              <p className="text-sm font-serif text-text-primary mb-4">
-                <a
-                  href={`tel:${phone}`}
-                  className="text-green-dark hover:underline"
-                >
+              <motion.p
+                className="text-sm font-serif text-text-primary mb-4"
+                variants={fadeUp}
+                transition={slowTransition}
+              >
+                <a href={`tel:${phone}`} className="text-green-dark hover:underline">
                   {phone}
                 </a>
-              </p>
+              </motion.p>
             )}
 
             {email && (
-              <p className="text-sm font-serif text-text-primary mb-8">
-                <a
-                  href={`mailto:${email}`}
-                  className="text-green-dark hover:underline"
-                >
+              <motion.p
+                className="text-sm font-serif text-text-primary mb-8"
+                variants={fadeUp}
+                transition={slowTransition}
+              >
+                <a href={`mailto:${email}`} className="text-green-dark hover:underline">
                   {email}
                 </a>
-              </p>
+              </motion.p>
             )}
 
-            {/* Team members */}
             {teamMembers && teamMembers.length > 0 && (
-              <div className="mt-12">
-                <h4 className="text-lg font-serif font-light text-navy-900 mb-6">
-                  Our team
-                </h4>
+              <motion.div className="mt-12" variants={fadeUp} transition={slowTransition}>
+                <h4 className="text-lg font-serif font-light text-navy-900 mb-6">Our team</h4>
                 <div className="space-y-6">
                   {teamMembers.map((member) => (
                     <div key={member.id}>
@@ -95,9 +128,7 @@ export const ContactSection: React.FC<ContactSectionType> = ({
                       <h5 className="text-base font-serif font-light text-navy-900">
                         {member.name}
                       </h5>
-                      <p className="text-sm text-text-secondary font-sans">
-                        {member.role}
-                      </p>
+                      <p className="text-sm text-text-secondary font-sans">{member.role}</p>
                       {member.email && (
                         <a
                           href={`mailto:${member.email}`}
@@ -109,13 +140,21 @@ export const ContactSection: React.FC<ContactSectionType> = ({
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
 
           {/* Contact form */}
           {formFields && formFields.length > 0 && (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <motion.form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewport}
+              transition={cardTransition}
+            >
               {formFields.map((field) => (
                 <div key={field.name}>
                   <label className="block text-xs font-sans font-medium text-text-primary uppercase tracking-wide mb-2">
@@ -143,9 +182,7 @@ export const ContactSection: React.FC<ContactSectionType> = ({
                     >
                       <option value="">{field.placeholder || "Select..."}</option>
                       {field.options?.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
+                        <option key={opt} value={opt}>{opt}</option>
                       ))}
                     </select>
                   ) : (
@@ -163,7 +200,7 @@ export const ContactSection: React.FC<ContactSectionType> = ({
               ))}
 
               <Button label="Send" fullWidth variant="primary" />
-            </form>
+            </motion.form>
           )}
         </div>
       </div>

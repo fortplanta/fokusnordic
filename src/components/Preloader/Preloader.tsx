@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useAnimate } from "framer-motion";
 import "./Preloader.css";
 
-// ─── images ────────────────────────────────────────────────────────────────
+// ── Images ─────────────────────────────────────────────────────────────────
 const SCATTERED_IMAGES = [
   "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=600&fit=crop",
   "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=600&fit=crop",
@@ -17,21 +17,10 @@ const SCATTERED_IMAGES = [
 const CENTER_IMAGE =
   "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&h=900&fit=crop";
 
+// ── Layout constants ────────────────────────────────────────────────────────
 /**
- * Scatter offsets for each of the 8 images, expressed as
- * [xVw, yVh] from the viewport center. Derived from the
- * original CSS scattered positions + each image's half-size.
- *
- * Original CSS (top-left corner)     Image size
- * img[1]  top:59.9vh  left:75.3vw   16.7vw × 20.6vh  →  cx=83.65vw cy=70.2vh
- * img[2]  top:43.2vh  left:26.3vw   12.5vw × 25.7vh  →  cx=32.55vw cy=56.05vh
- * img[3]  top:25.1vh  left:55.7vw   12.5vw × 25.7vh  →  cx=61.95vw cy=37.95vh
- * img[4]  top:16.4vh  left:76.3vw   16.7vw × 20.6vh  →  cx=84.65vw cy=26.7vh
- * img[5]  top:61.7vh  left:49vw     12.5vw × 25.7vh  →  cx=55.25vw cy=74.55vh
- * img[6]  top:20.1vh  left:11vw     12.5vw × 25.7vh  →  cx=17.25vw cy=32.95vh
- * img[7]  top:69.6vh  left:6.8vw    16.7vw × 20.6vh  →  cx=15.15vw cy=79.9vh
- * img[8]  top:35vh    left:88vw     16.7vw × 20.6vh  →  cx=96.35vw cy=45.3vh
- * Offset = cx - 50vw, cy - 50vh
+ * Scatter offsets [xVw, yVh] for each of the 8 images from the
+ * viewport centre. Derived from the original CSS positioned layout.
  */
 const SCATTER_VW_VH = [
   [33.65, 20.2],
@@ -42,119 +31,116 @@ const SCATTER_VW_VH = [
   [-32.75, -17.05],
   [-34.85, 29.9],
   [46.35, -4.7],
-];
+] as const;
 
-// ─── component ─────────────────────────────────────────────────────────────
+/** CSS sizes: images at indices 0,3,6,7 → B (large); 1,2,4,5 → A (small) */
+const getSize = (i: number, vw: number, vh: number) =>
+  [0, 3, 6, 7].includes(i)
+    ? { w: 16.7 * vw, h: 20.6 * vh }
+    : { w: 12.5 * vw, h: 25.7 * vh };
+
+// ── Component ───────────────────────────────────────────────────────────────
 interface PreloaderProps {
   onComplete: () => void;
 }
 
 export const Preloader = ({ onComplete }: PreloaderProps) => {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const imagesWrapperRef = useRef<HTMLDivElement>(null);
-  const centerImageWrapperRef = useRef<HTMLDivElement>(null);
-  const centerImageRef = useRef<HTMLImageElement>(null);
+  const [scope, animate] = useAnimate();
   const onCompleteRef = useRef(onComplete);
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
 
   useEffect(() => {
-    const root = rootRef.current;
-    const imagesWrapper = imagesWrapperRef.current;
-    const centerImageWrapper = centerImageWrapperRef.current;
-    const centerImage = centerImageRef.current;
-    if (!root || !imagesWrapper || !centerImageWrapper || !centerImage) return;
-
-    const imgs = [...imagesWrapper.querySelectorAll<HTMLImageElement>("img")];
-
-    // Convert vw/vh offsets to pixels once (at animation start)
     const vw = window.innerWidth / 100;
     const vh = window.innerHeight / 100;
-    const scatter = SCATTER_VW_VH.map(([x, y]) => ({
-      x: x * vw,
-      y: y * vh,
-    }));
+    const scatter = SCATTER_VW_VH.map(([x, y]) => ({ x: x * vw, y: y * vh }));
 
-    const ctx = gsap.context(() => {
-      // ── Initial state ─────────────────────────────────────────────────
-      // All images anchored at center (top:50% left:50% from CSS) and
-      // offset by xPercent/yPercent so their visual center = viewport center.
-      // Then shifted by scatter offset + 80px below.
+    // Full-viewport dimensions for the centre image wrapper
+    const CW = { w: window.innerWidth, h: window.innerHeight };
+
+    const imgs = Array.from(
+      scope.current.querySelectorAll<HTMLElement>(".preloader-img")
+    );
+    const cw = scope.current.querySelector<HTMLElement>(".preloader-center")!;
+    const ci = cw.querySelector<HTMLElement>("img")!;
+
+    let cancelled = false;
+
+    const run = async () => {
+      // ── Initial state (instant) ──────────────────────────────────────
+      await Promise.all([
+        ...imgs.map((img, i) => {
+          const { w, h } = getSize(i, vw, vh);
+          const { x, y } = scatter[i];
+          return animate(img, { x: -w / 2 + x, y: -h / 2 + y + 80, opacity: 0 }, { duration: 0 });
+        }),
+        animate(cw, { x: -CW.w / 2, y: -CW.h / 2 + 80, scale: 0.15, opacity: 0 }, { duration: 0 }),
+        animate(ci, { scale: 1.5 }, { duration: 0 }),
+      ]);
+
+      if (cancelled) return;
+
+      // ── Phase 1: fade up into scatter positions (stagger 0.07 s) ────
       imgs.forEach((img, i) => {
-        gsap.set(img, {
-          xPercent: -50,
-          yPercent: -50,
-          x: scatter[i].x,
-          y: scatter[i].y + 80,
-          opacity: 0,
+        const { w, h } = getSize(i, vw, vh);
+        const { x, y } = scatter[i];
+        animate(img, { x: -w / 2 + x, y: -h / 2 + y, opacity: 1 }, {
+          duration: 2,
+          ease: [0.17, 0.55, 0.55, 1],
+          delay: i * 0.07,
         });
       });
-
-      // Center image: fully centered, tiny scale, hidden below
-      gsap.set(centerImageWrapper, {
-        xPercent: -50,
-        yPercent: -50,
-        x: 0,
-        y: 80,
-        scale: 0.15,
-        opacity: 0,
-      });
-      gsap.set(centerImage, { scale: 1.5 });
-
-      // ── Phase 1: fade up into scatter positions ──────────────────────
-      const allTargets = [...imgs, centerImageWrapper];
-      gsap.to(allTargets, {
-        y: (_i, el) =>
-          el === centerImageWrapper ? 0 : scatter[imgs.indexOf(el as HTMLImageElement)].y,
-        opacity: 1,
+      // Centre image is the last element in the stagger
+      await animate(cw, { x: -CW.w / 2, y: -CW.h / 2, opacity: 1 }, {
         duration: 2,
-        ease: "power3.inOut",
-        stagger: 0.07,
-        onComplete: phase2,
+        ease: [0.17, 0.55, 0.55, 1],
+        delay: imgs.length * 0.07,
       });
 
-      // ── Phase 2: converge all to center ─────────────────────────────
-      function phase2() {
-        gsap.to(allTargets, {
-          x: 0,
-          y: 0,
+      if (cancelled) return;
+
+      // ── Phase 2: converge all to viewport centre (stagger 0.08 s) ───
+      imgs.forEach((img, i) => {
+        const { w, h } = getSize(i, vw, vh);
+        animate(img, { x: -w / 2, y: -h / 2 }, {
           duration: 1.2,
-          ease: "expo.inOut",
-          stagger: 0.08,
-          onComplete: phase3,
+          ease: [0.16, 1, 0.3, 1],
+          delay: i * 0.08,
         });
-      }
+      });
+      await animate(cw, { x: -CW.w / 2, y: -CW.h / 2 }, {
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1],
+        delay: imgs.length * 0.08,
+      });
 
-      // ── Phase 3: scale center image to fullscreen ────────────────────
-      function phase3() {
-        gsap
-          .timeline()
-          .to(centerImageWrapper, { scale: 1, duration: 1.5, ease: "expo.inOut" })
-          .to(centerImage, { scale: 1, duration: 1.5, ease: "expo.inOut" }, 0)
-          .to(
-            root,
-            {
-              opacity: 0,
-              duration: 0.5,
-              ease: "power2.inOut",
-              onComplete: () => onCompleteRef.current(),
-            },
-            "-=0.15"
-          );
-      }
-    }, root);
+      if (cancelled) return;
 
-    return () => ctx.revert();
+      // ── Phase 3: scale centre image to fullscreen ────────────────────
+      animate(ci, { scale: 1 }, { duration: 1.5, ease: [0.16, 1, 0.3, 1] });
+      await animate(cw, { scale: 1 }, { duration: 1.5, ease: [0.16, 1, 0.3, 1] });
+
+      if (cancelled) return;
+
+      // ── Fade out preloader ───────────────────────────────────────────
+      await animate(scope.current, { opacity: 0 }, { duration: 0.5, ease: "easeOut" });
+
+      if (!cancelled) onCompleteRef.current();
+    };
+
+    run();
+
+    return () => { cancelled = true; };
   }, []);
 
   return (
-    <div className="intro" ref={rootRef}>
-      <div className="intro__images" ref={imagesWrapperRef}>
+    <div className="intro" ref={scope}>
+      <div className="intro__images">
         {SCATTERED_IMAGES.map((src, i) => (
-          <img key={i} src={src} alt="" aria-hidden="true" />
+          <img key={i} className="preloader-img" src={src} alt="" aria-hidden="true" />
         ))}
       </div>
-      <div className="intro__center-image" ref={centerImageWrapperRef}>
-        <img ref={centerImageRef} src={CENTER_IMAGE} alt="" aria-hidden="true" />
+      <div className="intro__center-image preloader-center">
+        <img src={CENTER_IMAGE} alt="" aria-hidden="true" />
       </div>
     </div>
   );
