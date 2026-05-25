@@ -40,12 +40,12 @@ const P1_DUR  = 2000;  // fade-up duration
 const P1_STAG =   70;  // stagger between images
 const P1_END  = P1_DUR + 8 * P1_STAG; // 2560 — when last element finishes
 
-const P2_DUR  = 1200;  // converge duration
-const P2_STAG =   80;  // stagger between images
-const P2_END  = P1_END + P2_DUR + 8 * P2_STAG; // 4400
+const P2_DUR  = 1600;  // converge duration
+const P2_STAG =   60;  // stagger between images
+const P2_END  = P1_END + P2_DUR + 8 * P2_STAG; // 4640
 
 const P3_DUR  = 1500;  // scale to fullscreen
-const P3_END  = P2_END + P3_DUR; // 5900
+const P3_END  = P2_END + P3_DUR; // 6140
 
 const FADE_DUR = 500;  // preloader fade-out
 
@@ -109,14 +109,14 @@ export const Preloader = ({ onComplete }: PreloaderProps) => {
         const { w, h } = getSize(i, vw, vh);
         animate(img, { x: -w / 2, y: -h / 2 }, {
           duration: P2_DUR / 1000,
-          ease: [0.16, 1, 0.3, 1],
+          ease: [0.4, 0, 0.2, 1],
         });
       });
     });
     at(P1_END + imgs.length * P2_STAG, () => {
       animate(cw, { x: -CW.w / 2, y: -CW.h / 2 }, {
         duration: P2_DUR / 1000,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.4, 0, 0.2, 1],
       });
     });
 
