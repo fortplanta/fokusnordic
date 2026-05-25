@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   GLOBAL TYPOGRAPHY & STYLING
+   ============================================================================ */
+
+:root {
+  /* Font families */
+  --font-serif: "Petit Serif", "Georgia", serif;
+  --font-sans: "Mona Sans", system-ui, -apple-system, sans-serif;
+
+  /* Colors */
+  --color-navy: #1a1a1a;
+  --color-navy-light: #2d2d2d;
+  --color-cream: #f5f3ed;
+  --color-green: #2d5a3d;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #5a5a5a;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Transitions */
+  --transition-base: all 0.3s ease-in-out;
+}
+
+/* Reset & Defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-serif);
+  color: var(--color-text);
+  background-color: #ffffff;
+  line-height: 1.6;
+}
+
+/* Typography */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 42px;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: 32px;
+}
+
+h4 {
+  font-size: 24px;
+}
+
+p {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+small {
+  font-size: 14px;
+}
+
+/* Links */
+
+a {
+  color: var(--color-green);
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Images */
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Forms */
+
+input,
+textarea,
+select {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 12px 16px;
+  transition: var(--transition-base);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-green);
+  box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.1);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 42px;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+}
+
+/* Utilities */
+
+.text-navy {
+  color: var(--color-navy);
+}
+
+.text-cream {
+  color: var(--color-cream);
+}
+
+.text-green {
+  color: var(--color-green);
+}
+
+.bg-navy {
+  background-color: var(--color-navy);
+}
+
+.bg-cream {
+  background-color: var(--color-cream);
+}
+
+.bg-green {
+  background-color: var(--color-green);
+}
+
+/* Serif text utility */
+
+.text-serif {
+  font-family: var(--font-serif);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Justified text */
+
+.text-justify {
+  text-align: justify;
+}
+
+.leading-relaxed {
+  line-height: 1.75;
+}
+
+/* Section spacing */
+
+.section-spacing {
+  padding: 6rem 0;
+}
+
+@media (max-width: 768px) {
+  .section-spacing {
+    padding: 4rem 0;
+  }
+}
+
+/* Container */
+
+.container-wide {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+@media (max-width: 768px) {
+  .container-wide {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

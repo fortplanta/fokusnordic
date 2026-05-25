@@ -1,0 +1,292 @@
+{
+  "metadata": {
+    "title": "Barnängshuset – A World Away From The Noise",
+    "description": "Creative office building in Södermalm, Stockholm. Calm workspace with nature proximity and curated access to the best local culture.",
+    "lang": "en",
+    "version": "1.0"
+  },
+  "sections": [
+    {
+      "id": "hero-main",
+      "type": "hero",
+      "order": 1,
+      "variant": "dark_cinematic",
+      "headline": "A world away from the noise.",
+      "intro": "Eight minutes from everything. Calm focus, proximity to nature, and curated access to the best cafés, bars, and shops in Södermalm.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&h=900&fit=crop",
+        "alt": "Industrial creative workspace with large windows and people working"
+      },
+      "cta": {
+        "label": "Book a Viewing",
+        "href": "#contact",
+        "variant": "primary"
+      }
+    },
+    {
+      "id": "concept-positioning",
+      "type": "concept",
+      "order": 2,
+      "headline": "The Story of Barnängshuset",
+      "body": "Originally built as a textile mill in 1917, Barnängshuset has been reimagined as a creative workspace where history and modernity coexist. The building's industrial architecture—massive timber beams, dramatic windows, soaring ceilings—creates the perfect backdrop for focused work and inspired collaboration. We've preserved what made this place special: the sense of scale, the craftsmanship, the character. Then we added what makes it work today: modern amenities, flexible spaces, and a community of thinkers and makers.",
+      "pullQuote": "Distance from the center creates better boundaries. Proximity to nature improves how we think.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
+        "alt": "Industrial textile mill exterior in red brick"
+      },
+      "imagePosition": "right"
+    },
+    {
+      "id": "property-showcase",
+      "type": "property_showcase",
+      "order": 3,
+      "headline": "Space That Works",
+      "intro": "Open floors. Corner offices. Studio spaces. Choose what fits your team.",
+      "properties": [
+        {
+          "id": "floor-2",
+          "name": "Floor 2 North",
+          "floor": "2",
+          "sqm": 450,
+          "status": "available",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
+            "alt": "Modern open office space"
+          },
+          "details": "Bright corner space with windows on two sides. Includes shared kitchen and meeting areas.",
+          "ctaLabel": "View Details"
+        },
+        {
+          "id": "floor-3",
+          "name": "Floor 3 Studio",
+          "floor": "3",
+          "sqm": 120,
+          "status": "available",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop",
+            "alt": "Creative studio space"
+          },
+          "details": "Intimate studio perfect for small teams or single practitioners. Direct access to terrace.",
+          "ctaLabel": "View Details"
+        },
+        {
+          "id": "floor-4",
+          "name": "Floor 4 Open Plan",
+          "floor": "4",
+          "sqm": 680,
+          "status": "reserved",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop",
+            "alt": "Large collaborative office space"
+          },
+          "details": "Flexible layout suitable for growing teams. Industrial ceiling, natural light throughout.",
+          "ctaLabel": "Waitlist"
+        }
+      ]
+    },
+    {
+      "id": "neighborhood",
+      "type": "neighborhood",
+      "order": 4,
+      "headline": "Eight Minutes From Everything",
+      "intro": "Vitabergsparken for afternoon walks. SoFo for coffee and culture. Everything you need is a short walk away.",
+      "enableFilters": true,
+      "spots": [
+        {
+          "id": "vitabergsparken",
+          "name": "Vitabergsparken",
+          "category": "nature",
+          "distance": "5 min walk",
+          "time": "10 min bike",
+          "description": "Stockholm's most beloved park. Open meadows, forest trails, and a view over the city from the top.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+            "alt": "Forest park with meadow"
+          },
+          "tags": ["walk", "run", "picnic", "weekend"]
+        },
+        {
+          "id": "cafe-sofo",
+          "name": "Café SoFo",
+          "category": "cafe",
+          "distance": "3 min walk",
+          "time": "—",
+          "description": "Best morning coffee in the neighborhood. Homemade pastries and a calm corner seat by the window.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=600&h=400&fit=crop",
+            "alt": "Cozy neighborhood café"
+          },
+          "tags": ["morning", "coffee", "work-friendly"]
+        },
+        {
+          "id": "bistro",
+          "name": "Bistro Nora",
+          "category": "restaurant",
+          "distance": "7 min walk",
+          "time": "—",
+          "description": "French-inspired bistro. Perfect for team lunches or Friday afternoon aperitivos.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1504674900787-3c44f2d9fb53?w=600&h=400&fit=crop",
+            "alt": "Elegant restaurant interior"
+          },
+          "tags": ["lunch", "dinner", "afterwork"]
+        },
+        {
+          "id": "vintage-shop",
+          "name": "Vintage & Ink",
+          "category": "shop",
+          "distance": "4 min walk",
+          "time": "—",
+          "description": "Curated vintage furniture and design pieces. A treasure hunt for the office.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1506456170111-a80e9b1cffff?w=600&h=400&fit=crop",
+            "alt": "Vintage furniture showroom"
+          },
+          "tags": ["design", "weekend", "unique"]
+        },
+        {
+          "id": "bar-kultur",
+          "name": "Kultur Bar",
+          "category": "bar",
+          "distance": "6 min walk",
+          "time": "—",
+          "description": "Live music every Thursday. Craft cocktails and a scene. Where Södermalm comes to gather.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1516997121055-c79d53c6dcd7?w=600&h=400&fit=crop",
+            "alt": "Modern cocktail bar"
+          },
+          "tags": ["afterwork", "evening", "live-music"]
+        },
+        {
+          "id": "gallery",
+          "name": "Søgaard Gallery",
+          "category": "culture",
+          "distance": "8 min walk",
+          "time": "—",
+          "description": "Rotating exhibitions. Emerging Nordic artists. A good reason to step away from the desk.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1563829292454-6f4ee5386337?w=600&h=400&fit=crop",
+            "alt": "Contemporary art gallery"
+          },
+          "tags": ["culture", "weekend", "inspiration"]
+        }
+      ]
+    },
+    {
+      "id": "amenities",
+      "type": "amenities",
+      "order": 5,
+      "headline": "Everything Built In",
+      "intro": "A place designed to support how you actually work.",
+      "amenities": [
+        {
+          "id": "gym",
+          "name": "Studio Gym",
+          "type": "gym",
+          "description": "Fully equipped gym with weights, cardio, and daily classes. Shower and changing rooms.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop",
+            "alt": "Modern gym facility"
+          },
+          "capacity": "30 people",
+          "hours": "06:00–22:00"
+        },
+        {
+          "id": "lounge",
+          "name": "Quiet Lounge",
+          "type": "lounge",
+          "description": "Soft seating, natural light, and no distractions. For focused work or thinking.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1569209210332-c0ee0d8e3187?w=600&h=400&fit=crop",
+            "alt": "Peaceful lounge space"
+          },
+          "capacity": "20 people",
+          "hours": "08:00–18:00"
+        },
+        {
+          "id": "restaurant",
+          "name": "Eatery",
+          "type": "cafe",
+          "description": "In-house restaurant. Weekday lunches, coffee bar, and a menu that changes with the seasons.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=600&h=400&fit=crop",
+            "alt": "Contemporary restaurant"
+          },
+          "hours": "11:00–15:00 (lunch), 08:00–17:00 (coffee)"
+        },
+        {
+          "id": "conference",
+          "name": "Conference Rooms",
+          "type": "conference",
+          "description": "Flexible meeting spaces from intimate boardrooms to large presentation halls. AV-equipped.",
+          "image": {
+            "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop",
+            "alt": "Modern conference room"
+          },
+          "capacity": "6–100 people"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "type": "contact",
+      "order": 6,
+      "headline": "Let's Talk",
+      "intro": "Whether you're looking for office space, want to book a conference room, or just curious—we'd love to hear from you.",
+      "address": "Nackagatan 4, Södermalm, Stockholm",
+      "phone": "+46 8 555 00 123",
+      "email": "info@barnangshuset.se",
+      "formFields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Your name"
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "email",
+          "required": true,
+          "placeholder": "your@email.com"
+        },
+        {
+          "name": "inquiry",
+          "label": "What are you interested in?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Office Space",
+            "Conference Room",
+            "Restaurant Booking",
+            "Other"
+          ]
+        },
+        {
+          "name": "message",
+          "label": "Message",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Tell us what you're looking for..."
+        }
+      ],
+      "teamMembers": [
+        {
+          "id": "maria",
+          "name": "Maria Bergström",
+          "role": "Leasing Agent",
+          "email": "maria@barnangshuset.se",
+          "phone": "+46 8 555 00 124"
+        },
+        {
+          "id": "erik",
+          "name": "Erik Svensson",
+          "role": "Community Manager",
+          "email": "erik@barnangshuset.se",
+          "phone": "+46 8 555 00 125"
+        }
+      ]
+    }
+  ]
+}
