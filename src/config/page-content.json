@@ -37,9 +37,100 @@
       "imagePosition": "right"
     },
     {
+      "id": "spaces-index",
+      "type": "spaces_index",
+      "order": 3,
+      "logo": "Barnängshuset",
+      "instagramHandle": "@barnangshuset",
+      "featuredImage": {
+        "src": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&h=1000&fit=crop",
+        "alt": "Barnängshuset interior — open floor with industrial ceiling"
+      },
+      "categories": [
+        {
+          "name": "Office Floors",
+          "spaces": [
+            {
+              "id": "floor-2-north",
+              "name": "Floor 2 North — 450 sqm",
+              "status": "available",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&h=1000&fit=crop",
+                "alt": "Floor 2 North — bright corner open office"
+              }
+            },
+            {
+              "id": "floor-3-studio",
+              "name": "Floor 3 Studio — 120 sqm",
+              "status": "available",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&h=1000&fit=crop",
+                "alt": "Floor 3 Studio — intimate workspace with terrace"
+              }
+            },
+            {
+              "id": "floor-4-open",
+              "name": "Floor 4 Open Plan — 680 sqm",
+              "status": "reserved",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1400&h=1000&fit=crop",
+                "alt": "Floor 4 Open Plan — large collaborative floor"
+              }
+            },
+            {
+              "id": "floor-5-penthouse",
+              "name": "Floor 5 Penthouse — 310 sqm",
+              "status": "available",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1400&h=1000&fit=crop",
+                "alt": "Floor 5 Penthouse — top-floor suite with city view"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Shared Spaces",
+          "spaces": [
+            {
+              "id": "gym",
+              "name": "Studio Gym",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1400&h=1000&fit=crop",
+                "alt": "Studio Gym — fully equipped"
+              }
+            },
+            {
+              "id": "lounge",
+              "name": "Quiet Lounge",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1569209210332-c0ee0d8e3187?w=1400&h=1000&fit=crop",
+                "alt": "Quiet Lounge — soft seating and natural light"
+              }
+            },
+            {
+              "id": "eatery",
+              "name": "Eatery",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=1400&h=1000&fit=crop",
+                "alt": "Eatery — weekday lunch and coffee bar"
+              }
+            },
+            {
+              "id": "conference",
+              "name": "Conference Rooms",
+              "image": {
+                "src": "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=1400&h=1000&fit=crop",
+                "alt": "Conference Rooms — flexible AV-equipped meeting spaces"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "property-showcase",
       "type": "property_showcase",
-      "order": 3,
+      "order": 4,
       "headline": "Space That Works",
       "intro": "Open floors. Corner offices. Studio spaces. Choose what fits your team.",
       "properties": [
@@ -87,7 +178,7 @@
     {
       "id": "neighborhood",
       "type": "neighborhood",
-      "order": 4,
+      "order": 5,
       "headline": "Eight Minutes From Everything",
       "intro": "Vitabergsparken for afternoon walks. SoFo for coffee and culture. Everything you need is a short walk away.",
       "enableFilters": true,

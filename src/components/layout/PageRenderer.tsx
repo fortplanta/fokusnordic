@@ -6,6 +6,7 @@ import { PropertyShowcase } from "../sections/PropertyShowcase/PropertyShowcase"
 import { NeighborhoodGrid } from "../sections/NeighborhoodGrid/NeighborhoodGrid";
 import { AmenitiesGrid } from "../sections/AmenitiesGrid/AmenitiesGrid";
 import { ContactSection } from "../sections/ContactSection/ContactSection";
+import { SpacesIndex } from "../sections/SpacesIndex/SpacesIndex";
 
 interface PageRendererProps {
   config: PageConfig;
@@ -26,6 +27,8 @@ export const PageRenderer: React.FC<PageRendererProps> = ({ config }) => {
         return <AmenitiesGrid key={section.id} {...section} />;
       case "contact":
         return <ContactSection key={section.id} {...section} />;
+      case "spaces_index":
+        return <SpacesIndex key={section.id} {...section} />;
       default:
         console.warn(`Unknown section type: ${section.type}`);
         return null;

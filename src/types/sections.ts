@@ -137,6 +137,31 @@ export interface TeamMember {
 }
 
 // ============================================================================
+// SPACES INDEX (INGRAO-style full-viewport list + image)
+// ============================================================================
+
+export interface SpaceItem {
+  id: string;
+  name: string;
+  status?: "available" | "reserved" | "leased";
+  image?: Image;
+}
+
+export interface SpaceCategory {
+  name: string;
+  spaces: SpaceItem[];
+}
+
+export interface SpacesIndexSection extends BaseSection {
+  type: "spaces_index";
+  logo?: string;
+  instagramHandle?: string;
+  navLinks?: { label: string; href: string }[];
+  featuredImage?: Image;
+  categories: SpaceCategory[];
+}
+
+// ============================================================================
 // UNION TYPE FOR ALL SECTIONS
 // ============================================================================
 
@@ -146,7 +171,8 @@ export type Section =
   | PropertyShowcaseSection
   | NeighborhoodGridSection
   | AmenitiesGridSection
-  | ContactSectionConfig;
+  | ContactSectionConfig
+  | SpacesIndexSection;
 
 // ============================================================================
 // PAGE CONFIGURATION
