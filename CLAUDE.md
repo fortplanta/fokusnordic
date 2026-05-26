@@ -22,6 +22,36 @@
 
 ---
 
+## Design Handoff Files — How to Use Them
+
+When a design handoff (from Claude Design or any other source) is provided, it will likely include exact pixel values, specific margin/padding numbers, hard-coded hex colors, explicit motion curves, and raw CSS. **Do not implement those specs literally.** Treat the handoff as a brief, not a blueprint.
+
+### The rule
+> Use the design intent from the handoff, but always build with the project's own component system.
+
+Concretely:
+
+| Handoff says | What to do instead |
+|---|---|
+| `padding: 80px 32px` | Map to the nearest `paddingY` / `paddingX` token on `Section` |
+| `max-width: 1280px; margin: 0 auto` | Use `maxWidth="xl"` on `Section` — never hardcode |
+| `background-image: url(...)` | Use `bgImage` prop on `Section` or `VisualSurface` |
+| `background: rgba(0,0,0,0.4)` | Use `overlay="dark"` — never inline style |
+| `display: grid; grid-template-columns: repeat(3, 1fr)` | Use `grid cols={3}` on `Section` |
+| Raw `<div class="max-w-7xl mx-auto px-8">` | Use `Section` — never write this div by hand |
+| Specific easing like `cubic-bezier(0.16,1,0.3,1)` | Map to the named variant in `src/lib/motion.ts` (`expo`, `slowTransition`, etc.) |
+| New color not in the palette | Flag it, then use the closest token from `src/tokens/design-tokens.ts` |
+
+### What the handoff IS useful for
+- Visual hierarchy and spacing **relationships** (what's bigger, what breathes more)
+- Which overlay density to use (`dark`, `dark_strong`, `light`)
+- Whether a section should be `paddingY="lg"` vs `"xl"` (read the rhythm, not the px)
+- Confirming `maxWidth` choice (narrow prose vs. wide grid)
+- Motion intent (fast/snappy vs. slow/cinematic → maps to `cardTransition` vs. `slowTransition`)
+- Copy, image selections, and content structure
+
+---
+
 ## Layout System — Read This Before Building Any Section
 
 ### Two mandatory base components — always use them
