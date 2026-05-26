@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { HeroSection as HeroSectionType } from "../../../types/sections";
 import { Button } from "../../ui/Button";
+import { Section } from "../../layout";
 import { fadeUp, fadeIn, stagger, slowTransition, viewport } from "../../../lib/motion";
 
 export const Hero: React.FC<HeroSectionType> = ({
@@ -13,77 +14,66 @@ export const Hero: React.FC<HeroSectionType> = ({
 }) => {
   if (variant === "dark_cinematic") {
     return (
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background image */}
-        {image && (
-          <motion.div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${image.src})` }}
-            variants={fadeIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewport}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            aria-hidden="true"
-          />
-        )}
-
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-navy-900 opacity-40" aria-hidden="true" />
-
-        {/* Content stagger container */}
-        <motion.div
-          className="relative z-10 max-w-4xl mx-auto px-8 py-20 text-center md:text-left"
+      <Section
+        asChild
+        bgImage={image ? { src: image.src, alt: image.alt } : undefined}
+        overlay="dark"
+        minHeight="100vh"
+        paddingY="xl"
+        maxWidth="xl"
+      >
+        <motion.section
+          className="flex items-center"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
           viewport={viewport}
         >
-          <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-white leading-tight mb-6"
-            variants={fadeUp}
-            transition={slowTransition}
-          >
-            {headline}
-          </motion.h1>
-
-          {intro && (
-            <motion.p
-              className="text-base md:text-lg text-gray-200 font-serif max-w-xl mb-8 leading-relaxed"
+          <div className="text-center md:text-left">
+            <motion.h1
+              className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-white leading-tight mb-6"
               variants={fadeUp}
               transition={slowTransition}
             >
-              {intro}
-            </motion.p>
-          )}
+              {headline}
+            </motion.h1>
 
-          {cta && (
-            <motion.div variants={fadeUp} transition={slowTransition}>
-              <Button label={cta.label} href={cta.href} variant={cta.variant || "primary"} />
-            </motion.div>
-          )}
-        </motion.div>
+            {intro && (
+              <motion.p
+                className="text-base md:text-lg text-gray-200 font-serif max-w-xl mb-8 leading-relaxed"
+                variants={fadeUp}
+                transition={slowTransition}
+              >
+                {intro}
+              </motion.p>
+            )}
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-sm opacity-70"
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-          transition={{ duration: 1, delay: 0.6 }}
-        >
-          scroll to explore
-        </motion.div>
-      </section>
+            {cta && (
+              <motion.div variants={fadeUp} transition={slowTransition}>
+                <Button label={cta.label} href={cta.href} variant={cta.variant ?? "primary"} />
+              </motion.div>
+            )}
+          </div>
+
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-sm opacity-70"
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            transition={{ duration: 1, delay: 0.6 }}
+          >
+            scroll to explore
+          </motion.div>
+        </motion.section>
+      </Section>
     );
   }
 
   // Cream minimal variant
   return (
-    <section className="w-full bg-cream-50 py-20 md:py-32">
+    <Section bgColor="#F5F3ED" paddingY="xl" maxWidth="md">
       <motion.div
-        className="max-w-4xl mx-auto px-8"
         variants={stagger}
         initial="hidden"
         whileInView="visible"
@@ -109,10 +99,10 @@ export const Hero: React.FC<HeroSectionType> = ({
 
         {cta && (
           <motion.div variants={fadeUp} transition={slowTransition}>
-            <Button label={cta.label} href={cta.href} variant={cta.variant || "primary"} />
+            <Button label={cta.label} href={cta.href} variant={cta.variant ?? "primary"} />
           </motion.div>
         )}
       </motion.div>
-    </section>
+    </Section>
   );
 };
