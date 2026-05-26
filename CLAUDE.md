@@ -22,6 +22,64 @@
 
 ---
 
+## Layout System — Read This Before Building Any Section
+
+### Two mandatory base components — always use them
+
+Every section on this site **must** use these two primitives from `src/components/layout/`:
+
+#### `VisualSurface` — full-bleed backgrounds
+Handles background color, image, video, and overlay. Always renders full-width.
+```tsx
+import { VisualSurface } from "../../layout";
+
+<VisualSurface bgImage={{ src: "..." }} overlay="dark" minHeight="100vh">
+  {/* content sits above the bg layers */}
+</VisualSurface>
+```
+
+#### `Section` — constrained content container
+Wraps `VisualSurface` and adds a **centered max-width container** + optional grid.
+```tsx
+import { Section } from "../../layout";
+
+// Full-bleed bg, content at max-width:
+<Section bgImage={{ src: "..." }} overlay="dark" paddingY="xl" maxWidth="xl">
+  <h1>Content here</h1>
+</Section>
+
+// No bg, plain layout:
+<Section paddingY="lg" maxWidth="lg" grid cols={3} gap="md">
+  {cards}
+</Section>
+
+// asChild — user element replaces the inner <section> tag:
+<Section asChild bgColor="#F5F3ED" paddingY="xl" maxWidth="xl">
+  <header>...</header>
+</Section>
+```
+
+### The rule: backgrounds bleed, content doesn't
+- **Backgrounds** (color / image / video / overlay) → always full-width via `VisualSurface`
+- **Content** (text, cards, grids) → always inside the `Section` max-width container
+- **Never** wrap a section in a raw `<div>` with hardcoded `max-w-*` and `px-*` — use `Section` props instead
+- **Never** use inline `style={{ backgroundImage: ... }}` for section backgrounds — use `bgImage` prop
+
+### Token reference
+```
+maxWidth: "sm"=672px  "md"=896px  "lg"=1152px  "xl"=1280px  "2xl"=1536px  "full"=none
+paddingX: "none" "sm"=px-4  "md"=px-4 md:px-8  "lg"=px-4 md:px-8 lg:px-16
+paddingY: "none" "sm"=py-8  "md"=py-12 md:py-16  "lg"=py-16 md:py-24  "xl"=py-20 md:py-32
+cols:     1 | 2 | 3 | 4 | 6 | 12  (responsive by default: 1 col on mobile)
+gap:      "sm"=gap-4  "md"=gap-8  "lg"=gap-12
+overlay:  "dark" | "dark_strong" | "light" | { color, opacity }
+```
+
+### Content alignment rule
+All sections use `maxWidth="xl"` (`max-w-7xl`, 1280 px) as the default content width so text left-edges align vertically when scrolling. Only deviate if the design specifically calls for a narrower container (e.g. a prose-only block might use `"md"`).
+
+---
+
 ## Component Architecture
 
 ### Core Principle: Composable Sections
@@ -126,31 +184,31 @@ interface HeroSection extends BaseSection {
 src/
   ├── components/
   │   ├── sections/
-  │   │   ├── Hero/
-  │   │   │   ├── Hero.tsx
-  │   │   │   ├── Hero.module.css
-  │   │   │   └── Hero.types.ts
-  │   │   ├── ConceptBlock/
-  │   │   ├── PropertyShowcase/
-  │   │   ├── NeighborhoodGrid/
-  │   │   ├── AmenitiesGrid/
-  │   │   ├── ContactSection/
-  │   │   └── Pattern/
+  │   │   ├── Hero/               Hero.tsx
+  │   │   ├── ConceptBlock/       ConceptBlock.tsx
+  │   │   ├── PropertyShowcase/   PropertyShowcase.tsx
+  │   │   ├── NeighborhoodGrid/   NeighborhoodGrid.tsx
+  │   │   ├── AmenitiesGrid/      AmenitiesGrid.tsx
+  │   │   ├── ContactSection/     ContactSection.tsx
+  │   │   └── SpacesIndex/        SpacesIndex.tsx  ← INGRAO-style list+image
   │   ├── ui/
   │   │   ├── Button.tsx
-  │   │   ├── Card.tsx
-  │   │   └── Link.tsx
+  │   │   └── Card.tsx
   │   └── layout/
-  │       └── PageRenderer.tsx (reads config, renders sections in order)
+  │       ├── VisualSurface.tsx   ← full-bleed bg primitive (USE THIS)
+  │       ├── Section.tsx         ← max-width container + grid (USE THIS)
+  │       ├── index.ts            ← barrel export
+  │       └── PageRenderer.tsx    ← reads config, renders sections in order
   ├── config/
-  │   └── page-content.json (the "CMS")
+  │   └── page-content.json      (the "CMS" — add new sections here)
+  ├── lib/
+  │   ├── motion.ts              (shared Framer Motion variants)
+  │   └── utils.ts               (cn() helper — clsx + tailwind-merge)
   ├── tokens/
-  │   └── design-tokens.ts (colors, fonts, spacing)
+  │   └── design-tokens.ts       (colors, fonts, spacing)
   ├── types/
-  │   └── sections.ts (TypeScript interfaces for all section types)
-  ├── App.tsx
-  ├── index.css
-  └── globals.css
+  │   └── sections.ts            (TypeScript interfaces for all section types)
+  └── App.tsx
 ```
 
 ---
@@ -164,16 +222,15 @@ src/
 
 ---
 
-## Next Steps (This Session)
+## Adding a New Section — Checklist
 
-- [ ] Scaffold React + TypeScript + Tailwind project
-- [ ] Create design tokens (colors, typography, spacing)
-- [ ] Build Hero and ConceptBlock components (show the pattern)
-- [ ] Build PropertyShowcase, NeighborhoodGrid components
-- [ ] Create page config (JSON) with sample content
-- [ ] Wire PageRenderer to compose and order sections
-- [ ] Test reordering by changing JSON config
-- [ ] Deploy/render one-pager
+1. **Create** `src/components/sections/YourSection/YourSection.tsx`
+   - Import `Section` from `../../layout` — use it as the outer wrapper
+   - Pass `bgColor` / `bgImage` / `bgVideo` / `overlay` for any background
+   - Use `paddingY`, `maxWidth`, `grid`, `cols`, `gap` for layout
+2. **Add types** to `src/types/sections.ts` — new interface + add to `Section` union
+3. **Wire** in `src/components/layout/PageRenderer.tsx` — add a `case` to the switch
+4. **Add content** to `src/config/page-content.json` — new section object
 
 ---
 
