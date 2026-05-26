@@ -1,40 +1,170 @@
+/* ============================================================================
+   FONT FACES
+   ============================================================================ */
+
+/* Petit Serif — variable + static weights */
+@font-face {
+  font-family: 'Petit Serif';
+  src: url('/fonts/PetitSerif-VAR.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Petit Serif';
+  src: url('/fonts/PetitSerif-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Petit Serif';
+  src: url('/fonts/PetitSerif-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Petit Serif';
+  src: url('/fonts/PetitSerif-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Mona Sans */
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/MonaSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/MonaSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/MonaSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/MonaSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/MonaSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('/fonts/MonaSans-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================================
-   GLOBAL TYPOGRAPHY & STYLING
+   CSS CUSTOM PROPERTIES
    ============================================================================ */
 
 :root {
   /* Font families */
-  --font-serif: "Petit Serif", "Georgia", serif;
-  --font-sans: "Mona Sans", system-ui, -apple-system, sans-serif;
+  --font-serif:     'Petit Serif', 'Georgia', serif;
+  --font-sans:      'Mona Sans', system-ui, -apple-system, sans-serif;
+  --font-body:      'Mona Sans', system-ui, sans-serif;
 
-  /* Colors */
-  --color-navy: #1a1a1a;
-  --color-navy-light: #2d2d2d;
-  --color-cream: #f5f3ed;
-  --color-green: #2d5a3d;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #5a5a5a;
+  /* Colors — deep / dark */
+  --color-deep:      #13100D;
+  --color-navy-900:  #1a1a1a;
+  --color-navy-800:  #2d2d2d;
+  --color-navy-700:  #3d3d3d;
+
+  /* Colors — cream */
+  --color-cream-50:  #F6F2EA;
+  --color-cream-100: #FAF7F2;
+  --color-cream-200: #EDE7DA;
+
+  /* Colors — stone */
+  --color-stone-200: #DDD8D0;
+  --color-stone-300: #C4BAB0;
+  --color-stone-400: #A89B8C;
+
+  /* Colors — green */
+  --color-green-dark:  #274E36;
+  --color-green-mid:   #336348;
+  --color-green-light: #E4EDE6;
+
+  /* Colors — terra */
+  --color-terra:       #A05C3B;
+  --color-terra-light: #F0E6DF;
+
+  /* Text */
+  --color-text-primary:   #13100D;
+  --color-text-secondary: #5C544A;
+  --color-text-muted:     #9E9087;
+  --color-text-inverse:   #FAF7F2;
+
+  /* Borders */
+  --color-border-light: #E4DDD4;
+  --color-border-mid:   #C4BAB0;
+  --color-border-dark:  #2d2d2d;
+
+  /* Overlays */
+  --overlay-dark:        rgba(19, 16, 13, 0.45);
+  --overlay-dark-strong: rgba(19, 16, 13, 0.65);
+  --overlay-warm:        rgba(19, 16, 13, 0.25);
+  --overlay-cream:       rgba(246, 242, 234, 0.94);
+
+  /* Motion */
+  --ease-glide:     cubic-bezier(0.25, 0.10, 0.25, 1.00);
+  --ease-enter:     cubic-bezier(0.00, 0.00, 0.20, 1.00);
+  --ease-exit:      cubic-bezier(0.40, 0.00, 1.00, 1.00);
+  --ease-editorial: cubic-bezier(0.16, 1.00, 0.30, 1.00);
+
+  --duration-micro:  150ms;
+  --duration-base:   300ms;
+  --duration-reveal: 500ms;
+  --duration-slow:   800ms;
+
+  --transition-micro:  all var(--duration-micro)  var(--ease-glide);
+  --transition-base:   all var(--duration-base)   var(--ease-glide);
+  --transition-reveal: all var(--duration-reveal) var(--ease-enter);
+  --transition-slow:   all var(--duration-slow)   var(--ease-enter);
 
   /* Spacing */
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
-  --space-3xl: 64px;
-  --space-4xl: 96px;
+  --space-section:         96px;
+  --space-section-compact: 64px;
+  --space-gutter:          64px;
+  --space-gutter-sm:       24px;
 
-  /* Transitions */
-  --transition-base: all 0.3s ease-in-out;
+  /* Container */
+  --container-max:    1280px;
+  --container-mid:     960px;
+  --container-narrow:  720px;
 }
 
-/* Reset & Defaults */
-* {
+/* ============================================================================
+   BASE RESET
+   ============================================================================ */
+
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -42,192 +172,204 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: var(--font-serif);
-  color: var(--color-text);
-  background-color: #ffffff;
-  line-height: 1.6;
-}
-
-/* Typography */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  line-height: 1.2;
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-size: 42px;
-  letter-spacing: -0.02em;
-}
-
-h3 {
-  font-size: 32px;
-}
-
-h4 {
-  font-size: 24px;
-}
-
-p {
-  font-family: var(--font-serif);
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.7;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+  background-color: var(--color-cream-50);
 }
 
-small {
-  font-size: 14px;
-}
-
-/* Links */
-
-a {
-  color: var(--color-green);
-  text-decoration: none;
-  transition: var(--transition-base);
-}
-
-a:hover {
-  opacity: 0.8;
-}
-
-/* Images */
-
-img {
+img, video {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
-/* Forms */
+/* ============================================================================
+   TYPOGRAPHY BASE
+   ============================================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: 56px; line-height: 1.2; letter-spacing: -0.02em; }
+h2 { font-size: 42px; line-height: 1.4; letter-spacing: -0.02em; }
+h3 { font-size: 32px; line-height: 1.4; }
+h4 { font-size: 24px; line-height: 1.4; }
+
+p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  letter-spacing: -0.015em;
+}
+
+/* Responsive type */
+@media (max-width: 768px) {
+  h1 { font-size: 42px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 24px; }
+}
+
+/* Links */
+a {
+  color: var(--color-green-dark);
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+a:hover { opacity: 0.8; }
+
+/* ============================================================================
+   SCROLL-REVEAL UTILITY
+   Elements start hidden; JS/motion animates them in.
+   ============================================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity  var(--duration-reveal) var(--ease-enter),
+    transform var(--duration-reveal) var(--ease-enter);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-x {
+  opacity: 0;
+  transform: translateX(24px);
+  transition:
+    opacity   var(--duration-reveal) var(--ease-enter),
+    transform var(--duration-reveal) var(--ease-enter);
+}
+
+.reveal-x.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ============================================================================
+   FORM ELEMENTS
+   ============================================================================ */
 
 input,
 textarea,
 select {
-  font-family: var(--font-serif);
+  font-family: var(--font-body);
   font-size: 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  padding: 12px 16px;
-  transition: var(--transition-base);
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-light);
+  border-radius: 0;
+  padding: 12px 0;
+  width: 100%;
+  transition: border-color var(--duration-base) var(--ease-glide);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--color-green);
-  box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.1);
+  border-bottom-color: var(--color-text-primary);
 }
 
-/* Responsive */
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 42px;
-  }
-
-  h2 {
-    font-size: 32px;
-  }
-
-  h3 {
-    font-size: 24px;
-  }
-
-  p {
-    font-size: 16px;
-  }
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
 }
 
-/* Utilities */
+/* ============================================================================
+   SEMANTIC TYPOGRAPHY CLASSES
+   ============================================================================ */
 
-.text-navy {
-  color: var(--color-navy);
-}
-
-.text-cream {
-  color: var(--color-cream);
-}
-
-.text-green {
-  color: var(--color-green);
-}
-
-.bg-navy {
-  background-color: var(--color-navy);
-}
-
-.bg-cream {
-  background-color: var(--color-cream);
-}
-
-.bg-green {
-  background-color: var(--color-green);
-}
-
-/* Serif text utility */
-
-.text-serif {
+.display-xl {
   font-family: var(--font-serif);
+  font-size: clamp(48px, 7vw, 72px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 400;
 }
 
-.font-serif {
-  font-family: var(--font-serif);
-}
-
-.font-sans {
+.label {
   font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
 }
 
-/* Justified text */
-
-.text-justify {
-  text-align: justify;
+.pull-quote {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.7;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  border-left: 2px solid var(--color-green-dark);
+  padding-left: 24px;
 }
 
-.leading-relaxed {
-  line-height: 1.75;
-}
+/* ============================================================================
+   LEGACY UTILITY ALIASES
+   ============================================================================ */
 
-/* Section spacing */
+.text-navy    { color: var(--color-navy-900); }
+.text-cream   { color: var(--color-cream-50); }
+.text-green   { color: var(--color-green-dark); }
+.text-terra   { color: var(--color-terra); }
+.text-inverse { color: var(--color-text-inverse); }
+
+.bg-navy  { background-color: var(--color-navy-900); }
+.bg-deep  { background-color: var(--color-deep); }
+.bg-cream { background-color: var(--color-cream-50); }
+.bg-green { background-color: var(--color-green-dark); }
+
+.font-serif { font-family: var(--font-serif); }
+.font-sans  { font-family: var(--font-sans); }
+.font-body  { font-family: var(--font-body); }
+
+.text-justify    { text-align: justify; }
+.leading-relaxed { line-height: 1.75; }
+.uppercase       { text-transform: uppercase; }
+
+/* ============================================================================
+   SECTION / CONTAINER HELPERS
+   ============================================================================ */
 
 .section-spacing {
-  padding: 6rem 0;
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-section);
 }
-
 @media (max-width: 768px) {
   .section-spacing {
-    padding: 4rem 0;
+    padding-top: var(--space-section-compact);
+    padding-bottom: var(--space-section-compact);
   }
 }
 
-/* Container */
-
 .container-wide {
-  max-width: 1280px;
+  max-width: var(--container-max);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 32px;
-  padding-right: 32px;
+  padding-left: var(--space-gutter);
+  padding-right: var(--space-gutter);
 }
-
 @media (max-width: 768px) {
   .container-wide {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: var(--space-gutter-sm);
+    padding-right: var(--space-gutter-sm);
   }
 }

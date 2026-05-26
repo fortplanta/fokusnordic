@@ -26,7 +26,7 @@ export interface Image {
 export interface CTA {
   label: string;
   href: string;
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
 }
 
 // ============================================================================
@@ -137,6 +137,31 @@ export interface TeamMember {
 }
 
 // ============================================================================
+// STATEMENT (overline + large serif headline)
+// ============================================================================
+
+export interface StatementSection extends BaseSection {
+  type: "statement";
+  overline?: string;
+  headline: string;
+  body?: string;
+  bgColor?: string;
+}
+
+// ============================================================================
+// FOOTER
+// ============================================================================
+
+export interface FooterSection extends BaseSection {
+  type: "footer";
+  address?: string;
+  phone?: string;
+  email?: string;
+  links?: { label: string; href: string }[];
+  legalText?: string;
+}
+
+// ============================================================================
 // SPACES INDEX (INGRAO-style full-viewport list + image)
 // ============================================================================
 
@@ -167,12 +192,14 @@ export interface SpacesIndexSection extends BaseSection {
 
 export type Section =
   | HeroSection
+  | StatementSection
   | ConceptBlockSection
   | PropertyShowcaseSection
   | NeighborhoodGridSection
   | AmenitiesGridSection
   | ContactSectionConfig
-  | SpacesIndexSection;
+  | SpacesIndexSection
+  | FooterSection;
 
 // ============================================================================
 // PAGE CONFIGURATION

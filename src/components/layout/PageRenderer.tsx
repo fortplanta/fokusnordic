@@ -1,22 +1,25 @@
-import React from "react";
 import { PageConfig, Section } from "../../types/sections";
 import { Hero } from "../sections/Hero/Hero";
+import { Statement } from "../sections/Statement/Statement";
 import { ConceptBlock } from "../sections/ConceptBlock/ConceptBlock";
 import { PropertyShowcase } from "../sections/PropertyShowcase/PropertyShowcase";
 import { NeighborhoodGrid } from "../sections/NeighborhoodGrid/NeighborhoodGrid";
 import { AmenitiesGrid } from "../sections/AmenitiesGrid/AmenitiesGrid";
 import { ContactSection } from "../sections/ContactSection/ContactSection";
 import { SpacesIndex } from "../sections/SpacesIndex/SpacesIndex";
+import { Footer } from "../sections/Footer/Footer";
 
 interface PageRendererProps {
   config: PageConfig;
 }
 
-export const PageRenderer: React.FC<PageRendererProps> = ({ config }) => {
+export const PageRenderer = ({ config }: PageRendererProps) => {
   const renderSection = (section: Section) => {
     switch (section.type) {
       case "hero":
         return <Hero key={section.id} {...section} />;
+      case "statement":
+        return <Statement key={section.id} {...section} />;
       case "concept":
         return <ConceptBlock key={section.id} {...section} />;
       case "property_showcase":
@@ -29,6 +32,8 @@ export const PageRenderer: React.FC<PageRendererProps> = ({ config }) => {
         return <ContactSection key={section.id} {...section} />;
       case "spaces_index":
         return <SpacesIndex key={section.id} {...section} />;
+      case "footer":
+        return <Footer key={section.id} {...section} />;
       default: {
         const s = section as { type: string };
         console.warn(`Unknown section type: ${s.type}`);
@@ -38,13 +43,13 @@ export const PageRenderer: React.FC<PageRendererProps> = ({ config }) => {
   };
 
   // Sort sections by order if specified
-  const sortedSections = [...config.sections].sort(
-    (a, b) => (a.order || 0) - (b.order || 0)
+  const sorted = [...config.sections].sort(
+    (a, b) => (a.order ?? 0) - (b.order ?? 0)
   );
 
   return (
     <div className="w-full">
-      {sortedSections.map((section) => renderSection(section))}
+      {sorted.map((section) => renderSection(section))}
     </div>
   );
 };

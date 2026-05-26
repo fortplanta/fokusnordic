@@ -9,7 +9,7 @@ export type SectionMaxWidth = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 export type SectionPaddingX = "none" | "sm" | "md" | "lg";
 export type SectionPaddingY = "none" | "sm" | "md" | "lg" | "xl";
 export type SectionCols = 1 | 2 | 3 | 4 | 6 | 12;
-export type SectionGap = "sm" | "md" | "lg";
+export type SectionGap = "sm" | "md" | "lg" | "xl" | "2xl";
 export type SectionAlign = "start" | "center" | "end";
 
 const MAX_WIDTH: Record<SectionMaxWidth, string> = {
@@ -47,9 +47,11 @@ const COLS: Record<SectionCols, string> = {
 };
 
 const GAP: Record<SectionGap, string> = {
-  sm: "gap-4",
-  md: "gap-8",
-  lg: "gap-12",
+  sm:   "gap-4",
+  md:   "gap-8",
+  lg:   "gap-12",
+  xl:   "gap-[72px]",
+  "2xl":"gap-[96px]",
 };
 
 const ALIGN: Record<SectionAlign, string> = {
@@ -61,7 +63,9 @@ const ALIGN: Record<SectionAlign, string> = {
 // ── Props ─────────────────────────────────────────────────────────────────────
 
 export interface SectionProps
-  extends Omit<VisualSurfaceProps, "asChild" | "className" | "style"> {
+  extends Omit<VisualSurfaceProps, "asChild" | "className" | "style" | "overlayGradient"> {
+  /** CSS gradient overlay — forwarded to VisualSurface */
+  overlayGradient?: string;
   // Container
   maxWidth?: SectionMaxWidth;
   paddingX?: SectionPaddingX;
@@ -114,6 +118,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
       bgImage,
       bgVideo,
       overlay,
+      overlayGradient,
       minHeight,
       // Container
       maxWidth = "lg",
@@ -134,7 +139,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
     },
     ref
   ) => {
-    const hasSurface = !!(bgColor || bgImage || bgVideo || overlay || minHeight);
+    const hasSurface = !!(bgColor || bgImage || bgVideo || overlay || overlayGradient || minHeight);
 
     const gridClasses = grid
       ? cn("grid", COLS[cols], GAP[gap], ALIGN[align])
@@ -168,6 +173,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
             bgImage={bgImage}
             bgVideo={bgVideo}
             overlay={overlay}
+            overlayGradient={overlayGradient}
             minHeight={minHeight}
             className={surfaceClassName}
           >

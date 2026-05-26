@@ -1,89 +1,111 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { AmenitiesGridSection as AmenitiesGridType } from "../../../types/sections";
-import { Card } from "../../ui/Card";
-import { fadeUp, stagger, staggerFast, slowTransition, cardTransition, viewport } from "../../../lib/motion";
+import { Section } from "../../layout";
+import {
+  fadeUp,
+  stagger,
+  staggerFast,
+  heroTransition,
+  revealTransition,
+  cardTransition,
+  viewport,
+} from "../../../lib/motion";
 
-export const AmenitiesGrid: React.FC<AmenitiesGridType> = ({
+export const AmenitiesGrid = ({
   headline,
   intro,
   amenities,
-}) => {
+}: AmenitiesGridType) => {
   return (
-    <section className="w-full bg-navy-900 py-20 md:py-32 text-white">
-      <div className="max-w-6xl mx-auto px-8">
+    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="xl">
 
-        {/* Section header */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-          className="mb-12"
-        >
-          {headline && (
-            <motion.h2
-              className="text-4xl md:text-5xl font-serif font-light mb-4"
-              variants={fadeUp}
-              transition={slowTransition}
-            >
-              {headline}
-            </motion.h2>
-          )}
-          {intro && (
-            <motion.p
-              className="text-base md:text-lg font-serif text-gray-300 max-w-2xl"
-              variants={fadeUp}
-              transition={slowTransition}
-            >
-              {intro}
-            </motion.p>
-          )}
-        </motion.div>
+      {/* Header */}
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        className="mb-12"
+      >
+        {headline && (
+          <motion.h2
+            className="font-serif font-light text-text-primary mb-4
+                       text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
+            variants={fadeUp}
+            transition={heroTransition}
+          >
+            {headline}
+          </motion.h2>
+        )}
+        {intro && (
+          <motion.p
+            className="font-body text-body-md text-text-secondary max-w-2xl"
+            variants={fadeUp}
+            transition={revealTransition}
+          >
+            {intro}
+          </motion.p>
+        )}
+      </motion.div>
 
-        {/* Amenity cards — staggered grid */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={staggerFast}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-        >
-          {amenities.map((amenity) => (
-            <motion.div key={amenity.id} variants={fadeUp} transition={cardTransition}>
-              <Card variant="dark">
-                {amenity.image ? (
-                  <img
-                    src={amenity.image.src}
-                    alt={amenity.image.alt}
-                    className="w-full h-40 object-cover rounded mb-4 -m-6 mb-6"
-                  />
-                ) : amenity.icon ? (
-                  <div className="text-4xl mb-4">{amenity.icon}</div>
-                ) : null}
+      {/* Grid — internal borders only (no outer borders) */}
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-x divide-y divide-border-light"
+        variants={staggerFast}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+      >
+        {amenities.map((amenity) => (
+          <motion.article
+            key={amenity.id}
+            className="p-8 flex flex-col"
+            variants={fadeUp}
+            transition={cardTransition}
+          >
+            {amenity.image ? (
+              <div className="w-full aspect-video overflow-hidden mb-6">
+                <img
+                  src={amenity.image.src}
+                  alt={amenity.image.alt}
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            ) : amenity.icon ? (
+              <div className="text-3xl mb-5" aria-hidden="true">{amenity.icon}</div>
+            ) : null}
 
-                <h3 className="text-xl font-serif font-light mb-2">{amenity.name}</h3>
-                <p className="text-xs font-sans text-gray-400 uppercase tracking-wide mb-3">
-                  {amenity.type}
-                </p>
-                <p className="text-sm font-serif text-gray-300 mb-4">{amenity.description}</p>
+            <p className="font-body text-body-xs text-text-muted uppercase tracking-widest mb-3">
+              {amenity.type}
+            </p>
+
+            <h3 className="font-serif font-light text-text-primary text-display-xs mb-3">
+              {amenity.name}
+            </h3>
+
+            <p className="font-body text-body-sm text-text-secondary leading-relaxed flex-grow">
+              {amenity.description}
+            </p>
+
+            {(amenity.capacity || amenity.hours) && (
+              <div className="mt-5 pt-5 border-t border-border-light flex gap-6">
                 {amenity.capacity && (
-                  <p className="text-xs text-gray-400">
-                    <span className="font-sans font-medium">Capacity: </span>
+                  <p className="font-body text-body-xs text-text-muted">
+                    <span className="font-medium text-text-secondary">Cap. </span>
                     {amenity.capacity}
                   </p>
                 )}
                 {amenity.hours && (
-                  <p className="text-xs text-gray-400">
-                    <span className="font-sans font-medium">Hours: </span>
+                  <p className="font-body text-body-xs text-text-muted">
+                    <span className="font-medium text-text-secondary">Hours </span>
                     {amenity.hours}
                   </p>
                 )}
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
+              </div>
+            )}
+          </motion.article>
+        ))}
+      </motion.div>
+    </Section>
   );
 };

@@ -5,51 +5,89 @@
 import type { Variants, Transition } from "framer-motion";
 
 // ── Easing curves ──────────────────────────────────────────────────────────
-/** Expo out — the signature curve of this site */
-export const expo = [0.16, 1, 0.3, 1] as const;
-/** Power3 inOut — used for slow builds */
-export const power3 = [0.17, 0.55, 0.55, 1] as const;
+/** Standard glide — smooth, ends soft */
+export const glide     = [0.25, 0.10, 0.25, 1.00] as const;
+/** Decelerate — elements arriving from below */
+export const enter     = [0.00, 0.00, 0.20, 1.00] as const;
+/** Accelerate — elements leaving */
+export const exit      = [0.40, 0.00, 1.00, 1.00] as const;
+/** Editorial — hero type, elegant overshoot */
+export const editorial = [0.16, 1.00, 0.30, 1.00] as const;
+
+// Legacy aliases (keep old names working in existing components)
+/** @deprecated use `editorial` */
+export const expo    = editorial;
+/** @deprecated use `glide` */
+export const power3  = [0.17, 0.55, 0.55, 1] as const;
 
 // ── Shared viewport config ─────────────────────────────────────────────────
 /** Standard whileInView trigger — fires once, 80px before element enters */
 export const viewport = { once: true, margin: "-80px 0px" } as const;
 
 // ── Transitions ────────────────────────────────────────────────────────────
-export const slowTransition: Transition = { duration: 0.9, ease: expo };
-export const cardTransition: Transition = { duration: 0.7, ease: expo };
+
+/** Section headline / intro reveal — 500ms, decelerate */
+export const revealTransition: Transition = {
+  duration: 0.5,
+  ease: enter,
+};
+
+/** Hero / cinematic slow build — 800ms, editorial overshoot */
+export const heroTransition: Transition = {
+  duration: 0.8,
+  ease: editorial,
+};
+
+/** Standard card/element transition — 700ms, editorial */
+export const cardTransition: Transition = {
+  duration: 0.7,
+  ease: editorial,
+};
+
+/** Slow, languid reveal — 900ms, editorial */
+export const slowTransition: Transition = {
+  duration: 0.9,
+  ease: editorial,
+};
 
 // ── Variants ───────────────────────────────────────────────────────────────
 
-/** Headline / intro — fade and rise from below */
+/**
+ * Content reveal — fade and rise 16px (matches --reveal-offset-y token).
+ * Use with `revealTransition` or `slowTransition`.
+ */
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden:  { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0 },
 };
 
-/** Image / overlay — simple opacity */
+/** Image / overlay — simple opacity fade */
 export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
+  hidden:  { opacity: 0 },
   visible: { opacity: 1 },
 };
 
 /** Text reveal — text rises out of a clipped container */
 export const maskReveal: Variants = {
-  hidden: { y: "110%" },
+  hidden:  { y: "110%" },
   visible: { y: "0%" },
 };
 
-/** Stagger wrapper — 0.12 s between children, good for 2–4 items */
+/**
+ * Stagger wrapper — 80ms stagger, good for 3–6 text children.
+ * Matches --reveal-stagger token.
+ */
 export const stagger: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.05 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
   },
 };
 
-/** Stagger wrapper — 0.07 s between children, good for card grids */
+/** Tighter stagger — 60ms, good for card grids (4–8 items) */
 export const staggerFast: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.03 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.03 },
   },
 };

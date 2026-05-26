@@ -1,105 +1,166 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { HeroSection as HeroSectionType } from "../../../types/sections";
 import { Button } from "../../ui/Button";
 import { Section } from "../../layout";
-import { fadeUp, fadeIn, stagger, slowTransition, viewport } from "../../../lib/motion";
+import {
+  fadeUp,
+  fadeIn,
+  stagger,
+  heroTransition,
+  revealTransition,
+  viewport,
+} from "../../../lib/motion";
 
-export const Hero: React.FC<HeroSectionType> = ({
+// Bottom-to-transparent gradient — cinematic, matches handoff intent
+const HERO_GRADIENT =
+  "linear-gradient(to top, rgba(19,16,13,0.72) 0%, rgba(19,16,13,0.30) 45%, transparent 70%)";
+
+export const Hero = ({
   variant,
   headline,
   intro,
   image,
   cta,
-}) => {
+}: HeroSectionType) => {
+
+  // ── Dark Cinematic ───────────────────────────────────────────────────────
   if (variant === "dark_cinematic") {
     return (
       <Section
         asChild
         bgImage={image ? { src: image.src, alt: image.alt } : undefined}
-        overlay="dark"
+        overlayGradient={HERO_GRADIENT}
         minHeight="100vh"
-        paddingY="xl"
+        paddingY="none"
         maxWidth="xl"
       >
+        {/* BG image scales in on load — subtle, cinematic */}
         <motion.section
-          className="flex items-center"
-          variants={stagger}
+          className="flex flex-col justify-end pb-16 md:pb-24"
           initial="hidden"
-          whileInView="visible"
+          animate="visible"
           viewport={viewport}
         >
-          <div className="text-center md:text-left">
-            <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-white leading-tight mb-6"
-              variants={fadeUp}
-              transition={slowTransition}
+          {/* Background scale-in */}
+          <motion.div
+            className="absolute inset-0"
+            initial={{ scale: 1.06 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            aria-hidden="true"
+          />
+
+          {/* Top labels row */}
+          <motion.div
+            className="absolute top-8 left-0 right-0 z-10"
+            variants={fadeIn}
+            transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <div className="max-w-7xl mx-auto w-full px-4 md:px-8 flex items-center justify-between">
+              <span className="text-body-xs font-body text-text-inverse/70 uppercase tracking-widest">
+                Stockholm
+              </span>
+              <span className="text-body-xs font-body text-text-inverse/70 uppercase tracking-widest">
+                Est. 1899
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Bottom-anchored content */}
+          <div className="relative z-10">
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              animate="visible"
             >
-              {headline}
-            </motion.h1>
+              {headline && (
+                <motion.h1
+                  className="font-serif font-light text-text-inverse mb-6
+                             text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.1] tracking-tight"
+                  variants={fadeUp}
+                  transition={heroTransition}
+                >
+                  {headline}
+                </motion.h1>
+              )}
 
-            {intro && (
-              <motion.p
-                className="text-base md:text-lg text-gray-200 font-serif max-w-xl mb-8 leading-relaxed"
-                variants={fadeUp}
-                transition={slowTransition}
-              >
-                {intro}
-              </motion.p>
-            )}
+              {intro && (
+                <motion.p
+                  className="font-body text-body-md text-text-inverse/80 max-w-lg mb-10 leading-relaxed"
+                  variants={fadeUp}
+                  transition={revealTransition}
+                >
+                  {intro}
+                </motion.p>
+              )}
 
-            {cta && (
-              <motion.div variants={fadeUp} transition={slowTransition}>
-                <Button label={cta.label} href={cta.href} variant={cta.variant ?? "primary"} />
-              </motion.div>
-            )}
+              {cta && (
+                <motion.div variants={fadeUp} transition={revealTransition}>
+                  <Button
+                    label={cta.label}
+                    href={cta.href}
+                    variant={cta.variant ?? "primary"}
+                  />
+                </motion.div>
+              )}
+            </motion.div>
           </div>
 
+          {/* Scroll cue */}
           <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-sm opacity-70"
+            className="absolute bottom-8 right-8 z-10 text-text-inverse/50
+                       text-body-xs font-body uppercase tracking-widest
+                       flex items-center gap-2"
             variants={fadeIn}
             initial="hidden"
-            whileInView="visible"
-            viewport={viewport}
-            transition={{ duration: 1, delay: 0.6 }}
+            animate="visible"
+            transition={{ duration: 0.8, delay: 1.6 }}
           >
-            scroll to explore
+            <span className="block w-6 h-px bg-text-inverse/40" />
+            Scroll
           </motion.div>
         </motion.section>
       </Section>
     );
   }
 
-  // Cream minimal variant
+  // ── Cream Minimal ────────────────────────────────────────────────────────
   return (
-    <Section bgColor="#F5F3ED" paddingY="xl" maxWidth="md">
+    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="md">
       <motion.div
         variants={stagger}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
       >
-        <motion.h1
-          className="text-5xl md:text-6xl font-serif font-light text-navy-900 leading-tight mb-8"
-          variants={fadeUp}
-          transition={slowTransition}
-        >
-          {headline}
-        </motion.h1>
+        {headline && (
+          <motion.h1
+            className="font-serif font-light text-text-primary mb-8
+                       text-[clamp(2rem,5vw,3.5rem)] leading-[1.2] tracking-tight"
+            variants={fadeUp}
+            transition={heroTransition}
+          >
+            {headline}
+          </motion.h1>
+        )}
 
         {intro && (
           <motion.p
-            className="text-base md:text-lg text-text-primary font-serif max-w-2xl leading-relaxed mb-8"
+            className="font-body text-body-md text-text-secondary max-w-2xl mb-10 leading-relaxed"
             variants={fadeUp}
-            transition={slowTransition}
+            transition={revealTransition}
           >
             {intro}
           </motion.p>
         )}
 
         {cta && (
-          <motion.div variants={fadeUp} transition={slowTransition}>
-            <Button label={cta.label} href={cta.href} variant={cta.variant ?? "primary"} />
+          <motion.div variants={fadeUp} transition={revealTransition}>
+            <Button
+              label={cta.label}
+              href={cta.href}
+              variant={cta.variant ?? "primary"}
+            />
           </motion.div>
         )}
       </motion.div>

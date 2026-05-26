@@ -11,10 +11,11 @@ export interface OverlayConfig {
   preset?: OverlayPreset;
 }
 
+// Warm near-black (#13100D) matches --color-deep / --overlay-dark tokens
 const OVERLAY_PRESETS: Record<OverlayPreset, { color: string; opacity: number }> = {
-  dark:        { color: "#000000", opacity: 0.4 },
-  dark_strong: { color: "#000000", opacity: 0.6 },
-  light:       { color: "#000000", opacity: 0.1 },
+  dark:        { color: "#13100D", opacity: 0.45 },
+  dark_strong: { color: "#13100D", opacity: 0.65 },
+  light:       { color: "#13100D", opacity: 0.12 },
 };
 
 function resolveOverlay(
@@ -22,7 +23,9 @@ function resolveOverlay(
 ): { color: string; opacity: number } | null {
   if (!overlay) return null;
   if (typeof overlay === "string") return OVERLAY_PRESETS[overlay];
-  const base = overlay.preset ? OVERLAY_PRESETS[overlay.preset] : { color: "#000000", opacity: 0.4 };
+  const base = overlay.preset
+    ? OVERLAY_PRESETS[overlay.preset]
+    : { color: "#13100D", opacity: 0.45 };
   return {
     color:   overlay.color   ?? base.color,
     opacity: overlay.opacity ?? base.opacity,
@@ -33,7 +36,7 @@ function resolveOverlay(
 
 export interface BgImageConfig {
   src: string;
-  /** omit or leave empty for purely decorative images */
+  /** Omit or leave empty for purely decorative images */
   alt?: string;
   objectFit?: "cover" | "contain";
   objectPosition?: string;
@@ -45,19 +48,23 @@ export interface BgVideoConfig {
 }
 
 export interface VisualSurfaceProps {
-  // Backgrounds — only one of color/image/video is expected, but any combo is valid
+  // Backgrounds — only one of color/image/video expected, but any combo is valid
   bgColor?: string;
   bgImage?: BgImageConfig;
   bgVideo?: BgVideoConfig;
+  /** Solid-color overlay (flat, single layer) */
   overlay?: OverlayConfig | OverlayPreset;
+  /**
+   * CSS gradient string for the overlay layer — use instead of (or on top of) `overlay`.
+   * E.g.: "linear-gradient(to top, rgba(19,16,13,0.72) 0%, transparent 60%)"
+   * When both `overlay` and `overlayGradient` are provided, gradient renders on top.
+   */
+  overlayGradient?: string;
   /** CSS min-height value, e.g. "100vh", "600px" */
   minHeight?: string;
-  // Slot
   /**
    * Merges VisualSurface's classes and style onto the single child element.
-   * bg layers (image / video / overlay) are injected as absolute siblings
-   * before the child's existing content.
-   *
+   * bg layers (image / video / overlays) are injected before child's own content.
    * Best used when you want a background surface without an extra <div> wrapper.
    */
   asChild?: boolean;
@@ -69,12 +76,23 @@ export interface VisualSurfaceProps {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 /**
- * Full-bleed visual primitive. Handles background color, image, video, and
- * overlay. Content renders above the background layers via relative stacking.
+ * Full-bleed visual primitive. Handles background color, image, video,
+ * solid overlay, and gradient overlay. Content renders above all bg layers.
  */
 export const VisualSurface = React.forwardRef<HTMLDivElement, VisualSurfaceProps>(
   (
-    { bgColor, bgImage, bgVideo, overlay, minHeight, asChild = false, className, style, children },
+    {
+      bgColor,
+      bgImage,
+      bgVideo,
+      overlay,
+      overlayGradient,
+      minHeight,
+      asChild = false,
+      className,
+      style,
+      children,
+    },
     ref
   ) => {
     const resolved = resolveOverlay(overlay);
@@ -113,6 +131,7 @@ export const VisualSurface = React.forwardRef<HTMLDivElement, VisualSurfaceProps
             <source src={bgVideo.src} />
           </video>
         )}
+        {/* Flat overlay */}
         {resolved && (
           <div
             className="absolute inset-0"
@@ -120,10 +139,18 @@ export const VisualSurface = React.forwardRef<HTMLDivElement, VisualSurfaceProps
             aria-hidden="true"
           />
         )}
+        {/* Gradient overlay — renders on top of flat overlay */}
+        {overlayGradient && (
+          <div
+            className="absolute inset-0"
+            style={{ background: overlayGradient }}
+            aria-hidden="true"
+          />
+        )}
       </>
     );
 
-    // asChild: inject bg layers into the single child element so no wrapper div is added
+    // asChild: inject bg layers into the single child element — no wrapper div
     if (asChild) {
       const child = React.Children.only(children) as React.ReactElement<{
         className?: string;

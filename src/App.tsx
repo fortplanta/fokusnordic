@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { PageRenderer } from "./components/layout/PageRenderer";
 import { Preloader } from "./components/Preloader/Preloader";
+import { Nav } from "./components/Nav/Nav";
 import type { PageConfig } from "./types/sections";
 import rawConfig from "./config/page-content.json";
 import "./index.css";
@@ -21,7 +22,10 @@ function App() {
 
   return (
     <div className="w-full min-h-screen">
-      {/* Page renders immediately underneath — images load during the ~7s animation */}
+      {/* Nav — fixed overlay, always on top of page content */}
+      {preloaderDone && <Nav />}
+
+      {/* Page content renders immediately underneath preloader */}
       <PageRenderer config={pageConfig} />
 
       {/* Preloader sits on top (fixed, z-9999) and fades out when done */}
