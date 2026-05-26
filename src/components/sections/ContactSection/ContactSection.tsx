@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ContactSectionConfig as ContactSectionType } from "../../../types/sections";
 import { Button } from "../../ui/Button";
-import { Card } from "../../ui/Card";
 import { fadeUp, stagger, slowTransition, cardTransition, viewport } from "../../../lib/motion";
 
 export const ContactSection: React.FC<ContactSectionType> = ({

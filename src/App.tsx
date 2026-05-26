@@ -1,8 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PageRenderer } from "./components/layout/PageRenderer";
 import { Preloader } from "./components/Preloader/Preloader";
-import pageConfig from "./config/page-content.json";
+import type { PageConfig } from "./types/sections";
+import rawConfig from "./config/page-content.json";
 import "./index.css";
+
+// JSON imports infer string for literal fields like `lang`; cast to the
+// typed interface so PageRenderer receives its expected shape.
+const pageConfig = rawConfig as unknown as PageConfig;
 
 function App() {
   const [preloaderDone, setPreloaderDone] = useState(false);

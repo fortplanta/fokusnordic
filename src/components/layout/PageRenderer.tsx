@@ -29,9 +29,11 @@ export const PageRenderer: React.FC<PageRendererProps> = ({ config }) => {
         return <ContactSection key={section.id} {...section} />;
       case "spaces_index":
         return <SpacesIndex key={section.id} {...section} />;
-      default:
-        console.warn(`Unknown section type: ${section.type}`);
+      default: {
+        const s = section as { type: string };
+        console.warn(`Unknown section type: ${s.type}`);
         return null;
+      }
     }
   };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { colors, typography } from "../../tokens/design-tokens";
 
 interface ButtonProps {
   label: string;

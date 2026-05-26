@@ -55,7 +55,7 @@ interface PreloaderProps {
 }
 
 export const Preloader = ({ onComplete }: PreloaderProps) => {
-  const [scope, animate] = useAnimate();
+  const [scope, animate] = useAnimate<HTMLDivElement>();
   const onCompleteRef = useRef(onComplete);
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
 
