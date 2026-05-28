@@ -3,12 +3,9 @@ import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/Button";
 
-// Split into two column groups — mirrors the reference layout
-const LINKS_A = [
-  { label: "Spaces",    href: "#spaces" },
-  { label: "Amenities", href: "#amenities" },
-];
-const LINKS_B = [
+const NAV_LINKS = [
+  { label: "Spaces",       href: "#spaces" },
+  { label: "Amenities",    href: "#amenities" },
   { label: "Neighborhood", href: "#neighborhood" },
   { label: "Contact",      href: "#contact" },
 ];
@@ -17,7 +14,8 @@ export const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
-  // Publish real nav height as --nav-height on :root so any section can offset correctly
+  // Publish real nav height as --nav-height on :root so any section can read it.
+  // Updates on mount and on every resize so the value is always accurate.
   useEffect(() => {
     const publish = () => {
       const h = headerRef.current?.getBoundingClientRect().height ?? 64;
@@ -35,10 +33,11 @@ export const Nav = () => {
   }, []);
 
   const linkCls = cn(
-    "relative block font-body text-body-sm",
-    "after:absolute after:bottom-0 after:left-0 after:h-px after:w-full",
+    "relative font-body text-body-sm uppercase tracking-widest",
+    "after:absolute after:bottom-[-2px] after:left-0 after:h-px after:w-full",
     "after:origin-left after:scale-x-0 hover:after:scale-x-100",
     "after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+    "transition-opacity hover:opacity-70",
   );
 
   return (
@@ -58,59 +57,51 @@ export const Nav = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      {/* 5-column grid — logo | gap | links-A | links-B | cta */}
-      <div className="max-w-[1664px] mx-auto w-full px-4 md:px-8 py-4 md:py-5 grid grid-cols-5 items-start">
+      <div className="max-w-[1664px] mx-auto w-full px-4 md:px-8 flex items-center justify-between h-16 md:h-20">
 
-        {/* Col 1 — logo */}
-        <a href="/" aria-label="Barnängshuset — home">
+        {/* Logo */}
+        <a href="/" aria-label="Barnängshuset — home" className="flex-shrink-0">
           <img
             src="/assets/barnangshuset_logo-neg.svg"
             alt="Barnängshuset"
-            className={cn("h-10 w-auto transition-all", scrolled ? "invert" : "")}
+            className={cn(
+              "h-7 w-auto transition-all",
+              scrolled ? "invert" : ""
+            )}
             style={{ transitionDuration: "300ms" }}
           />
         </a>
 
-        {/* Col 2 — intentionally empty spacer */}
-        <div />
-
-        {/* Col 3 — Spaces + Amenities */}
-        <nav className="hidden md:flex flex-col gap-1.5" aria-label="Main navigation">
-          {LINKS_A.map(({ label, href }) => (
+        {/* Nav links — hidden on mobile, single row on md+ */}
+        <nav
+          className="hidden md:flex items-center gap-8"
+          aria-label="Site navigation"
+        >
+          {NAV_LINKS.map((link) => (
             <a
-              key={href}
-              href={href}
-              className={cn(linkCls, scrolled ? "text-text-primary after:bg-text-primary" : "text-text-inverse after:bg-text-inverse")}
-              style={scrolled ? undefined : { textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
+              key={link.href}
+              href={link.href}
+              className={cn(
+                linkCls,
+                scrolled
+                  ? "text-text-primary after:bg-text-primary"
+                  : "text-text-inverse after:bg-text-inverse"
+              )}
+              style={
+                scrolled ? undefined : { textShadow: "0 1px 4px rgba(0,0,0,0.4)" }
+              }
             >
-              {label}
+              {link.label}
             </a>
           ))}
         </nav>
 
-        {/* Col 4 — Neighborhood + Contact */}
-        <nav className="hidden md:flex flex-col gap-1.5" aria-label="More navigation">
-          {LINKS_B.map(({ label, href }) => (
-            <a
-              key={href}
-              href={href}
-              className={cn(linkCls, scrolled ? "text-text-primary after:bg-text-primary" : "text-text-inverse after:bg-text-inverse")}
-              style={scrolled ? undefined : { textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Col 5 — CTA */}
-        <div>
-          <Button
-            label="Book a viewing"
-            href="#contact"
-            variant={scrolled ? "primary" : "ghost"}
-            className="px-4 py-2 text-[11px]"
-          />
-        </div>
+        {/* CTA */}
+        <Button
+          label="Book a viewing"
+          href="#contact"
+          variant={scrolled ? "primary" : "ghost"}
+        />
       </div>
     </motion.header>
   );
