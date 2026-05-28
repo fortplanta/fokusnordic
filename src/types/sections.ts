@@ -152,12 +152,29 @@ export interface StatementSection extends BaseSection {
 // FOOTER
 // ============================================================================
 
+export interface FooterLinkGroup {
+  /** Parenthetical category label, e.g. "(Navigation)" */
+  label: string;
+  links: { label: string; href: string }[];
+}
+
+export interface FooterContactGroup {
+  /** Italic sub-heading, e.g. "Leasing—" */
+  label: string;
+  lines: string[];
+}
+
 export interface FooterSection extends BaseSection {
   type: "footer";
-  address?: string;
-  phone?: string;
-  email?: string;
-  links?: { label: string; href: string }[];
+  /** Left column: stacked groups of links */
+  columns?: FooterLinkGroup[];
+  /** Middle column: visit address + contact sub-groups */
+  visitAddress?: string;
+  contactGroups?: FooterContactGroup[];
+  /** Right column: newsletter email capture */
+  newsletter?: { text: string };
+  /** Mega display brand name shown at the bottom of the footer */
+  brandName?: string;
   legalText?: string;
 }
 

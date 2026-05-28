@@ -383,15 +383,45 @@
       "id": "footer-main",
       "type": "footer",
       "order": 9,
-      "address": "Nackagatan 4, 116 40 Stockholm",
-      "phone": "+46 8 555 00 123",
-      "email": "info@barnangshuset.se",
-      "links": [
-        { "label": "Spaces",       "href": "#spaces" },
-        { "label": "Amenities",    "href": "#amenities" },
-        { "label": "Neighborhood", "href": "#neighborhood" },
-        { "label": "Contact",      "href": "#contact" }
+      "brandName": "Barnängshuset",
+      "columns": [
+        {
+          "label": "(Explore)",
+          "links": [
+            { "label": "Spaces",       "href": "#spaces" },
+            { "label": "Amenities",    "href": "#amenities" },
+            { "label": "Neighborhood", "href": "#neighborhood" },
+            { "label": "Contact",      "href": "#contact" }
+          ]
+        },
+        {
+          "label": "(Follow)",
+          "links": [
+            { "label": "Instagram", "href": "https://instagram.com" },
+            { "label": "LinkedIn",  "href": "https://linkedin.com" }
+          ]
+        }
       ],
+      "visitAddress": "Nackagatan 4\n116 40 Stockholm",
+      "contactGroups": [
+        {
+          "label": "Leasing—",
+          "lines": [
+            "maria@barnangshuset.se",
+            "+46 8 555 00 124"
+          ]
+        },
+        {
+          "label": "General Inquiries—",
+          "lines": [
+            "info@barnangshuset.se",
+            "+46 8 555 00 123"
+          ]
+        }
+      ],
+      "newsletter": {
+        "text": "Join our circle of architects, designers, and founders. Be the first to know about new spaces and events."
+      },
       "legalText": "Barnängshuset AB. Org. nr 556000-0000."
     }
   ]
