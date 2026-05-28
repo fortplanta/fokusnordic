@@ -11,9 +11,10 @@ import {
   viewport,
 } from "../../../lib/motion";
 
-// Bottom-to-transparent gradient — cinematic, matches handoff intent
+// Two-layer gradient: bottom darkens for text legibility, top darkens for nav legibility
 const HERO_GRADIENT =
-  "linear-gradient(to top, rgba(19,16,13,0.72) 0%, rgba(19,16,13,0.30) 45%, transparent 70%)";
+  "linear-gradient(to top,   rgba(19,16,13,0.72) 0%, rgba(19,16,13,0.30) 45%, transparent 70%), " +
+  "linear-gradient(to bottom, rgba(0,0,0,0.45)   0%, transparent 22%)";
 
 export const Hero = ({
   variant,
@@ -49,11 +50,6 @@ export const Hero = ({
             aria-hidden="true"
           />
 
-          {/* Top vignette — ensures nav text is legible over any photo */}
-          <div
-            className="absolute inset-x-0 top-0 h-32 pointer-events-none bg-gradient-to-b from-black/40 to-transparent"
-            aria-hidden="true"
-          />
 
           {/* Top labels — positioned below the nav using --nav-height */}
           <motion.div
