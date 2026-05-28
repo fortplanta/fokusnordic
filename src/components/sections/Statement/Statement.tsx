@@ -13,7 +13,7 @@ export const Statement = ({
     <Section
       bgColor={bgColor ?? "#F6F2EA"}
       paddingY="xl"
-      maxWidth="xl"
+      maxWidth="2xl"
     >
       <motion.div
         variants={stagger}

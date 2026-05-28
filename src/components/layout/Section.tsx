@@ -13,12 +13,12 @@ export type SectionGap = "sm" | "md" | "lg" | "xl" | "2xl";
 export type SectionAlign = "start" | "center" | "end";
 
 const MAX_WIDTH: Record<SectionMaxWidth, string> = {
-  sm:   "max-w-2xl",          //  672px
-  md:   "max-w-4xl",          //  896px
-  lg:   "max-w-6xl",          // 1152px
-  xl:   "max-w-7xl",          // 1280px
-  "2xl":"max-w-screen-2xl",   // 1536px
-  "3xl":"max-w-[1664px]",     // 1664px — widest content container
+  sm:   "max-w-2xl",       //  672px
+  md:   "max-w-4xl",       //  896px
+  lg:   "max-w-6xl",       // 1152px
+  xl:   "max-w-7xl",       // 1280px
+  "2xl":"max-w-[1664px]",  // 1664px — standard content container
+  "3xl":"max-w-[1664px]",  // 1664px — alias kept for backward compat
   full: "max-w-none",
 };
 
@@ -137,7 +137,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
       overlayGradient,
       minHeight,
       // Container
-      maxWidth = "3xl",
+      maxWidth = "2xl",
       paddingX = "md",
       paddingY = "lg",
       // Grid
