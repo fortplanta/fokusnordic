@@ -81,6 +81,7 @@ export const Nav = () => {
               key={href}
               href={href}
               className={cn(linkCls, scrolled ? "text-text-primary after:bg-text-primary" : "text-text-inverse after:bg-text-inverse")}
+              style={scrolled ? undefined : { textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
             >
               {label}
             </a>
@@ -94,6 +95,7 @@ export const Nav = () => {
               key={href}
               href={href}
               className={cn(linkCls, scrolled ? "text-text-primary after:bg-text-primary" : "text-text-inverse after:bg-text-inverse")}
+              style={scrolled ? undefined : { textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
             >
               {label}
             </a>

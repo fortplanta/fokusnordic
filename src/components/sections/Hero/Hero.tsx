@@ -49,6 +49,12 @@ export const Hero = ({
             aria-hidden="true"
           />
 
+          {/* Top vignette — ensures nav text is legible over any photo */}
+          <div
+            className="absolute inset-x-0 top-0 h-32 pointer-events-none bg-gradient-to-b from-black/40 to-transparent"
+            aria-hidden="true"
+          />
+
           {/* Top labels — positioned below the nav using --nav-height */}
           <motion.div
             className="absolute left-0 right-0 z-10"
