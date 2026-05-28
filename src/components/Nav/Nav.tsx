@@ -57,7 +57,7 @@ export const Nav = () => {
             src="/assets/barnangshuset_logo-neg.svg"
             alt="Barnängshuset"
             className={cn(
-              "h-7 w-auto transition-all",
+              "h-10 w-auto transition-all",
               scrolled ? "invert" : ""
             )}
             style={{ transitionDuration: "300ms" }}
@@ -71,10 +71,14 @@ export const Nav = () => {
               key={link.href}
               href={link.href}
               className={cn(
-                "font-body text-body-sm uppercase tracking-widest transition-opacity hover:opacity-60",
-                scrolled ? "text-text-primary" : "text-text-inverse"
+                "relative font-body text-body-xs uppercase tracking-widest",
+                "after:absolute after:bottom-0 after:left-0 after:h-px after:w-full",
+                "after:origin-left after:scale-x-0 hover:after:scale-x-100",
+                "after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                scrolled
+                  ? "text-text-primary after:bg-text-primary"
+                  : "text-text-inverse after:bg-text-inverse"
               )}
-              style={{ transitionDuration: "150ms" }}
             >
               {link.label}
             </a>
@@ -86,6 +90,7 @@ export const Nav = () => {
           label="Book a viewing"
           href="#contact"
           variant={scrolled ? "primary" : "ghost"}
+          className="px-4 py-2 text-[11px]"
         />
       </div>
     </motion.header>
