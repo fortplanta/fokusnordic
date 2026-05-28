@@ -5,7 +5,7 @@ import { VisualSurface, type VisualSurfaceProps } from "./VisualSurface";
 
 // ── Token maps ────────────────────────────────────────────────────────────────
 
-export type SectionMaxWidth = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+export type SectionMaxWidth = "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
 export type SectionPaddingX = "none" | "sm" | "md" | "lg";
 export type SectionPaddingY = "none" | "sm" | "md" | "lg" | "xl";
 export type SectionCols = 1 | 2 | 3 | 4 | 6 | 12;
@@ -13,11 +13,12 @@ export type SectionGap = "sm" | "md" | "lg" | "xl" | "2xl";
 export type SectionAlign = "start" | "center" | "end";
 
 const MAX_WIDTH: Record<SectionMaxWidth, string> = {
-  sm:   "max-w-2xl",
-  md:   "max-w-4xl",
-  lg:   "max-w-6xl",
-  xl:   "max-w-7xl",
-  "2xl":"max-w-screen-2xl",
+  sm:   "max-w-2xl",          //  672px
+  md:   "max-w-4xl",          //  896px
+  lg:   "max-w-6xl",          // 1152px
+  xl:   "max-w-7xl",          // 1280px
+  "2xl":"max-w-screen-2xl",   // 1536px
+  "3xl":"max-w-[1664px]",     // 1664px — widest content container
   full: "max-w-none",
 };
 
@@ -136,7 +137,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
       overlayGradient,
       minHeight,
       // Container
-      maxWidth = "lg",
+      maxWidth = "3xl",
       paddingX = "md",
       paddingY = "lg",
       // Grid

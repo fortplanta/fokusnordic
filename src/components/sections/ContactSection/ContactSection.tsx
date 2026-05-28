@@ -35,7 +35,7 @@ export const ContactSection = ({
   };
 
   return (
-    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="xl">
+    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="3xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 
         {/* Left: contact info + team */}

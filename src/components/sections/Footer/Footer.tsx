@@ -25,7 +25,7 @@ export const Footer = ({
     <footer className="bg-deep overflow-hidden">
 
       {/* ── Top grid ──────────────────────────────────────────────────────── */}
-      <Section bgColor="#13100D" paddingY="xl" maxWidth="xl">
+      <Section bgColor="#13100D" paddingY="xl" maxWidth="3xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 pb-20 border-b border-text-inverse/10">
 
           {/* Left: stacked link groups */}

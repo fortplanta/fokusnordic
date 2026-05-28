@@ -17,7 +17,7 @@ export const AmenitiesGrid = ({
   amenities,
 }: AmenitiesGridType) => {
   return (
-    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="xl">
+    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="3xl">
 
       {/* Header */}
       <motion.div

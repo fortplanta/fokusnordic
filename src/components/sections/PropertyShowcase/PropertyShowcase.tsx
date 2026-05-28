@@ -33,7 +33,7 @@ export const PropertyShowcase = ({
     <Section
       bgColor="#13100D"
       paddingY="xl"
-      maxWidth="xl"
+      maxWidth="3xl"
       surfaceClassName="relative overflow-hidden"
     >
       {/* Subtle twill pattern watermark */}

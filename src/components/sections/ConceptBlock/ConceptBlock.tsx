@@ -21,7 +21,7 @@ export const ConceptBlock = ({
   const isImageLeft = imagePosition === "left";
 
   return (
-    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="xl">
+    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="3xl">
       {/* 5/12 text + 7/12 image — matches handoff ratio */}
       <div
         className={`flex flex-col ${isImageLeft ? "md:flex-row-reverse" : "md:flex-row"} gap-12 md:gap-16 items-start`}

@@ -32,7 +32,7 @@ export const Hero = ({
         bgImage={image ? { src: image.src, alt: image.alt } : undefined}
         overlayGradient={HERO_GRADIENT}
         paddingY="none"
-        maxWidth="xl"
+        maxWidth="3xl"
       >
         <motion.section
           className="flex flex-col justify-end pb-16 md:pb-24"
@@ -56,7 +56,7 @@ export const Hero = ({
             variants={fadeIn}
             transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="max-w-7xl mx-auto w-full px-4 md:px-8 flex items-center justify-between pt-4">
+            <div className="max-w-[1664px] mx-auto w-full px-4 md:px-8 flex items-center justify-between pt-4">
               <span className="text-body-xs font-body text-text-inverse/70 uppercase tracking-widest">
                 Stockholm
               </span>
