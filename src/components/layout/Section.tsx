@@ -78,6 +78,21 @@ export interface SectionProps
   align?: SectionAlign;
 
   /**
+   * Stamps `.is--hero` on the section element.
+   * CSS sets `min-height: 100dvh` so the section fills the full viewport,
+   * and the section reads `--nav-height` (set by Nav) to correctly position
+   * any absolutely-placed top content beneath the fixed navbar.
+   * Toggle off to collapse back to normal content-driven height.
+   */
+  isHero?: boolean;
+
+  /**
+   * Adds `scroll-margin-top: var(--nav-height)` so anchor links (#section)
+   * scroll to the right place instead of disappearing behind the fixed nav.
+   */
+  navOffset?: boolean;
+
+  /**
    * Merges Section's layout classes (padding, max-width, grid) onto the
    * single child element — replacing the default `<section>` tag without
    * adding any extra wrapper divs.
@@ -131,6 +146,8 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
       align = "start",
       // Composition
       asChild = false,
+      isHero = false,
+      navOffset = false,
       surfaceClassName,
       className,
       innerClassName,
@@ -140,6 +157,11 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
     ref
   ) => {
     const hasSurface = !!(bgColor || bgImage || bgVideo || overlay || overlayGradient || minHeight);
+
+    // Build scroll-margin style when navOffset is set
+    const navOffsetStyle: React.CSSProperties = navOffset
+      ? { scrollMarginTop: "var(--nav-height, 64px)" }
+      : {};
 
     const gridClasses = grid
       ? cn("grid", COLS[cols], GAP[gap], ALIGN[align])
@@ -152,6 +174,7 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
     if (asChild) {
       const containerClasses = cn(
         "relative z-10",
+        isHero && "is--hero",
         PADDING_Y[paddingY],
         MAX_WIDTH[maxWidth],
         PADDING_X[paddingX],
@@ -161,7 +184,11 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
       );
 
       const slotContent = (
-        <Slot ref={ref as React.Ref<HTMLElement>} className={containerClasses} style={style}>
+        <Slot
+          ref={ref as React.Ref<HTMLElement>}
+          className={containerClasses}
+          style={{ ...navOffsetStyle, ...style }}
+        >
           {children}
         </Slot>
       );
@@ -189,8 +216,8 @@ export const Section = React.forwardRef<HTMLElement, SectionProps>(
     const sectionEl = (
       <section
         ref={ref}
-        className={cn("relative z-10", PADDING_Y[paddingY], className)}
-        style={style}
+        className={cn("relative z-10", isHero && "is--hero", PADDING_Y[paddingY], className)}
+        style={{ ...navOffsetStyle, ...style }}
       >
         <div
           className={cn(

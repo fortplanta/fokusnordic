@@ -28,13 +28,12 @@ export const Hero = ({
     return (
       <Section
         asChild
+        isHero           // → stamps .is--hero (min-height: 100dvh via CSS)
         bgImage={image ? { src: image.src, alt: image.alt } : undefined}
         overlayGradient={HERO_GRADIENT}
-        minHeight="100vh"
         paddingY="none"
         maxWidth="xl"
       >
-        {/* BG image scales in on load — subtle, cinematic */}
         <motion.section
           className="flex flex-col justify-end pb-16 md:pb-24"
           initial="hidden"
@@ -50,13 +49,14 @@ export const Hero = ({
             aria-hidden="true"
           />
 
-          {/* Top labels row */}
+          {/* Top labels — positioned below the nav using --nav-height */}
           <motion.div
-            className="absolute top-8 left-0 right-0 z-10"
+            className="absolute left-0 right-0 z-10"
+            style={{ top: "var(--nav-height, 64px)" }}
             variants={fadeIn}
             transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="max-w-7xl mx-auto w-full px-4 md:px-8 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto w-full px-4 md:px-8 flex items-center justify-between pt-4">
               <span className="text-body-xs font-body text-text-inverse/70 uppercase tracking-widest">
                 Stockholm
               </span>

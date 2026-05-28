@@ -85,6 +85,10 @@
    ============================================================================ */
 
 :root {
+  /* Nav height — overwritten at runtime by Nav.tsx measuring the real element.
+     64px fallback covers SSR / before JS runs. */
+  --nav-height: 64px;
+
   /* Font families */
   --font-serif:     'Petit Serif', 'Georgia', serif;
   --font-sans:      'Mona Sans', system-ui, -apple-system, sans-serif;
@@ -227,6 +231,37 @@ a {
   transition: var(--transition-base);
 }
 a:hover { opacity: 0.8; }
+
+/* ============================================================================
+   HERO + NAV OFFSET UTILITIES
+   ============================================================================ */
+
+/**
+ * .is--hero
+ * Applied by <Section isHero> to any full-bleed section that intentionally
+ * sits behind the fixed navbar.
+ *
+ * - min-height: 100dvh  → fills the full visual viewport on mobile too
+ * - Does NOT add padding-top; the nav is transparent over the hero.
+ *   Inner elements that need to clear the nav should use top: var(--nav-height).
+ *
+ * Toggle off by removing the prop to get content-driven height.
+ */
+.is--hero {
+  min-height: 100dvh;
+}
+
+/**
+ * [data-nav-offset] / .nav-offset
+ * Adds scroll-margin-top so anchor links (#contact, #spaces, etc.) scroll
+ * to the correct position — not hidden behind the fixed nav.
+ * Applied via <Section navOffset> prop (sets scroll-margin-top inline)
+ * or via this CSS class directly on any element.
+ */
+[data-nav-offset],
+.nav-offset {
+  scroll-margin-top: var(--nav-height, 64px);
+}
 
 /* ============================================================================
    SCROLL-REVEAL UTILITY

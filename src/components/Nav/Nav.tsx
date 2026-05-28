@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/Button";
@@ -12,6 +12,19 @@ const NAV_LINKS = [
 
 export const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Publish real nav height as --nav-height on :root so any section can read it.
+  // Updates on mount and on every resize so the value is always accurate.
+  useEffect(() => {
+    const publish = () => {
+      const h = headerRef.current?.getBoundingClientRect().height ?? 64;
+      document.documentElement.style.setProperty("--nav-height", `${h}px`);
+    };
+    publish();
+    window.addEventListener("resize", publish, { passive: true });
+    return () => window.removeEventListener("resize", publish);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
@@ -21,9 +34,9 @@ export const Nav = () => {
 
   return (
     <motion.header
+      ref={headerRef}
       className={cn(
         "fixed top-0 inset-x-0 z-50 transition-all",
-        // Transparent on hero, cream-blur when scrolled
         scrolled
           ? "bg-cream-50/95 backdrop-blur-md border-b border-border-light"
           : "bg-transparent"
