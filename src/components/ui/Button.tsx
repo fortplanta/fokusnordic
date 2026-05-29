@@ -13,7 +13,7 @@ interface ButtonProps {
 // Base classes shared across all variants
 const BASE =
   "inline-flex items-center justify-center font-body font-medium text-body-sm " +
-  "uppercase tracking-wide cursor-pointer px-6 py-3 " +
+  "uppercase tracking-wide cursor-pointer px-6 py-3 rounded-sm" +
   "transition-[opacity,background-color,border-color,color] duration-[150ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]";
 
 const VARIANTS: Record<string, string> = {
