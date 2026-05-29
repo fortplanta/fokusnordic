@@ -3,6 +3,8 @@ import Editor from "@monaco-editor/react";
 import { useDevFile } from "./useDevFile";
 import { setOverride, clearOverride, clearAllOverrides, loadOverrides } from "../../lib/designOverrides";
 
+const IS_DEV = import.meta.env.DEV;
+
 // ── Token definitions ─────────────────────────────────────────────────────────
 
 interface ColorToken { label: string; var: string; default: string }
@@ -152,7 +154,7 @@ function SaveBar({
         <button type="button" onClick={onSave} disabled={saving}
           className="transition-opacity hover:opacity-80 disabled:opacity-40"
           style={{ color: "#E4EDE6", fontFamily: "'Mona Sans',sans-serif" }}>
-          {saving ? "Saving…" : saved ? "✓ Saved to index.css" : "Save to index.css"}
+          {saving ? "Committing…" : saved ? (IS_DEV ? "✓ Saved" : "✓ Committed — rebuilding") : (IS_DEV ? "Save to index.css" : "Commit & Rebuild")}
         </button>
         <button type="button" onClick={onReset}
           className="opacity-40 hover:opacity-70 transition-opacity"
@@ -358,7 +360,7 @@ export function TokensTab() {
                     color: "#FAF7F2",
                     border: "1px solid rgba(255,255,255,0.12)",
                   }}>
-                  {cssFile.saving ? "Saving…" : cssFile.saved ? "✓ Saved" : "Save"}
+                  {cssFile.saving ? "Committing…" : cssFile.saved ? (IS_DEV ? "✓ Saved" : "✓ Committed — rebuilding") : (IS_DEV ? "Save" : "Commit & Rebuild")}
                 </button>
               </div>
             </div>
@@ -375,7 +377,7 @@ export function TokensTab() {
                   language="css"
                   theme="vs-dark"
                   value={cssFile.content}
-                  onChange={(v) => cssFile.setContent(v ?? "")}
+                  onChange={(v: string | undefined) => cssFile.setContent(v ?? "")}
                   options={{
                     fontSize: 12,
                     lineHeight: 20,

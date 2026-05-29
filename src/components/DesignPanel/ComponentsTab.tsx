@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+const IS_DEV = import.meta.env.DEV;
 import Editor from "@monaco-editor/react";
 import { Button } from "../ui/Button";
 import { Chip } from "../ui/Chip";
@@ -296,7 +298,7 @@ function EditorPane({ componentId }: { componentId: ComponentId }) {
               border: "1px solid",
               borderColor: saved ? "#274E36" : "rgba(255,255,255,0.12)",
             }}>
-            {saving ? "Saving…" : saved ? "✓ Saved" : "Save"}
+            {saving ? "Committing…" : saved ? (IS_DEV ? "✓ Saved" : "✓ Committed — rebuilding") : (IS_DEV ? "Save" : "Commit & Rebuild")}
           </button>
         </div>
       </div>
@@ -315,7 +317,7 @@ function EditorPane({ componentId }: { componentId: ComponentId }) {
             theme="vs-dark"
             path={filePath}
             value={content}
-            onChange={(v) => setContent(v ?? "")}
+            onChange={(v: string | undefined) => setContent(v ?? "")}
             options={{
               fontSize: 12,
               lineHeight: 20,
