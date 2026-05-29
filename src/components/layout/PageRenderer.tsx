@@ -8,6 +8,8 @@ import { AmenitiesGrid } from "../sections/AmenitiesGrid/AmenitiesGrid";
 import { ContactSection } from "../sections/ContactSection/ContactSection";
 import { SpacesIndex } from "../sections/SpacesIndex/SpacesIndex";
 import { Footer } from "../sections/Footer/Footer";
+import { Testimonials } from "../sections/Testimonials/Testimonials";
+import { Process } from "../sections/Process/Process";
 
 interface PageRendererProps {
   config: PageConfig;
@@ -34,6 +36,10 @@ export const PageRenderer = ({ config }: PageRendererProps) => {
         return <SpacesIndex key={section.id} {...section} />;
       case "footer":
         return <Footer key={section.id} {...section} />;
+      case "testimonials":
+        return <Testimonials key={section.id} {...section} />;
+      case "process":
+        return <Process key={section.id} {...section} />;
       default: {
         const s = section as { type: string };
         console.warn(`Unknown section type: ${s.type}`);

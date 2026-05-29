@@ -12,56 +12,52 @@ export default {
         "content": "1920px",
       },
       colors: {
-        // Deep / near-black
-        deep: "#13100D",
+        // All colors reference CSS custom properties so that overrides set via
+        // the /styleguide design panel propagate instantly to every Tailwind
+        // utility class across the site (bg-*, text-*, border-*, etc.).
 
-        // Neutrals
+        deep: "var(--color-deep)",
+
         navy: {
-          900: "#1a1a1a",
-          800: "#2d2d2d",
-          700: "#3d3d3d",
+          900: "var(--color-navy-900)",
+          800: "var(--color-navy-800)",
+          700: "var(--color-navy-700)",
         },
 
-        // Cream / parchment
         cream: {
-          50:  "#F6F2EA",
-          100: "#FAF7F2",
-          200: "#EDE7DA",
+          50:  "var(--color-cream-50)",
+          100: "var(--color-cream-100)",
+          200: "var(--color-cream-200)",
         },
 
-        // Stone / putty
         stone: {
-          200: "#DDD8D0",
-          300: "#C4BAB0",
-          400: "#A89B8C",
+          200: "var(--color-stone-200)",
+          300: "var(--color-stone-300)",
+          400: "var(--color-stone-400)",
         },
 
-        // Forest green
         green: {
-          dark:  "#274E36",
-          mid:   "#336348",
-          light: "#E4EDE6",
+          dark:  "var(--color-green-dark)",
+          mid:   "var(--color-green-mid)",
+          light: "var(--color-green-light)",
         },
 
-        // Terracotta
         terra: {
-          DEFAULT: "#A05C3B",
-          light:   "#F0E6DF",
+          DEFAULT: "var(--color-terra)",
+          light:   "var(--color-terra-light)",
         },
 
-        // Text semantic aliases
         text: {
-          primary:   "#13100D",
-          secondary: "#5C544A",
-          muted:     "#9E9087",
-          inverse:   "#FAF7F2",
+          primary:   "var(--color-text-primary)",
+          secondary: "var(--color-text-secondary)",
+          muted:     "var(--color-text-muted)",
+          inverse:   "var(--color-text-inverse)",
         },
 
-        // Border aliases
         border: {
-          light: "#E4DDD4",
-          mid:   "#C4BAB0",
-          dark:  "#2d2d2d",
+          light: "var(--color-border-light)",
+          mid:   "var(--color-border-mid)",
+          dark:  "var(--color-border-dark)",
         },
       },
 
