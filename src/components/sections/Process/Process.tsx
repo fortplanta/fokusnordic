@@ -32,7 +32,7 @@ export const Process = ({
           )}
           {headline && (
             <motion.h2
-              className="font-serif font-light text-text-primary text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight mb-4"
+              className="font-serif font-normal text-text-primary text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight mb-4"
               variants={fadeUp}
               transition={heroTransition}
             >
@@ -83,7 +83,7 @@ export const Process = ({
               <span className="font-body text-body-xs text-text-muted uppercase tracking-widest">
                 {step.number}
               </span>
-              <h3 className="font-serif font-light text-text-primary text-[clamp(1.25rem,2vw,1.5rem)] leading-[1.3] tracking-tight">
+              <h3 className="font-serif font-normal text-text-primary text-[clamp(1.25rem,2vw,1.5rem)] leading-[1.3] tracking-tight">
                 {step.title}
               </h3>
               <p className="font-body text-body-md text-text-secondary leading-relaxed">

@@ -34,7 +34,7 @@ export const Statement = ({
 
         {headline && (
           <motion.h2
-            className="font-serif font-light text-text-primary mb-8
+            className="font-serif font-normal text-text-primary mb-8
                        text-[clamp(2rem,4vw,3rem)] leading-[1.2] tracking-tight"
             variants={fadeUp}
             transition={heroTransition}

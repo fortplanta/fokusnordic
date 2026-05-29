@@ -77,7 +77,7 @@ export const Hero = ({
             >
               {headline && (
                 <motion.h1
-                  className="font-serif font-light text-text-inverse mb-6
+                  className="font-serif font-normal text-text-inverse mb-6
                              text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.1] tracking-tight"
                   variants={fadeUp}
                   transition={heroTransition}
@@ -137,7 +137,7 @@ export const Hero = ({
       >
         {headline && (
           <motion.h1
-            className="font-serif font-light text-text-primary mb-8
+            className="font-serif font-normal text-text-primary mb-8
                        text-[clamp(2rem,5vw,3.5rem)] leading-[1.2] tracking-tight"
             variants={fadeUp}
             transition={heroTransition}

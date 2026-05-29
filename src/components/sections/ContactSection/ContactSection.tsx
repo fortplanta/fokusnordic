@@ -47,7 +47,7 @@ export const ContactSection = ({
         >
           {headline && (
             <motion.h2
-              className="font-serif font-light text-text-primary mb-6
+              className="font-serif font-normal text-text-primary mb-6
                          text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
               variants={fadeUp}
               transition={heroTransition}
@@ -106,7 +106,7 @@ export const ContactSection = ({
                       />
                     )}
                     <div>
-                      <p className="font-serif font-light text-text-primary text-body-md">
+                      <p className="font-serif font-normal text-text-primary text-body-md">
                         {member.name}
                       </p>
                       <p className="font-body text-body-xs text-text-muted">
@@ -158,7 +158,7 @@ export const ContactSection = ({
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="font-serif font-light text-text-primary text-display-xs mb-3">
+                  <h3 className="font-serif font-normal text-text-primary text-display-xs mb-3">
                     Message received
                   </h3>
                   <p className="font-body text-body-md text-text-secondary mb-8">

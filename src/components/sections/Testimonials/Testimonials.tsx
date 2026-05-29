@@ -31,7 +31,7 @@ export const Testimonials = ({
           )}
           {headline && (
             <motion.h2
-              className="font-serif font-light text-text-primary text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
+              className="font-serif font-normal text-text-primary text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
               variants={fadeUp}
               transition={heroTransition}
             >
@@ -55,7 +55,7 @@ export const Testimonials = ({
             variants={fadeIn}
             transition={cardTransition}
           >
-            <blockquote className="font-serif font-light text-text-primary text-[clamp(1.25rem,2.5vw,1.75rem)] leading-[1.4] tracking-tight">
+            <blockquote className="font-serif font-normal text-text-primary text-[clamp(1.25rem,2.5vw,1.75rem)] leading-[1.4] tracking-tight">
               &ldquo;{item.quote}&rdquo;
             </blockquote>
             <figcaption className="flex flex-col gap-1">

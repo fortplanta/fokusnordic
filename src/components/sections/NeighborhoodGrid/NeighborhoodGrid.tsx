@@ -46,7 +46,7 @@ export const NeighborhoodGrid = ({
       >
         {headline && (
           <motion.h2
-            className="font-serif font-light text-text-primary mb-4
+            className="font-serif font-normal text-text-primary mb-4
                        text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
             variants={fadeUp}
             transition={heroTransition}
@@ -134,7 +134,7 @@ export const NeighborhoodGrid = ({
                 {spot.distance && ` · ${spot.distance}`}
               </p>
 
-              <h3 className="font-serif font-light text-text-primary text-display-xs mb-3">
+              <h3 className="font-serif font-normal text-text-primary text-display-xs mb-3">
                 {spot.name}
               </h3>
 

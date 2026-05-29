@@ -52,7 +52,7 @@ export const PropertyShowcase = ({
       >
         {headline && (
           <motion.h2
-            className="font-serif font-light text-text-inverse mb-4
+            className="font-serif font-normal text-text-inverse mb-4
                        text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
             variants={fadeUp}
             transition={heroTransition}
@@ -103,7 +103,7 @@ export const PropertyShowcase = ({
               {STATUS_LABELS[property.status] ?? property.status}
             </span>
 
-            <h3 className="font-serif font-light text-text-inverse text-display-xs mb-2">
+            <h3 className="font-serif font-normal text-text-inverse text-display-xs mb-2">
               {property.name}
             </h3>
 

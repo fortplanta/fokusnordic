@@ -36,7 +36,7 @@ export const ConceptBlock = ({
         >
           {headline && (
             <motion.h2
-              className="font-serif font-light text-text-primary mb-8
+              className="font-serif font-normal text-text-primary mb-8
                          text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.2] tracking-tight"
               variants={fadeUp}
               transition={heroTransition}
