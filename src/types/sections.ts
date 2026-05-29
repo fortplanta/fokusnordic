@@ -204,6 +204,47 @@ export interface SpacesIndexSection extends BaseSection {
 }
 
 // ============================================================================
+// TESTIMONIALS
+// ============================================================================
+
+export interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  role?: string;
+  company?: string;
+}
+
+export interface TestimonialsSection extends BaseSection {
+  type: "testimonials";
+  overline?: string;
+  headline?: string;
+  items: Testimonial[];
+  bgColor?: string;
+}
+
+// ============================================================================
+// PROCESS STEPS
+// ============================================================================
+
+export interface ProcessStep {
+  id: string;
+  number: string;
+  title: string;
+  body: string;
+  image?: Image;
+}
+
+export interface ProcessSection extends BaseSection {
+  type: "process";
+  overline?: string;
+  headline?: string;
+  intro?: string;
+  steps: ProcessStep[];
+  bgColor?: string;
+}
+
+// ============================================================================
 // UNION TYPE FOR ALL SECTIONS
 // ============================================================================
 
@@ -216,7 +257,9 @@ export type Section =
   | AmenitiesGridSection
   | ContactSectionConfig
   | SpacesIndexSection
-  | FooterSection;
+  | FooterSection
+  | TestimonialsSection
+  | ProcessSection;
 
 // ============================================================================
 // PAGE CONFIGURATION

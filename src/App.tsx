@@ -2,17 +2,30 @@ import { useCallback, useEffect, useState } from "react";
 import { PageRenderer } from "./components/layout/PageRenderer";
 import { Preloader } from "./components/Preloader/Preloader";
 import { Nav } from "./components/Nav/Nav";
+import { DesignPanel } from "./components/DesignPanel/DesignPanel";
+import { bootOverrides } from "./lib/designOverrides";
 import type { PageConfig } from "./types/sections";
 import rawConfig from "./config/page-content.json";
 import "./index.css";
 
-// JSON imports infer string for literal fields like `lang`; cast to the
-// typed interface so PageRenderer receives its expected shape.
 const pageConfig = rawConfig as unknown as PageConfig;
+const isStyleGuide = window.location.pathname === "/styleguide";
 
 function App() {
   const [preloaderDone, setPreloaderDone] = useState(false);
   const handlePreloaderComplete = useCallback(() => setPreloaderDone(true), []);
+
+  // Boot design overrides on every page load:
+  //   - applies any localStorage overrides immediately to :root
+  //   - opens a BroadcastChannel so this tab receives live updates from /styleguide
+  useEffect(() => {
+    const cleanup = bootOverrides();
+    return cleanup;
+  }, []);
+
+  if (isStyleGuide) {
+    return <DesignPanel />;
+  }
 
   // Block body scroll while preloader is covering the page
   useEffect(() => {
@@ -22,13 +35,8 @@ function App() {
 
   return (
     <div className="w-full min-h-screen">
-      {/* Nav — fixed overlay, always on top of page content */}
       {preloaderDone && <Nav />}
-
-      {/* Page content renders immediately underneath preloader */}
       <PageRenderer config={pageConfig} />
-
-      {/* Preloader sits on top (fixed, z-9999) and fades out when done */}
       {!preloaderDone && <Preloader onComplete={handlePreloaderComplete} />}
     </div>
   );
