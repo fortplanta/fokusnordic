@@ -128,7 +128,7 @@ export const Hero = ({
 
   // ── Cream Minimal ────────────────────────────────────────────────────────
   return (
-    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="xl">
+    <Section bgColor="#F6F2EA" paddingY="xl" maxWidth="2xl">
       <motion.div
         variants={stagger}
         initial="hidden"
