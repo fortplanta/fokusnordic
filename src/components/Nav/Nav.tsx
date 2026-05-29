@@ -59,7 +59,7 @@ export const Nav = () => {
       transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {/* 5-column grid — logo | gap | links-A | links-B | cta */}
-      <div className="max-w-[1664px] mx-auto w-full px-4 md:px-8 py-4 md:py-5 grid grid-cols-5 items-start">
+      <div className="max-w-content mx-auto w-full px-4 md:px-8 py-4 md:py-5 grid grid-cols-5 items-start">
 
         {/* Col 1 — logo */}
         <a href="/" aria-label="Barnängshuset — home">

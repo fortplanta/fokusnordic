@@ -6,6 +6,11 @@ export default {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        // Single source of truth for the page content container width.
+        // Used by Section.tsx, Nav, Hero labels, SpacesIndex — change here, done everywhere.
+        "content": "1920px",
+      },
       colors: {
         // Deep / near-black
         deep: "#13100D",

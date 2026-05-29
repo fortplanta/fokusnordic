@@ -17,8 +17,8 @@ const MAX_WIDTH: Record<SectionMaxWidth, string> = {
   md:   "max-w-4xl",       //  896px
   lg:   "max-w-6xl",       // 1152px
   xl:   "max-w-7xl",       // 1280px
-  "2xl":"max-w-[1920px]",  // 1920px — standard content container (full-HD reference)
-  "3xl":"max-w-[1920px]",  // 1920px — alias kept for backward compat
+  "2xl":"max-w-content",   // 1920px — standard content container (see tailwind.config.ts)
+  "3xl":"max-w-content",   // 1920px — alias kept for backward compat
   full: "max-w-none",
 };
 

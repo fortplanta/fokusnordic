@@ -58,7 +58,7 @@ export const Hero = ({
             variants={fadeIn}
             transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <div className="max-w-[1664px] mx-auto w-full px-4 md:px-8 flex items-center justify-between pt-4">
+            <div className="max-w-content mx-auto w-full px-4 md:px-8 flex items-center justify-between pt-4">
               <span className="text-body-xs font-body text-text-inverse/70 uppercase tracking-widest">
                 Stockholm
               </span>

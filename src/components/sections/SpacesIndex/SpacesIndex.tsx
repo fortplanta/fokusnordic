@@ -4,21 +4,21 @@ import { SpacesIndexSection, Image } from "../../../types/sections";
 
 // ── Layout constants ──────────────────────────────────────────────────────────
 //
-// These must match the Section component's "xl" preset so that the list's
+// These must match the Section component's "content" token so that the list's
 // left edge aligns with every other section's content on the page.
 //
-//   max-w-[1664px] = 104rem = 1664px
-//   px-8           = 2rem  =   32px
+//   max-w-content = 1920px = 120rem
+//   px-8          = 2rem  =   32px
 //
 // The right-side image bleeds to the viewport edge.  Its left edge is
 // calculated with the same math that Section.tsx uses to place content:
 //
 //   image-left = max( gutter + LIST_W, (vw - MAX_W) / 2 + GUTTER + LIST_W )
 //
-// When viewport ≤ 1664 px the first term wins; when larger the second does.
+// When viewport ≤ 1920 px the first term wins; when larger the second does.
 // Result: the image always starts exactly at the right edge of the list column.
 
-const MAX_W  = "104rem";  // max-w-[1664px] = 1664px
+const MAX_W  = "120rem";  // max-w-content = 1920px
 const GUTTER = "2rem";    // md:px-8        =   32px (used in the centering calc)
 const LIST_W = "320px";
 
@@ -63,7 +63,7 @@ export const SpacesIndex: React.FC<SpacesIndexSection> = ({
   // other Section on the page (same rule as Section.tsx → maxWidth "xl").
   // px-4 md:px-8 matches Section.tsx's default paddingX="md" so content
   // left-edges align across every section on the page.
-  const container = "max-w-[1664px] mx-auto w-full px-4 md:px-8";
+  const container = "max-w-content mx-auto w-full px-4 md:px-8";
 
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden select-none">
