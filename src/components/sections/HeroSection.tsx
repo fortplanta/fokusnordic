@@ -10,7 +10,7 @@ export default function HeroSection({ section }: { section: T }) {
     posterImage,
     tagline      = 'Södermalm, Stockholm',
     aboutLabel   = 'About the building',
-    aboutText    = 'A restored 1917 cotton mill — 300m² across two quiet floors, 4.9m ceilings, eight minutes from Slussen.',
+    aboutText    = 'Some buildings are designed to impress visitors. Barnängshuset was built in 1917 for people who were too busy making things to care about that. It still is.',
     ctaLabel     = 'View available spaces',
     headlineRow1 = 'A WORLD AWAY',
     headlineRow2 = 'FROM THE NOISE',
@@ -60,6 +60,11 @@ export default function HeroSection({ section }: { section: T }) {
               <div className="hero__about">
                 <p className="lbl">{aboutLabel}</p>
                 <p>{aboutText}</p>
+                <div className="hero__about-secondary">
+                  <a href="#spaces">
+                    Spaces &amp; specifications&nbsp;<span aria-hidden="true">↓</span>
+                  </a>
+                </div>
               </div>
               <div className="hero__link">
                 <a href="#spaces">

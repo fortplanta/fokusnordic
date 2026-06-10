@@ -92,6 +92,11 @@ export const HOME_PAGE_QUERY = /* groq */ `
         }
       },
 
+      // bridgeSection — transitional pause before the floor plan
+      _type == "bridgeSection" => {
+        headline, supportingLine
+      },
+
       // floorsSection — dereference floor documents
       _type == "floorsSection" => {
         heading, label,
@@ -104,11 +109,18 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // neighbourhoodSection — dereference poi documents
       _type == "neighbourhoodSection" => {
-        heading, label,
+        heading, label, supportingLine,
         pois[]-> {
           _id, name, description, category,
           walkingMinutes, lat, lng, sortOrder
         }
+      },
+
+      // rationalCaseSection — procurement / ESG block
+      _type == "rationalCaseSection" => {
+        orientLine, eyebrow, headline,
+        facts[] { _key, label, value },
+        closingLine
       },
 
       // journalSection (posts fetched separately via LATEST_JOURNAL_QUERY)

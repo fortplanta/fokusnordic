@@ -9,13 +9,21 @@ export default defineType({
       name: 'heading',
       title: 'Section heading',
       type: 'string',
-      initialValue: 'The neighbourhood',
+      initialValue: 'Södermalm has always been where people come to make things.',
     }),
     defineField({
       name: 'label',
       title: 'Eyebrow label',
       type: 'string',
-      initialValue: 'Södermalm',
+      initialValue: 'The address',
+    }),
+    defineField({
+      name: 'supportingLine',
+      title: 'Supporting line',
+      type: 'text',
+      rows: 3,
+      description: 'One or two sentences below the headline. Shifts the argument from "convenient" to "deliberate".',
+      initialValue: 'Not to be seen making them — to actually make them. Barnängshuset sits at the quieter end of that tradition, eight minutes from the centre and a world away from its noise.',
     }),
     defineField({
       name: 'pois',

@@ -10,9 +10,11 @@ import heroSection          from './sections/heroSection'
 import statementSection     from './sections/statementSection'
 import figuresSection       from './sections/figuresSection'
 import testimonialSection   from './sections/testimonialSection'
+import bridgeSection        from './sections/bridgeSection'
 import floorsSection        from './sections/floorsSection'
-import neighbourhoodSection from './sections/neighbourhoodSection'
-import journalSection       from './sections/journalSection'
+import neighbourhoodSection  from './sections/neighbourhoodSection'
+import rationalCaseSection  from './sections/rationalCaseSection'
+import journalSection        from './sections/journalSection'
 import viewingSection       from './sections/viewingSection'
 
 export const schemaTypes = [
@@ -27,8 +29,10 @@ export const schemaTypes = [
   statementSection,
   figuresSection,
   testimonialSection,
+  bridgeSection,
   floorsSection,
   neighbourhoodSection,
+  rationalCaseSection,
   journalSection,
   viewingSection,
 ]
