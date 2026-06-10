@@ -124,6 +124,13 @@ export type TestimonialSection = {
   }
 }
 
+export type BridgeSection = {
+  _type: 'bridgeSection'
+  _key: string
+  headline?: string
+  supportingLine?: string
+}
+
 export type FloorsSection = {
   _type: 'floorsSection'
   _key: string
@@ -137,7 +144,24 @@ export type NeighbourhoodSection = {
   _key: string
   heading?: string
   label?: string
+  supportingLine?: string
   pois?: POI[]
+}
+
+export type RationalCaseFact = {
+  _key: string
+  label?: string
+  value?: string
+}
+
+export type RationalCaseSection = {
+  _type: 'rationalCaseSection'
+  _key: string
+  orientLine?: string
+  eyebrow?: string
+  headline?: string
+  facts?: RationalCaseFact[]
+  closingLine?: string
 }
 
 export type JournalSection = {
@@ -163,7 +187,9 @@ export type PageSection =
   | StatementSection
   | FiguresSection
   | TestimonialSection
+  | BridgeSection
   | FloorsSection
   | NeighbourhoodSection
+  | RationalCaseSection
   | JournalSection
   | ViewingSection

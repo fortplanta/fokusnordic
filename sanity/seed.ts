@@ -140,7 +140,7 @@ async function seed() {
         mediaType:    'image',
         tagline:      'Södermalm, Stockholm',
         aboutLabel:   'About the building',
-        aboutText:    'A restored 1917 cotton mill — 300m² across two quiet floors, 4.9m ceilings, eight minutes from Slussen.',
+        aboutText:    'Some buildings are designed to impress visitors. Barnängshuset was built in 1917 for people who were too busy making things to care about that. It still is.',
         ctaLabel:     'View available spaces',
         headlineRow1: 'A WORLD AWAY',
         headlineRow2: 'FROM THE NOISE',
@@ -183,16 +183,20 @@ async function seed() {
           { _type: 'object', _key: 'f2', value: '2',            label: 'Floors' },
           { _type: 'object', _key: 'f3', value: '300m²',        label: 'Total area' },
           { _type: 'object', _key: 'f4', value: '8 min',        label: 'To Slussen' },
-          { _type: 'object', _key: 'f5', value: '1917 / BREEAM',label: 'Built / Certified' },
+          { _type: 'object', _key: 'f5', value: '1917',           label: 'BREEAM Very Good' },
         ],
       },
       {
         _type: 'testimonialSection',
         _key:  'testimonial',
         eyebrow:    'From our tenants',
-        quote:      'We looked at fifteen offices. This was the only one where we stopped talking about the space and started talking about the work.',  // PLACEHOLDER
-        authorName: 'Placeholder Tenant',
-        authorRole: 'PLACEHOLDER — replace with real attributed quote',
+        // quote/authorName/authorRole intentionally absent until real tenant copy is confirmed
+      },
+      {
+        _type: 'bridgeSection',
+        _key:  'bridge',
+        headline:       'Four point nine metres.',
+        supportingLine: 'Not a specification. A condition for the kind of work that needs room to happen.',
       },
       {
         _type: 'floorsSection',
@@ -207,9 +211,44 @@ async function seed() {
       {
         _type: 'neighbourhoodSection',
         _key:  'neighbourhood',
-        heading: 'The neighbourhood',
-        label:   'Södermalm',
+        heading:       'Södermalm has always been where people come to make things.',
+        label:         'The address',
+        supportingLine: 'Not to be seen making them — to actually make them. Barnängshuset sits at the quieter end of that tradition, eight minutes from the centre and a world away from its noise.',
         pois: pois.map((p) => ({ _type: 'reference', _ref: p._id, _key: p._id })),
+      },
+      {
+        _type: 'rationalCaseSection',
+        _key:  'rationalCase',
+        orientLine:  'Barnängshuset — Nackagatan 4, Södermalm. A 1917 textile mill, restored for office use.',
+        eyebrow:     'The case',
+        headline:    'Everything the spreadsheet needs.',
+        facts: [
+          {
+            _type: 'object',
+            _key:  'breeam',
+            label: 'BREEAM In-Use',
+            value: 'BREEAM In-Use: Very Good — which means the building carries its own environmental credentials, so your tenancy starts with the reporting already done.',
+          },
+          {
+            _type: 'object',
+            _key:  'lease',
+            label: 'Lease',
+            value: 'Flexible terms available, from 12 months. Full details on request.',
+          },
+          {
+            _type: 'object',
+            _key:  'available',
+            label: 'Available',
+            value: 'Available from Q4 2025.',
+          },
+          {
+            _type: 'object',
+            _key:  'owner',
+            label: 'Owner',
+            value: 'PPP Group, Stockholm.',
+          },
+        ],
+        closingLine: 'Managed by PPP Group, who have looked after buildings like this long enough to know the details are the point.',
       },
       {
         _type: 'journalSection',

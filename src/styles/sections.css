@@ -99,8 +99,8 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(10, 9, 7, 0.45) 0%,
-    rgba(10, 9, 7, 0.12) 28%,
+    rgba(10, 9, 7, 0.68) 0%,
+    rgba(10, 9, 7, 0.28) 38%,
     rgba(10, 9, 7, 0.22) 64%,
     rgba(10, 9, 7, 0.70) 100%
   );
@@ -157,6 +157,24 @@
   line-height: 1.22;
   max-width: 26ch;
   font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+}
+.hero__about-secondary {
+  margin-top: 1.25rem;
+}
+.hero__about-secondary a {
+  font-size: var(--step-00);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.3s var(--ease-soft);
+}
+.hero__about-secondary a:hover {
+  color: rgba(255, 255, 255, 0.82);
 }
 .hero__link {
   grid-column: 11 / 13;
@@ -365,8 +383,8 @@
 
 .testi {
   background: var(--c-paper-2);
-  padding-top: clamp(4rem, 3rem + 5vw, 8rem);
-  padding-bottom: clamp(5rem, 4rem + 8vw, 12rem);
+  padding-top: clamp(5rem, 4rem + 6vw, 11rem);
+  padding-bottom: clamp(5rem, 4rem + 6vw, 11rem);
 }
 .testi__eyebrow {
   font-size: var(--step-00);
@@ -381,6 +399,12 @@
   gap: clamp(2rem, 1.5rem + 4vw, 6rem);
   align-items: start;
 }
+.testi__left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Left: wide image (3:2) ─────────────────────────────────────────────── */
 .testi__img {
   position: relative;
   width: 100%;
@@ -388,14 +412,10 @@
   overflow: hidden;
   background: var(--c-stone-4);
   margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
+  /* img positioned by Next.js fill — do not re-set absolute here */
 }
-.testi__img img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+
+/* ── Left: quote + attribution ─────────────────────────────────────────── */
 .testi__quote {
   font-size: var(--step-2);
   line-height: 1.32;
@@ -409,8 +429,10 @@
   text-transform: uppercase;
   line-height: 1.6;
 }
-.testi__owner .nm  { color: var(--c-ink); font-weight: 500; display: block }
+.testi__owner .nm   { color: var(--c-ink); font-weight: 500; display: block }
 .testi__owner .role { color: var(--c-stone); display: block }
+
+/* ── Right: portrait card (3:4) — structural, always visible ────────────── */
 .testi__aside {
   display: block;
   text-decoration: none;
@@ -433,6 +455,42 @@
   transition: transform 1.1s var(--ease-soft);
 }
 .testi__aside:hover .testi__card img { transform: scale(1.04) }
+
+/* Gradient cover-label — fades in on hover */
+.testi__card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(18, 16, 13, 0.70) 0%,
+    rgba(18, 16, 13, 0.15) 44%,
+    transparent 68%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-soft);
+  pointer-events: none;
+}
+.testi__aside:hover .testi__card-overlay { opacity: 1 }
+.testi__card-cover-label {
+  font-size: var(--step-00);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--c-paper);
+  transform: translateY(6px);
+  opacity: 0;
+  transition:
+    opacity  0.45s var(--ease-soft) 0.06s,
+    transform 0.45s var(--ease-soft) 0.06s;
+}
+.testi__aside:hover .testi__card-cover-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Below card: meta row ───────────────────────────────────────────────── */
 .testi__meta {
   display: flex;
   align-items: baseline;
@@ -465,8 +523,47 @@
   transition: transform 0.55s var(--ease-soft);
 }
 .testi__aside:hover .testi__meta .cta::after { transform: scaleX(1) }
+
 @media (max-width: 900px) {
   .testi__grid { grid-template-columns: 1fr; gap: 3rem }
+}
+
+/* ─── BRIDGE ─────────────────────────────────────────────────────────────── */
+/*
+  Transitional pause between testimonial (emotion) and floor plan (data).
+  Ground: --c-paper-3 — a half-step from paper-2 toward olive, reads as
+  a deliberate beat rather than another content section.
+  Almost entirely silence: typography + space, nothing else.
+*/
+
+.bridge {
+  background: var(--c-paper-3);
+  color: var(--c-ink);
+  padding-top:    clamp(8rem, 5rem + 14vw, 18rem);
+  padding-bottom: clamp(8rem, 5rem + 14vw, 18rem);
+  text-align: center;
+}
+.bridge__inner {
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.75rem, 1rem + 2.5vw, 3rem);
+}
+.bridge__headline {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-4);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--c-ink);
+  max-width: 22ch;
+}
+.bridge__support {
+  font-size: var(--step-1);
+  line-height: 1.58;
+  color: var(--c-stone);
+  max-width: 40ch;
 }
 
 /* ─── FLOORS ──────────────────────────────────────────────────────────────── */
@@ -619,6 +716,18 @@
   letter-spacing: -0.01em;
   color: var(--c-ink);
 }
+.hood__support {
+  grid-column: 3 / 10;
+  font-size: var(--step-0);
+  color: var(--c-stone);
+  line-height: 1.62;
+  max-width: 46ch;
+  margin-top: clamp(1.25rem, 0.75rem + 1.5vw, 2rem);
+}
+@media (max-width: 900px) {
+  .hood__head h2   { grid-column: 1 / 13 }
+  .hood__support   { grid-column: 1 / 13 }
+}
 .hood__list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -669,6 +778,109 @@
 @media (max-width: 760px) {
   .hood__list { grid-template-columns: 1fr }
   .spot:nth-child(odd) { border-right: none; padding-right: 0 }
+}
+
+/* ─── RATIONAL CASE ──────────────────────────────────────────────────────── */
+/*
+  Ground: --c-ink — the page's single non-footer ink section.
+  Register: formal, factual, document-grade. The procurement reader's block.
+  Self-sufficient: the orient line re-establishes the building for cold arrivals.
+*/
+
+.rcase {
+  background: var(--c-ink);
+  color: var(--c-paper);
+  padding-top:    clamp(5rem, 4rem + 6vw, 11rem);
+  padding-bottom: clamp(5rem, 4rem + 6vw, 11rem);
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+
+.rcase__header {
+  max-width: 64ch;
+  margin-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+}
+.rcase__orient {
+  font-size: var(--step-0);
+  color: var(--c-stone-2);
+  line-height: 1.5;
+  margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+}
+.rcase__eyebrow {
+  font-size: var(--step-00);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--c-sage);
+  margin-bottom: 1rem;
+}
+.rcase__headline {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-3);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--c-paper);
+}
+
+/* ── Divider ──────────────────────────────────────────────────────────── */
+
+.rcase__divider {
+  height: 1px;
+  background: rgba(250, 247, 243, 0.1);
+  margin-bottom: 0;
+}
+
+/* ── Ledger ───────────────────────────────────────────────────────────── */
+
+.rcase__facts {
+  margin: 0;
+  padding: 0;
+}
+.rcase__fact {
+  display: grid;
+  grid-template-columns: minmax(9rem, 22%) 1fr;
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  padding-top:    clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  padding-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  border-bottom: 1px solid rgba(250, 247, 243, 0.1);
+  align-items: baseline;
+}
+.rcase__fact-label {
+  font-size: var(--step-00);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--c-sage);
+  padding-top: 0.2rem;  /* optical alignment with value line-height */
+  flex: none;
+}
+.rcase__fact-value {
+  font-size: var(--step-0);
+  color: rgba(250, 247, 243, 0.78);
+  line-height: 1.62;
+  max-width: 58ch;
+  margin: 0;
+}
+
+/* ── Closing ──────────────────────────────────────────────────────────── */
+
+.rcase__closing {
+  font-size: var(--step-1);
+  color: var(--c-stone-2);
+  line-height: 1.55;
+  max-width: 52ch;
+  margin-top: clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .rcase__fact {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  .rcase__fact-label {
+    padding-top: 0;
+  }
 }
 
 /* ─── JOURNAL ─────────────────────────────────────────────────────────────── */
@@ -796,8 +1008,8 @@
 .viewing {
   background: var(--c-olive);
   color: var(--c-paper);
-  padding-top: clamp(5rem, 4rem + 6vw, 11rem);
-  padding-bottom: clamp(5rem, 4rem + 6vw, 11rem);
+  padding-top: clamp(7rem, 5rem + 8vw, 14rem);
+  padding-bottom: clamp(7rem, 5rem + 8vw, 14rem);
 }
 .viewing__grid {
   display: grid;
@@ -1206,6 +1418,42 @@
   aspect-ratio: 4 / 3;
   background: var(--c-stone-4);
   overflow: hidden;
+}
+
+/*
+  Canvas filter — warms the WebGL render to match the paper palette.
+  Targets only the canvas (and its container), NOT the DOM marker elements
+  or the attribution control, which are sibling divs in the MapLibre tree.
+  sepia: adds warmth toward paper; saturate: cuts the default blue water;
+  brightness: micro-correction to avoid going muddy.
+*/
+.map-container .maplibregl-canvas-container {
+  filter: sepia(0.06) saturate(0.8) brightness(0.98);
+}
+
+/*
+  Attribution — legally required, visually quiet.
+  Reduced opacity and size; background removed so it floats over the map
+  without the white pill that clashes with the paper ground.
+*/
+.maplibregl-ctrl-attrib {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.maplibregl-ctrl-attrib-inner,
+.maplibregl-ctrl-attrib-inner a {
+  font-size: 9px !important;
+  opacity: 0.5;
+  color: var(--c-stone) !important;
+  text-decoration: none !important;
+}
+.maplibregl-ctrl-attrib-button {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+/* Maptiler logo — keep present but unobtrusive */
+.maplibregl-ctrl-logo {
+  opacity: 0.35 !important;
 }
 .map-placeholder {
   display: flex;

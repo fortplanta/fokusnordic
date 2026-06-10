@@ -76,8 +76,8 @@ export default function PageAnimations() {
       }
 
       // ── Section heading reveals ──────────────────────────────────────────
-      // Targets every h2 outside the hero
-      document.querySelectorAll<HTMLElement>('section:not(.hero) h2').forEach((el) => {
+      // Targets every h2 outside the hero, excluding the bridge (handled below)
+      document.querySelectorAll<HTMLElement>('section:not(.hero):not(.bridge) h2').forEach((el) => {
         gsap.fromTo(el,
           { opacity: 0, y: 40, clipPath: 'inset(0 0 30% 0)' },
           {
@@ -91,6 +91,42 @@ export default function PageAnimations() {
           }
         )
       })
+
+      // ── Bridge — slow single reveal ──────────────────────────────────────
+      // The pivot beat from emotion to data; one unhurried unfold, no stagger.
+      const bridgeHeadline = document.querySelector<HTMLElement>('.bridge__headline')
+      const bridgeSupport  = document.querySelector<HTMLElement>('.bridge__support')
+
+      if (bridgeHeadline) {
+        gsap.fromTo(bridgeHeadline,
+          { opacity: 0, y: 28, clipPath: 'inset(0 0 22% 0)' },
+          {
+            opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)',
+            duration: 1.6, ease: EASE_MASK,
+            scrollTrigger: {
+              trigger: bridgeHeadline,
+              start: 'top 78%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+
+      if (bridgeSupport) {
+        gsap.fromTo(bridgeSupport,
+          { opacity: 0, y: 16 },
+          {
+            opacity: 1, y: 0,
+            duration: 1.2, ease: EASE_SOFT,
+            delay: 0.22,
+            scrollTrigger: {
+              trigger: bridgeSupport,
+              start: 'top 82%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
 
       // ── [data-fade] elements ─────────────────────────────────────────────
       document.querySelectorAll<HTMLElement>('[data-fade]').forEach((el) => {
@@ -239,6 +275,24 @@ export default function PageAnimations() {
             stagger: 0.12,
             scrollTrigger: {
               trigger: '.journal__grid',
+              start: 'top 82%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+
+      // ── Rational case — ledger rows stagger ─────────────────────────
+      const rcaseFacts = document.querySelectorAll<HTMLElement>('.rcase__fact')
+      if (rcaseFacts.length) {
+        gsap.fromTo(rcaseFacts,
+          { opacity: 0, y: 18 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.9, ease: EASE_SOFT,
+            stagger: 0.08,
+            scrollTrigger: {
+              trigger: '.rcase__facts',
               start: 'top 82%',
               toggleActions: 'play none none none',
             },
