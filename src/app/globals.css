@@ -63,28 +63,52 @@
 /* ─── Design tokens ──────────────────────────────────────────────────────── */
 /*
   Single source of truth. Every color, type size, space, and motion curve
-  is a token. Never hardcode a hex or raw timing value in a component.
+  resolves to a token. Never hardcode a hex or raw value in a component.
 
-  Palette hierarchy:
-    Grounds  → olive, papers (paper/paper-2/paper-3), ink
-    Highlight → moss, sage — NEVER as a background
-    Accent   → coral — RARE; CTAs, active states, one or two words
+  Palette (Swedish names — self-documenting by material):
+    Grounds  : Sot / Beck (dark anchors), Blekäng (neutral default)
+    Earth    : Ängsull → Vadmal → Torv → Mylla (warm neutral gradient, rhythm breaks)
+    Greens   : Nässla — ONE section ground maximum; Reseda — hover / label accents only
+    Accent   : Havtorn — absolute max ONE element per viewport, never on Nässla
 */
 
 :root {
-  /* Colors */
-  --c-ink:      #12100D;
-  --c-paper:    #FAF7F3;
-  --c-paper-2:  #F5F2EB;
-  --c-paper-3:  #EEE7E0;
-  --c-moss:     #4E6646;
-  --c-sage:     #8E9E6C;
-  --c-olive:    #3D3928;
-  --c-stone:    #5B554B;
-  --c-stone-2:  #A69C8E;
-  --c-stone-3:  #C2BBB1;
-  --c-stone-4:  #DCD8D1;
-  --c-coral:    #C9725D;
+  /* Grounds — dark */
+  --sot:     #000000;   /* pure black — deepest media bg, overlays */
+  --beck:    #1A1A1A;   /* near-black — hero, dark sections, footer */
+
+  /* Grounds — light (neutral default) */
+  --blekang: #F5F2EB;   /* warm off-white — DEFAULT section ground; replaces pure white */
+  --aska:    #DCD8D1;   /* light warm grey — dividers, secondary surfaces, disabled */
+
+  /* Earth tones — section rhythm breaks, secondary grounds, overlays */
+  --angsull: #C2BBB1;
+  --vadmal:  #A69C8E;
+  --torv:    #5B554B;
+  --mylla:   #3D3928;
+
+  /* Brand greens — restrained */
+  --nassla:  #38482E;   /* deep cool green — ONE section ground max ("The Spaces") */
+  --reseda:  #7F7E43;   /* warmer light green — hover states, label / typographic accents */
+
+  /* Accent */
+  --havtorn: #FF9542;   /* orange — max ONE element per viewport/composition */
+
+  /* ── Backward-compat aliases ─────────────────────────────────────────────
+     Keep these until every consumer in sections.css + components uses the
+     Swedish names above. Remove in the next sweep.                         */
+  --c-ink:     var(--beck);
+  --c-paper:   var(--blekang);
+  --c-paper-2: var(--blekang);
+  --c-paper-3: var(--angsull);
+  --c-moss:    var(--nassla);
+  --c-sage:    var(--reseda);
+  --c-olive:   var(--nassla);  /* ⚠ two sections use this — viewing must move to --beck */
+  --c-stone:   var(--torv);
+  --c-stone-2: var(--vadmal);
+  --c-stone-3: var(--angsull);
+  --c-stone-4: var(--aska);
+  --c-coral:   var(--havtorn);
 
   /* Typography */
   --font-display: 'Petit Serif', Georgia, serif;
@@ -103,7 +127,7 @@
   --container-pad: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
   --site-max:      140rem;
 
-  /* Motion — long, unhurried; this site drifts, it doesn't snap */
+  /* Motion — long, unhurried; drifts and settles, never snaps */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-mask: cubic-bezier(0.16, 1, 0.30, 1);
 
@@ -113,23 +137,38 @@
 
 /* ─── Tailwind theme bridge ──────────────────────────────────────────────── */
 /*
-  @theme inline exposes the custom properties above as Tailwind utilities.
-  Named shortcuts let you write bg-paper, text-ink, etc. without brackets.
+  @theme inline exposes custom properties as Tailwind utilities.
+  Swedish names are canonical: bg-nassla, text-torv, bg-blekang, etc.
+  Compat names (bg-olive, text-coral …) are kept until sections.css is swept.
 */
 
 @theme inline {
-  --color-ink:     var(--c-ink);
-  --color-paper:   var(--c-paper);
-  --color-paper-2: var(--c-paper-2);
-  --color-paper-3: var(--c-paper-3);
-  --color-moss:    var(--c-moss);
-  --color-sage:    var(--c-sage);
-  --color-olive:   var(--c-olive);
-  --color-stone:   var(--c-stone);
-  --color-stone-2: var(--c-stone-2);
-  --color-stone-3: var(--c-stone-3);
-  --color-stone-4: var(--c-stone-4);
-  --color-coral:   var(--c-coral);
+  /* Swedish canonical names */
+  --color-sot:     var(--sot);
+  --color-beck:    var(--beck);
+  --color-blekang: var(--blekang);
+  --color-aska:    var(--aska);
+  --color-angsull: var(--angsull);
+  --color-vadmal:  var(--vadmal);
+  --color-torv:    var(--torv);
+  --color-mylla:   var(--mylla);
+  --color-nassla:  var(--nassla);
+  --color-reseda:  var(--reseda);
+  --color-havtorn: var(--havtorn);
+
+  /* Backward-compat Tailwind classes — remove with aliases above */
+  --color-ink:     var(--beck);
+  --color-paper:   var(--blekang);
+  --color-paper-2: var(--blekang);
+  --color-paper-3: var(--angsull);
+  --color-moss:    var(--nassla);
+  --color-sage:    var(--reseda);
+  --color-olive:   var(--nassla);
+  --color-stone:   var(--torv);
+  --color-stone-2: var(--vadmal);
+  --color-stone-3: var(--angsull);
+  --color-stone-4: var(--aska);
+  --color-coral:   var(--havtorn);
 
   --font-display: var(--font-display);
   --font-sans:    var(--font-sans);
@@ -154,8 +193,8 @@ html {
 }
 
 body {
-  background: var(--c-paper);
-  color: var(--c-ink);
+  background: var(--blekang);
+  color: var(--beck);
   font-family: var(--font-sans);
   font-weight: 400;
   line-height: 1.6;
@@ -212,7 +251,7 @@ a {
   Never remove :focus-visible — it is required for WCAG 2.1 AA.
 */
 :focus-visible {
-  outline: 2px solid var(--c-coral);
+  outline: 2px solid var(--havtorn);
   outline-offset: 3px;
   border-radius: 1px;
 }
@@ -247,24 +286,24 @@ a {
 
 /* Ensure interactive SVG elements show focus rings */
 .unit:focus-visible {
-  outline: 2px solid var(--c-coral);
+  outline: 2px solid var(--havtorn);
   outline-offset: 2px;
 }
 
 /* Floor tab keyboard focus */
 .floor-tab:focus-visible {
-  outline: 2px solid var(--c-coral);
+  outline: 2px solid var(--havtorn);
   outline-offset: -2px;
 }
 
 /* Form elements */
 .vf-input:focus-visible {
-  outline: 2px solid var(--c-coral);
+  outline: 2px solid var(--havtorn);
   outline-offset: -2px;
 }
 
 /* Availability bar dismiss button */
 .avail-bar__dismiss:focus-visible {
-  outline: 2px solid var(--c-coral);
+  outline: 2px solid var(--havtorn);
   border-radius: 2px;
 }
