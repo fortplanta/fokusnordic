@@ -569,8 +569,8 @@
 /* ─── FLOORS ──────────────────────────────────────────────────────────────── */
 
 .floors {
-  background: var(--nassla);
-  color: var(--c-paper);
+  background: var(--reseda);
+  color: var(--sot);
   padding-top: clamp(5rem, 4rem + 6vw, 11rem);
   padding-bottom: clamp(5rem, 4rem + 6vw, 11rem);
   position: relative;
@@ -588,7 +588,7 @@
   font-size: var(--step-00);
   letter-spacing: var(--tracking-mono);
   text-transform: uppercase;
-  color: var(--c-sage);
+  color: var(--beck);
   padding-top: 0.6rem;
 }
 .floors__head h2 {
@@ -608,29 +608,29 @@
   font-size: var(--step-00);
   letter-spacing: 0.04em;
 }
-.floors__legend .row { display: flex; align-items: center; gap: 0.6rem; color: var(--c-stone-3) }
+.floors__legend .row { display: flex; align-items: center; gap: 0.6rem; color: var(--beck) }
 .floors__legend .dot { width: 9px; height: 9px; border-radius: 50%; flex: none }
-.dot-avail  { background: var(--reseda) }   /* no Havtorn on Nässla ground */
-.dot-res    { background: var(--reseda) }
-.dot-leased { background: var(--torv) }
+.dot-avail  { background: var(--sot) }    /* black on Reseda = 5.3:1 */
+.dot-res    { background: var(--torv) }   /* mid-dark earth */
+.dot-leased { background: var(--aska) }   /* muted light = visually "gone" */
 
 /* Unit list — Stage 3 placeholder for the interactive SVG (Stage 5) */
 .floors__list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1px;
-  background: rgba(245, 242, 235, 0.1);
-  border: 1px solid rgba(245, 242, 235, 0.1);
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.10);
 }
 .floor-card {
-  background: color-mix(in oklab, var(--c-paper) 6%, transparent);
+  background: rgba(0, 0, 0, 0.04);
   padding: clamp(1.5rem, 1.2rem + 2vw, 2.5rem);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   transition: background 0.4s var(--ease-soft);
 }
-.floor-card:hover { background: color-mix(in oklab, var(--c-paper) 10%, transparent) }
+.floor-card:hover { background: rgba(0, 0, 0, 0.08) }
 .floor-card.leased { opacity: 0.5; cursor: default }
 .floor-card__status {
   display: flex;
@@ -639,7 +639,7 @@
   font-size: var(--step-00);
   letter-spacing: var(--tracking-mono);
   text-transform: uppercase;
-  color: var(--c-stone-3);
+  color: var(--beck);
 }
 .floor-card__label {
   font-family: var(--font-display);
@@ -651,7 +651,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem 1.5rem;
-  border-top: 1px solid rgba(245, 242, 235, 0.15);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   padding-top: 1.25rem;
 }
 .floor-card__spec .v {
@@ -664,7 +664,7 @@
   font-size: var(--step-00);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--c-stone-3);
+  color: var(--beck);
   margin-top: 0.25rem;
 }
 .floor-card__features {
@@ -676,10 +676,10 @@
 .floor-card__feature {
   font-size: var(--step-00);
   letter-spacing: 0.04em;
-  border: 1px solid rgba(245, 242, 235, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.2rem 0.6rem;
   border-radius: 2px;
-  color: var(--c-stone-3);
+  color: var(--beck);
 }
 @media (max-width: 760px) {
   .floors__list { grid-template-columns: 1fr }
@@ -1260,8 +1260,8 @@
 }
 .floor-tab {
   background: none;
-  border: 1px solid rgba(245, 242, 235, 0.15);
-  color: var(--c-stone-3);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  color: var(--beck);
   font-family: var(--font-sans);
   font-size: var(--step-00);
   letter-spacing: var(--tracking-mono);
@@ -1272,12 +1272,12 @@
 }
 .floor-tab:not(:first-child) { border-left: none }
 .floor-tab.active {
-  background: rgba(245, 242, 235, 0.1);
-  color: var(--c-paper);
+  background: rgba(0, 0, 0, 0.10);
+  color: var(--sot);
 }
 .floor-tab:hover:not(.active) {
-  background: rgba(245, 242, 235, 0.06);
-  color: var(--c-paper);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--sot);
 }
 
 .floors__stage {
@@ -1293,34 +1293,34 @@
 .plan { position: relative; width: 100% }
 .plan svg { width: 100%; height: auto; display: block; overflow: visible }
 
-/* SVG unit states */
+/* SVG unit states — on Reseda ground, fills/strokes are dark tints */
 .unit {
-  fill: color-mix(in oklab, var(--c-paper) 6%, transparent);
-  stroke: rgba(245, 242, 235, 0.15);
+  fill: rgba(0, 0, 0, 0.07);
+  stroke: rgba(0, 0, 0, 0.22);
   stroke-width: 1.2;
   cursor: pointer;
   transition: fill 0.45s var(--ease-soft), stroke 0.45s var(--ease-soft);
 }
 .unit:hover,
 .unit.hovered {
-  fill: color-mix(in oklab, var(--c-paper) 14%, transparent);
-  stroke: rgba(245, 242, 235, 0.35);
+  fill: rgba(0, 0, 0, 0.13);
+  stroke: rgba(0, 0, 0, 0.40);
 }
 .unit.active {
-  fill: color-mix(in oklab, var(--reseda) 72%, transparent);
-  stroke: var(--reseda);
+  fill: color-mix(in oklab, var(--beck) 72%, transparent);
+  stroke: var(--beck);
   stroke-width: 1.8;
 }
 .unit.reserved.active {
-  fill: color-mix(in oklab, var(--reseda) 55%, transparent);
-  stroke: var(--reseda);
+  fill: color-mix(in oklab, var(--mylla) 60%, transparent);
+  stroke: var(--mylla);
 }
 .unit.leased {
-  fill: color-mix(in oklab, var(--c-paper) 3%, transparent);
-  stroke: rgba(245, 242, 235, 0.06);
+  fill: rgba(0, 0, 0, 0.03);
+  stroke: rgba(0, 0, 0, 0.08);
   cursor: default;
 }
-.unit.leased:hover { fill: color-mix(in oklab, var(--c-paper) 3%, transparent) }
+.unit.leased:hover { fill: rgba(0, 0, 0, 0.03) }
 
 /* Plan info panel */
 .planinfo {
@@ -1337,7 +1337,7 @@
   font-size: var(--step-00);
   letter-spacing: var(--tracking-mono);
   text-transform: uppercase;
-  color: var(--c-stone-3);
+  color: var(--beck);
   margin-bottom: var(--step-0);
 }
 .planinfo__status .dot {
@@ -1352,13 +1352,13 @@
   font-size: var(--step-3);
   line-height: 1;
   margin-bottom: 1.5rem;
-  color: var(--c-paper);
+  color: var(--sot);
 }
 .planinfo__specs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem 2rem;
-  border-top: 1px solid rgba(245, 242, 235, 0.15);
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
   padding-top: 1.5rem;
 }
 .planinfo__spec .v {
@@ -1366,13 +1366,13 @@
   font-size: var(--step-1);
   display: block;
   line-height: 1.1;
-  color: var(--c-paper);
+  color: var(--sot);
 }
 .planinfo__spec .k {
   font-size: var(--step-00);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--c-stone-3);
+  color: var(--beck);
   margin-top: 0.3rem;
 }
 .planinfo__features {
@@ -1384,14 +1384,14 @@
 .planinfo__feature {
   font-size: var(--step-00);
   letter-spacing: 0.04em;
-  border: 1px solid rgba(245, 242, 235, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.2rem 0.65rem;
   border-radius: 2px;
-  color: var(--c-stone-3);
+  color: var(--beck);
 }
 .planinfo__hint {
   font-size: var(--step-00);
-  color: var(--c-stone-3);
+  color: var(--beck);
   letter-spacing: 0.06em;
   opacity: 0.7;
 }
