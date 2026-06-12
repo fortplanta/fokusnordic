@@ -266,7 +266,9 @@
   gap: 2rem;
 }
 .intro__statement { grid-column: 1 / 9; align-self: start }
-.intro__statement h2 {
+/* Tag-agnostic: the headingLevel field changes the semantic tag only —
+   visual size always comes from the type scale, never the HTML tag */
+.intro__statement :is(h1, h2, h3, h4) {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: clamp(2rem, 1rem + 4vw, 4.6rem);
@@ -1630,3 +1632,36 @@
   border: 1px solid rgba(245, 242, 235, 0.18);
   max-width: 30rem;
 }
+
+/* ─── SECTION COLOR THEMES ────────────────────────────────────────────────── */
+/*
+   Driven by the colorTheme field on each section in Sanity. A theme is a
+   PAIRED background + text combination — editors pick a theme, never
+   individual colors. Secondary text derives from the theme's text color at
+   reduced opacity (--section-fg-muted), so contrast holds in every theme.
+
+   `section[data-section-theme]` (0,1,1) deliberately outranks the per-section
+   ground rules like `.intro` (0,1,0), so the theme wins when set.
+*/
+
+section[data-section-theme] {
+  background: var(--section-bg);
+  color: var(--section-fg);
+  --section-fg-muted: color-mix(in srgb, var(--section-fg) 62%, transparent);
+  --section-hairline: color-mix(in srgb, var(--section-fg) 14%, transparent);
+}
+
+section[data-section-theme='light']   { --section-bg: var(--blekang); --section-fg: var(--beck) }
+section[data-section-theme='warm']    { --section-bg: var(--angsull); --section-fg: var(--beck) }
+section[data-section-theme='dark']    { --section-bg: var(--beck);    --section-fg: var(--blekang) }
+section[data-section-theme='brand']   { --section-bg: var(--reseda);  --section-fg: var(--blekang) }
+section[data-section-theme='deep']    { --section-bg: var(--mylla);   --section-fg: var(--blekang) }
+section[data-section-theme='neutral'] { --section-bg: var(--aska);    --section-fg: var(--beck) }
+
+/* Intro internals re-derived from the theme (sample wiring — statementSection) */
+section[data-section-theme] .intro__label        { color: var(--section-fg) }
+section[data-section-theme] .intro__body         { color: var(--section-fg-muted) }
+section[data-section-theme] .intro__body strong  { color: var(--section-fg) }
+section[data-section-theme] .intro__cta a        { color: var(--section-fg) }
+section[data-section-theme] .intro__cta a::after { background: var(--section-fg) }
+section[data-section-theme] .intro__rule         { background: var(--section-hairline) }

@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 // The "intro" section — big serif statement + offset parallax image + body ledger
 export default defineType({
@@ -13,6 +14,8 @@ export default defineType({
       initialValue: 'The room you work in changes the work you do.',
       validation: (r) => r.required(),
     }),
+    headingLevelField('h2'),
+    colorThemeField('light'),
     defineField({
       name: 'media',
       title: 'Parallax image',
