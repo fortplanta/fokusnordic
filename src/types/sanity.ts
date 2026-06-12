@@ -90,10 +90,15 @@ export type HeroSection = {
   headlineRow2?: string
 }
 
+export type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4'
+export type SectionColorTheme = 'light' | 'warm' | 'dark' | 'brand' | 'deep' | 'neutral'
+
 export type StatementSection = {
   _type: 'statementSection'
   _key: string
   statement?: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   media?: SanityImage
   ledgerLabel?: string
   bodyParagraphs?: unknown[]

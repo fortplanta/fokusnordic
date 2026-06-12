@@ -1,25 +1,8 @@
-import { createClient } from 'next-sanity'
-import imageUrlBuilder  from '@sanity/image-url'
-import type { SanityImageSource } from '@sanity/image-url'
+// Client + image builder live in sanity.client.ts (avoids a circular import
+// with sanity.live.ts); re-exported here so existing imports keep working.
+export { client, urlFor } from './sanity.client'
 
-// ─── Client ──────────────────────────────────────────────────────────────────
-
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
-  apiVersion: '2024-01-01',
-  useCdn: process.env.NODE_ENV === 'production',
-  // Token only needed for draft previews — set SANITY_API_READ_TOKEN in .env.local
-  token: process.env.SANITY_API_READ_TOKEN,
-})
-
-// ─── Image URL builder ────────────────────────────────────────────────────────
-
-const builder = imageUrlBuilder(client)
-
-export function urlFor(source: SanityImageSource) {
-  return builder.image(source)
-}
+import { sanityFetch } from './sanity.live'
 
 // ─── Reusable image projection ────────────────────────────────────────────────
 
@@ -74,7 +57,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // statementSection
       _type == "statementSection" => {
-        statement,
+        statement, headingLevel, colorTheme,
         media { ${IMAGE_FIELDS} },
         ledgerLabel, bodyParagraphs, ctaLabel, ctaUrl
       },
@@ -159,19 +142,26 @@ export const FLOOR_AVAILABILITY_QUERY = /* groq */ `
 `
 
 // ─── Typed fetch helpers ──────────────────────────────────────────────────────
+// All page-level reads go through sanityFetch (next-sanity live) so the
+// Presentation tool can stream draft changes into the preview in real time.
+// Outside draft mode it behaves like a cached, tag-revalidated client.fetch.
 
 export async function getSiteSettings() {
-  return client.fetch(SITE_SETTINGS_QUERY, {}, { next: { tags: ['siteSettings'] } })
+  const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY })
+  return data
 }
 
 export async function getHomePage() {
-  return client.fetch(HOME_PAGE_QUERY, {}, { next: { tags: ['homePage'] } })
+  const { data } = await sanityFetch({ query: HOME_PAGE_QUERY })
+  return data
 }
 
 export async function getLatestJournalPosts() {
-  return client.fetch(LATEST_JOURNAL_QUERY, {}, { next: { tags: ['journalPost'] } })
+  const { data } = await sanityFetch({ query: LATEST_JOURNAL_QUERY })
+  return data
 }
 
 export async function getFloorAvailability() {
-  return client.fetch(FLOOR_AVAILABILITY_QUERY, {}, { next: { revalidate: 60 } })
+  const { data } = await sanityFetch({ query: FLOOR_AVAILABILITY_QUERY })
+  return data
 }

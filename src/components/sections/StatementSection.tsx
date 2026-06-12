@@ -41,12 +41,17 @@ const FALLBACK_BODY = (
 export default function StatementSection({ section }: { section: T }) {
   const {
     statement       = 'The room you work in changes the work you do.',
+    headingLevel,
+    colorTheme,
     media,
     ledgerLabel     = 'The building',
     bodyParagraphs,
     ctaLabel        = 'Read the full story',
     ctaUrl          = '/about',
   } = section
+
+  // Semantic tag only — visual size stays on the CSS type scale
+  const Heading = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 
   const imgSrc = media?.asset?.url
     ? urlFor(media).width(800).url()
@@ -55,12 +60,17 @@ export default function StatementSection({ section }: { section: T }) {
   const hasBody = Array.isArray(bodyParagraphs) && bodyParagraphs.length > 0
 
   return (
-    <section className="intro" id="building" aria-label="Introduction">
+    <section
+      className="intro"
+      id="building"
+      aria-label="Introduction"
+      data-section-theme={colorTheme ?? 'light'}
+    >
       <div className="container">
         <div className="intro__grid">
           {/* Statement headline */}
           <div className="intro__statement">
-            <h2>{statement}</h2>
+            <Heading>{statement}</Heading>
           </div>
 
           {/* Offset parallax image — clip-wipe on scroll, parallax in PageAnimations */}

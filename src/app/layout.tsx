@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { SanityLive }        from '@/lib/sanity.live'
 import JsFlag               from '@/components/motion/JsFlag'
 import SmoothScrollProvider  from '@/components/motion/SmoothScrollProvider'
 import PageAnimations        from '@/components/motion/PageAnimations'
@@ -48,6 +49,9 @@ export default function RootLayout({
           {children}
           <PageAnimations />
         </SmoothScrollProvider>
+        {/* Live content event stream — revalidates published content and
+            streams drafts to the Presentation preview in real time */}
+        <SanityLive />
       </body>
     </html>
   )
