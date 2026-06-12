@@ -1,47 +1,36 @@
 import type { NextConfig } from 'next'
 import path from 'path'
 
-// Absolute paths to the real installed React builds.
-// NormalModuleReplacementPlugin rewrites to absolute paths, which bypasses
-// Next.js's 'react$' alias that redirects to next/dist/compiled/react/ —
-// that vendored copy omits useEffectEvent, breaking @sanity/vision imports.
-const REACT_CJS_PROD = path.resolve('./node_modules/react/cjs/react.production.js')
-const REACT_CJS_DEV  = path.resolve('./node_modules/react/cjs/react.development.js')
-
-// Sanity packages are ESM ("type":"module") and use useEffectEvent.
-// Match any file under node_modules/sanity or node_modules/@sanity.
-const SANITY_CTX_RE = /[\\/]node_modules[\\/](@?sanity)[\\/]/
-
 const nextConfig: NextConfig = {
   // Prevent server/SSR webpack bundle from bundling Sanity at all.
-  // The react-server subset of React (used for SSR) also lacks useEffectEvent.
+  // Sanity packages are ESM-only and use browser APIs; externalising them lets
+  // Node load them natively while the Studio (client-only via useEffect guard)
+  // is never rendered server-side.
   serverExternalPackages: [
     'sanity',
     '@sanity/vision',
     '@sanity/ui',
     '@sanity/icons',
-    // next-sanity intentionally omitted: the Studio is loaded with ssr:false
-    // so it never enters the server bundle, making externalization unnecessary.
-    // Including it here breaks next/dynamic's import() for ESM externals.
   ],
 
-  webpack(config, { webpack, dev, isServer }) {
-    // Only apply on the SERVER build. The server uses a vendored React subset
-    // (react-server) that lacks useEffectEvent, so Sanity package imports of
-    // 'react' must be redirected to the real installed CJS build.
+  webpack(config, { isServer }) {
+    // Next.js aliases "react" → next/dist/compiled/react (a canary build,
+    // currently 19.2.0-canary) which does NOT export useEffectEvent.
+    // sanity/structureTool imports useEffectEvent from "react" directly and
+    // crashes in the browser.
     //
-    // On the CLIENT build, webpack deduplicates React automatically. Applying
-    // the redirect there would create two module IDs for React (index.js vs
-    // cjs/react.development.js), causing "Invalid hook call / multiple React
-    // copies" errors in the browser.
-    if (isServer) {
-      config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(/^react$/, (resource: { context?: string; request: string }) => {
-          if (SANITY_CTX_RE.test(resource.context ?? '')) {
-            resource.request = dev ? REACT_CJS_DEV : REACT_CJS_PROD
-          }
-        })
-      )
+    // Client bundle only: override the alias so every package — including
+    // Sanity — resolves to the single installed react@19.2.6 (stable), which
+    // has useEffectEvent. One module ID, one React instance, no hook errors.
+    //
+    // Server bundle is left untouched: Next.js's RSC runtime, SSR internals,
+    // and dev-tools all expect the vendored React on the server side.
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        react: path.resolve('./node_modules/react'),
+        'react-dom': path.resolve('./node_modules/react-dom'),
+      }
     }
     return config
   },
