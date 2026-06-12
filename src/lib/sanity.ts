@@ -92,9 +92,10 @@ export const HOME_PAGE_QUERY = /* groq */ `
         }
       },
 
-      // bridgeSection — transitional pause before the floor plan
+      // bridgeSection — two-column: ceiling-height stat + architectural drawing
       _type == "bridgeSection" => {
-        headline, supportingLine
+        eyebrow, headline, supportingLine,
+        drawing { ${IMAGE_FIELDS} }
       },
 
       // floorsSection — dereference floor documents

@@ -195,7 +195,8 @@ async function seed() {
       {
         _type: 'bridgeSection',
         _key:  'bridge',
-        headline:       'Four point nine metres.',
+        eyebrow:        'EYEBROW CONTENT',
+        headline:       'Four point nine / meters',
         supportingLine: 'Not a specification. A condition for the kind of work that needs room to happen.',
       },
       {

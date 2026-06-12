@@ -127,8 +127,10 @@ export type TestimonialSection = {
 export type BridgeSection = {
   _type: 'bridgeSection'
   _key: string
+  eyebrow?: string
   headline?: string
   supportingLine?: string
+  drawing?: SanityImage
 }
 
 export type FloorsSection = {
