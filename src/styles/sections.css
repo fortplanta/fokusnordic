@@ -530,40 +530,83 @@
 
 /* ─── BRIDGE ─────────────────────────────────────────────────────────────── */
 /*
-  Transitional pause between testimonial (emotion) and floor plan (data).
-  Ground: --c-paper-3 — a half-step from paper-2 toward olive, reads as
-  a deliberate beat rather than another content section.
-  Almost entirely silence: typography + space, nothing else.
+  Two-column section: ceiling-height stat (left) + architectural drawing (right).
+  Ground: --blekang (neutral default — reads as a quiet pause before the floor plan).
+  Left column uses flex column with margin-top:auto on the support line so it
+  sits at the bottom, level with the drawing's base.
 */
 
 .bridge {
-  background: var(--angsull);
-  color: var(--c-ink);
-  padding-top:    clamp(8rem, 5rem + 14vw, 18rem);
-  padding-bottom: clamp(8rem, 5rem + 14vw, 18rem);
-  text-align: center;
+  background: var(--blekang);
+  color: var(--beck);
+  padding-top:    clamp(5rem, 4rem + 6vw, 11rem);
+  padding-bottom: clamp(5rem, 4rem + 6vw, 11rem);
 }
-.bridge__inner {
-  margin-inline: auto;
+.bridge__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(3rem, 2rem + 5vw, 7rem);
+  align-items: stretch;
+}
+.bridge__text {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: clamp(1.75rem, 1rem + 2.5vw, 3rem);
+}
+.bridge__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--torv);
+  margin-bottom: clamp(1rem, 0.5rem + 1.5vw, 2rem);
 }
 .bridge__headline {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--step-4);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  color: var(--c-ink);
-  max-width: 22ch;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--beck);
+}
+.bridge__headline-line {
+  display: block;
 }
 .bridge__support {
-  font-size: var(--step-1);
+  font-size: var(--step-0);
   line-height: 1.58;
-  color: var(--c-stone);
-  max-width: 40ch;
+  color: var(--torv);
+  max-width: 38ch;
+  margin-top: auto;
+  padding-top: clamp(3rem, 2rem + 4vw, 7rem);
+}
+.bridge__drawing {
+  margin-right: calc(-1 * var(--container-pad));
+  display: flex;
+  align-items: center;
+}
+.bridge__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+.bridge__img-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px dashed var(--aska);
+}
+@media (max-width: 900px) {
+  .bridge__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2.5rem, 2rem + 3vw, 4rem);
+  }
+  .bridge__drawing {
+    margin-right: 0;
+  }
+  .bridge__support {
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+    padding-top: 0;
+  }
 }
 
 /* ─── FLOORS ──────────────────────────────────────────────────────────────── */

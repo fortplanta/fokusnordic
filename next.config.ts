@@ -20,20 +20,29 @@ const nextConfig: NextConfig = {
     '@sanity/vision',
     '@sanity/ui',
     '@sanity/icons',
-    'next-sanity',
+    // next-sanity intentionally omitted: the Studio is loaded with ssr:false
+    // so it never enters the server bundle, making externalization unnecessary.
+    // Including it here breaks next/dynamic's import() for ESM externals.
   ],
 
-  webpack(config, { webpack, dev }) {
-    // For imports of 'react' originating inside Sanity packages, replace the
-    // request with an absolute path to the real CJS build. Absolute paths skip
-    // webpack alias resolution, so Next.js's vendored-react alias is bypassed.
-    config.plugins.push(
-      new webpack.NormalModuleReplacementPlugin(/^react$/, (resource: { context?: string; request: string }) => {
-        if (SANITY_CTX_RE.test(resource.context ?? '')) {
-          resource.request = dev ? REACT_CJS_DEV : REACT_CJS_PROD
-        }
-      })
-    )
+  webpack(config, { webpack, dev, isServer }) {
+    // Only apply on the SERVER build. The server uses a vendored React subset
+    // (react-server) that lacks useEffectEvent, so Sanity package imports of
+    // 'react' must be redirected to the real installed CJS build.
+    //
+    // On the CLIENT build, webpack deduplicates React automatically. Applying
+    // the redirect there would create two module IDs for React (index.js vs
+    // cjs/react.development.js), causing "Invalid hook call / multiple React
+    // copies" errors in the browser.
+    if (isServer) {
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(/^react$/, (resource: { context?: string; request: string }) => {
+          if (SANITY_CTX_RE.test(resource.context ?? '')) {
+            resource.request = dev ? REACT_CJS_DEV : REACT_CJS_PROD
+          }
+        })
+      )
+    }
     return config
   },
 
