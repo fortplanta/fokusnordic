@@ -5,17 +5,11 @@
 
 @font-face {
   font-family: 'Petit Serif';
-  src: url('/fonts/PetitSerif-VAR.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Petit Serif';
-  src: url('/fonts/PetitSerif-Regular.otf') format('opentype');
+  src: url('/fonts/PetitSerif-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-00FF, U+0100-024F, U+1E00-1EFF;
 }
 @font-face {
   font-family: 'Mona Sans';
