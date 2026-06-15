@@ -18,6 +18,12 @@ export default function NeighbourhoodDetailsSection({ section }: { section: T })
     ? introText.split(/\n\n+/).filter(Boolean)
     : []
 
+  // Group categories into row-pairs so the spanning rule sits above each pair
+  const rows: (typeof categories)[] = []
+  for (let i = 0; i < categories.length; i += 2) {
+    rows.push(categories.slice(i, i + 2))
+  }
+
   return (
     <section
       className="nhood-det"
@@ -46,25 +52,31 @@ export default function NeighbourhoodDetailsSection({ section }: { section: T })
             )}
           </div>
 
-          {/* ── Right: categorised place listings in multi-column grid ── */}
-          {categories.length > 0 && (
+          {/* ── Right: category rows — two per row, rule above each row ── */}
+          {rows.length > 0 && (
             <div className="nhood-det__categories">
-              {categories.map((cat, i) => (
-                <div key={cat._key ?? i} className="nhood-det__category">
-                  <div className="nhood-det__rule" aria-hidden="true" />
-                  <p className="nhood-det__cat-name">{cat.categoryName}</p>
-                  {cat.items && cat.items.length > 0 && (
-                    <ul className="nhood-det__items">
-                      {cat.items.map((item, j) => (
-                        <li key={j} className="nhood-det__item">
-                          <span className="nhood-det__item-name">{item.itemName}</span>
-                          {item.itemDetail && (
-                            <span className="nhood-det__item-detail">{item.itemDetail}</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+              {rows.map((row, rowIdx) => (
+                <div key={rowIdx} className="nhood-det__row">
+                  <div className="nhood-det__row-rule" aria-hidden="true" />
+                  <div className="nhood-det__row-pair">
+                    {row.map((cat, i) => (
+                      <div key={cat._key ?? i} className="nhood-det__category">
+                        <p className="nhood-det__cat-name">{cat.categoryName}</p>
+                        {cat.items && cat.items.length > 0 && (
+                          <ul className="nhood-det__items">
+                            {cat.items.map((item, j) => (
+                              <li key={j} className="nhood-det__item">
+                                <span className="nhood-det__item-name">{item.itemName}</span>
+                                {item.itemDetail && (
+                                  <span className="nhood-det__item-detail">{item.itemDetail}</span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
