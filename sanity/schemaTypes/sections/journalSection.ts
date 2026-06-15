@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 // Latest 3 journal posts are queried automatically — no manual selection needed.
 export default defineType({
@@ -6,6 +7,8 @@ export default defineType({
   title: 'Journal',
   type: 'object',
   fields: [
+    headingLevelField('h2'),
+    colorThemeField('light'),
     defineField({
       name: 'heading',
       title: 'Section heading',

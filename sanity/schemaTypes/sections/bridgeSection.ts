@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 export default defineType({
   name: 'bridgeSection',
@@ -6,6 +7,8 @@ export default defineType({
   type: 'object',
   description: 'Two-column section: ceiling-height stat (left) + architectural cross-section drawing (right).',
   fields: [
+    headingLevelField('h2'),
+    colorThemeField('light'),
     defineField({
       name: 'eyebrow',
       title: 'Eyebrow label',

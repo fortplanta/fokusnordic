@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 export default defineType({
   name: 'rationalCaseSection',
@@ -6,6 +7,8 @@ export default defineType({
   type: 'object',
   description: 'The formal business-case block for CFOs, operations, and procurement. Ink ground. Self-sufficient — must make sense to someone who arrived cold.',
   fields: [
+    headingLevelField('h2'),
+    colorThemeField('light'),
     defineField({
       name: 'orientLine',
       title: 'Self-orienting header',

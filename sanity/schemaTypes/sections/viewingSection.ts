@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 // The leasing agent's section. Agent details come from siteSettings.leasingContact
 // so they only need to be updated in one place.
@@ -7,6 +8,8 @@ export default defineType({
   title: 'Arrange a Viewing',
   type: 'object',
   fields: [
+    headingLevelField('h2'),
+    colorThemeField('light'),
     defineField({
       name: 'heading',
       title: 'Section heading',

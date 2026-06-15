@@ -9,20 +9,23 @@ export default function FloorsSection({
   contactEmail?: string
 }) {
   const {
+    headingLevel,
+    colorTheme,
     heading = 'The spaces',
     label   = 'Floor plan',
     floors  = [],
   } = section
+  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 
   const sorted = [...floors].sort((a, b) => a.sortOrder - b.sortOrder)
 
   return (
-    <section className="floors" id="spaces" aria-label="Floor plan">
+    <section className="floors" id="spaces" aria-label="Floor plan" data-section-theme={colorTheme ?? 'light'}>
       <div className="container">
         {/* Header */}
         <div className="floors__head">
           <span className="lab">{label}</span>
-          <h2>{heading}</h2>
+          <Tag>{heading}</Tag>
           <div className="floors__legend" aria-label="Status legend">
             <div className="row">
               <span className="dot dot-avail" aria-hidden="true" />

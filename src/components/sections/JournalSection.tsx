@@ -24,17 +24,20 @@ export default function JournalSection({
   posts: JournalPost[]
 }) {
   const {
+    headingLevel,
+    colorTheme,
     heading       = 'A working building, with a life worth following.',
     subheading    = 'From the building',
     allPostsLabel = 'View all',
   } = section
+  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 
   return (
-    <section className="journal" id="journal" aria-label="Journal">
+    <section className="journal" id="journal" aria-label="Journal" data-section-theme={colorTheme ?? 'light'}>
       <div className="container">
         <div className="journal__head">
           <div className="journal__statement">
-            <h2>{heading}</h2>
+            <Tag>{heading}</Tag>
           </div>
           <p className="journal__sub">{subheading}</p>
           <div className="journal__all">

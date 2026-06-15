@@ -3,18 +3,21 @@ import type { BridgeSection as T } from '@/types/sanity'
 
 export default function BridgeSection({ section }: { section: T }) {
   const {
+    headingLevel,
+    colorTheme,
     eyebrow,
     headline      = 'Four point nine / meters',
     supportingLine = 'Not a specification. A condition for the kind of work that needs room to happen.',
     drawing,
   } = section
+  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 
   // Split on ' / ' for an explicit two-line display.
   // Editors can move the break by repositioning the ' / ' separator.
   const lines = headline.split(' / ')
 
   return (
-    <section className="bridge" aria-label="Key statistic">
+    <section className="bridge" aria-label="Key statistic" data-section-theme={colorTheme ?? 'light'}>
       <div className="container">
         <div className="bridge__grid">
 
@@ -24,13 +27,13 @@ export default function BridgeSection({ section }: { section: T }) {
               {eyebrow && (
                 <p className="bridge__eyebrow" data-fade data-delay="0">{eyebrow}</p>
               )}
-              <h2 className="bridge__headline">
+              <Tag className="bridge__headline">
                 {lines.map((line, i) => (
                   <span key={i} className="bridge__headline-line">
                     {i === 0 ? line : `/ ${line}`}
                   </span>
                 ))}
-              </h2>
+              </Tag>
             </div>
             {supportingLine && (
               <p className="bridge__support">{supportingLine}</p>

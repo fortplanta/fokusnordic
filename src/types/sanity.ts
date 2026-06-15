@@ -75,9 +75,14 @@ export type JournalPost = {
 
 // ─── Section types ────────────────────────────────────────────────────────────
 
+export type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4'
+export type SectionColorTheme = 'light' | 'warm' | 'dark' | 'brand' | 'deep' | 'neutral'
+
 export type HeroSection = {
   _type: 'heroSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   mediaType?: 'image' | 'video'
   image?: SanityImage
   videoUrl?: string
@@ -89,9 +94,6 @@ export type HeroSection = {
   headlineRow1?: string
   headlineRow2?: string
 }
-
-export type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4'
-export type SectionColorTheme = 'light' | 'warm' | 'dark' | 'brand' | 'deep' | 'neutral'
 
 export type StatementSection = {
   _type: 'statementSection'
@@ -109,12 +111,16 @@ export type StatementSection = {
 export type FiguresSection = {
   _type: 'figuresSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   figures?: Array<{ value: string; label: string }>
 }
 
 export type TestimonialSection = {
   _type: 'testimonialSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   eyebrow?: string
   quote?: string
   authorName?: string
@@ -132,6 +138,8 @@ export type TestimonialSection = {
 export type BridgeSection = {
   _type: 'bridgeSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   eyebrow?: string
   headline?: string
   supportingLine?: string
@@ -141,6 +149,8 @@ export type BridgeSection = {
 export type FloorsSection = {
   _type: 'floorsSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   heading?: string
   label?: string
   floors?: Floor[]
@@ -149,6 +159,8 @@ export type FloorsSection = {
 export type NeighbourhoodSection = {
   _type: 'neighbourhoodSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   heading?: string
   label?: string
   supportingLine?: string
@@ -164,6 +176,8 @@ export type RationalCaseFact = {
 export type RationalCaseSection = {
   _type: 'rationalCaseSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   orientLine?: string
   eyebrow?: string
   headline?: string
@@ -174,6 +188,8 @@ export type RationalCaseSection = {
 export type JournalSection = {
   _type: 'journalSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   heading?: string
   subheading?: string
   allPostsLabel?: string
@@ -182,6 +198,8 @@ export type JournalSection = {
 export type ViewingSection = {
   _type: 'viewingSection'
   _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
   heading?: string
   bodyText?: string
   ctaLabel?: string

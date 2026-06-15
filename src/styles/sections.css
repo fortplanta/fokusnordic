@@ -641,7 +641,7 @@
   color: var(--beck);
   padding-top: 0.6rem;
 }
-.floors__head h2 {
+.floors__head :is(h1, h2, h3, h4) {
   grid-column: 3 / 10;
   font-family: var(--font-display);
   font-weight: 400;
@@ -757,7 +757,7 @@
   color: var(--c-stone);
   padding-bottom: 0.4rem;
 }
-.hood__head h2 {
+.hood__head :is(h1, h2, h3, h4) {
   grid-column: 3 / 10;
   font-family: var(--font-display);
   font-weight: 400;
@@ -775,7 +775,7 @@
   margin-top: clamp(1.25rem, 0.75rem + 1.5vw, 2rem);
 }
 @media (max-width: 900px) {
-  .hood__head h2   { grid-column: 1 / 13 }
+  .hood__head :is(h1, h2, h3, h4) { grid-column: 1 / 13 }
   .hood__support   { grid-column: 1 / 13 }
 }
 .hood__list {
@@ -950,7 +950,7 @@
   grid-column: 1 / 11;
   margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
 }
-.journal__statement h2 {
+.journal__statement :is(h1, h2, h3, h4) {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--step-3);
@@ -1121,7 +1121,7 @@
   flex-direction: column;
   gap: 1.5rem;
 }
-.viewing__body h2 {
+.viewing__body :is(h1, h2, h3, h4) {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--step-3);
