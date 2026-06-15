@@ -3,6 +3,7 @@ import { PortableText } from '@portabletext/react'
 import type { StatementSection as T } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
 import { cleanHeadingTag } from '@/lib/stega'
+import { stegaClean } from '@sanity/client/stega'
 
 // Portable text component map — maps Sanity block types to HTML elements
 const ptComponents = {
@@ -45,6 +46,7 @@ export default function StatementSection({ section }: { section: T }) {
     headingLevel,
     colorTheme,
     media,
+    enableParallax,
     ledgerLabel     = 'The building',
     bodyParagraphs,
     ctaLabel        = 'Read the full story',
@@ -53,6 +55,7 @@ export default function StatementSection({ section }: { section: T }) {
 
   // Semantic tag only — visual size stays on the CSS type scale
   const Heading = cleanHeadingTag(headingLevel)
+  const parallax = stegaClean(enableParallax) === true
 
   const imgSrc = media?.asset?.url
     ? urlFor(media).width(800).url()
@@ -75,7 +78,7 @@ export default function StatementSection({ section }: { section: T }) {
           </div>
 
           {/* Offset parallax image — clip-wipe on scroll, parallax in PageAnimations */}
-          <div className="intro__media reveal-img">
+          <div className="intro__media reveal-img" {...(parallax ? { 'data-parallax': '' } : {})}>
             <Image
               src={imgSrc}
               alt="Barnängshuset interior"

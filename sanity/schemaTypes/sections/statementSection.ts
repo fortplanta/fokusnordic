@@ -23,6 +23,14 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'enableParallax',
+      title: 'Parallax scroll effect',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Enable for photographic images. Disable for flat/vector imagery.',
+      hidden: ({ parent }: { parent?: { media?: unknown } }) => !parent?.media,
+    }),
+    defineField({
       name: 'ledgerLabel',
       title: 'Ledger label',
       type: 'string',
