@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { NeighbourhoodSection as T } from '@/types/sanity'
 import NeighbourhoodMap from './NeighbourhoodMap'
+import { cleanHeadingTag } from '@/lib/stega'
 
 // Building coordinates — from Sanity siteSettings in production
 const BUILDING = { lat: 59.3148, lng: 18.0717 }
@@ -16,7 +17,7 @@ export default function NeighbourhoodSection({ section }: { section: T }) {
     supportingLine = 'Not to be seen making them — to actually make them. Barnängshuset sits at the quieter end of that tradition, eight minutes from the centre and a world away from its noise.',
     pois           = [],
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 

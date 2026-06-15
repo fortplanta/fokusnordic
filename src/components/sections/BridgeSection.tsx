@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { BridgeSection as T } from '@/types/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 export default function BridgeSection({ section }: { section: T }) {
   const {
@@ -10,7 +11,7 @@ export default function BridgeSection({ section }: { section: T }) {
     supportingLine = 'Not a specification. A condition for the kind of work that needs room to happen.',
     drawing,
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   // Split on ' / ' for an explicit two-line display.
   // Editors can move the break by repositioning the ' / ' separator.

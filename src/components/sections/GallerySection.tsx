@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { GallerySection as T } from '@/types/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 export default function GallerySection({ section }: { section: T }) {
   const {
@@ -8,7 +9,7 @@ export default function GallerySection({ section }: { section: T }) {
     title,
     galleryItems = [],
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   return (
     <section
