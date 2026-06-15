@@ -14,10 +14,10 @@ export default function FloorsSection({
     colorTheme,
     heading = 'The spaces',
     label   = 'Floor plan',
-    floors  = [],
   } = section
   const Tag = cleanHeadingTag(headingLevel)
 
+  const floors = section.floors ?? []
   const sorted = [...floors].sort((a, b) => a.sortOrder - b.sortOrder)
 
   return (

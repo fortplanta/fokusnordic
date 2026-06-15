@@ -31,12 +31,11 @@ export default function RationalCaseSection({ section }: { section: T }) {
     orientLine  = 'Barnängshuset — Nackagatan 4, Södermalm. A 1917 textile mill, restored for office use.',
     eyebrow     = 'The case',
     headline    = 'Everything the spreadsheet needs.',
-    facts       = DEFAULT_FACTS,
     closingLine = 'Managed by PPP Group, who have looked after buildings like this long enough to know the details are the point.',
   } = section
   const Tag = cleanHeadingTag(headingLevel)
 
-  const activeFacts = facts.length > 0 ? facts : DEFAULT_FACTS
+  const activeFacts = section.facts?.length ? section.facts : DEFAULT_FACTS
 
   return (
     <section className="rcase" id="the-case" aria-label="The business case" data-section-theme={colorTheme ?? 'light'}>

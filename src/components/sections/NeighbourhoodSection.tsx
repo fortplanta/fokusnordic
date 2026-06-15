@@ -15,8 +15,8 @@ export default function NeighbourhoodSection({ section }: { section: T }) {
     heading        = 'Södermalm has always been where people come to make things.',
     label          = 'The address',
     supportingLine = 'Not to be seen making them — to actually make them. Barnängshuset sits at the quieter end of that tradition, eight minutes from the centre and a world away from its noise.',
-    pois           = [],
   } = section
+  const pois = section.pois ?? []
   const Tag = cleanHeadingTag(headingLevel)
 
   const [hoveredId, setHoveredId] = useState<string | null>(null)

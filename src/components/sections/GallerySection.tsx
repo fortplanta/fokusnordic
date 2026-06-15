@@ -7,8 +7,8 @@ export default function GallerySection({ section }: { section: T }) {
     headingLevel,
     colorTheme,
     title,
-    galleryItems = [],
   } = section
+  const galleryItems = section.galleryItems ?? []
   const Tag = cleanHeadingTag(headingLevel)
 
   return (
