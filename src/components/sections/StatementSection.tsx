@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
 import type { StatementSection as T } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 // Portable text component map — maps Sanity block types to HTML elements
 const ptComponents = {
@@ -51,7 +52,7 @@ export default function StatementSection({ section }: { section: T }) {
   } = section
 
   // Semantic tag only — visual size stays on the CSS type scale
-  const Heading = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Heading = cleanHeadingTag(headingLevel)
 
   const imgSrc = media?.asset?.url
     ? urlFor(media).width(800).url()

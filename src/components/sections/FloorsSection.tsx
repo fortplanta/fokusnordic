@@ -1,5 +1,6 @@
 import type { FloorsSection as T } from '@/types/sanity'
 import FloorPlanInteractive from './FloorPlanInteractive'
+import { cleanHeadingTag } from '@/lib/stega'
 
 export default function FloorsSection({
   section,
@@ -15,7 +16,7 @@ export default function FloorsSection({
     label   = 'Floor plan',
     floors  = [],
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   const sorted = [...floors].sort((a, b) => a.sortOrder - b.sortOrder)
 

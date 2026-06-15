@@ -2,6 +2,7 @@ import Image from 'next/image'
 import type { ViewingSection as T, LeasingContact } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
 import ViewingForm from './ViewingForm'
+import { cleanHeadingTag } from '@/lib/stega'
 
 export default function ViewingSection({
   section,
@@ -16,7 +17,7 @@ export default function ViewingSection({
     heading  = 'See it in person.',
     bodyText = 'Spaces like this read differently in photographs. The light, the volume, the quiet — come and spend an hour.',
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   const photoSrc = contact?.photo?.asset?.url
     ? urlFor(contact.photo).width(400).url()

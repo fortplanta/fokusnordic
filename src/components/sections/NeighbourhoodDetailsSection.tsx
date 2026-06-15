@@ -1,4 +1,5 @@
 import type { NeighbourhoodDetailsSection as T } from '@/types/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 export default function NeighbourhoodDetailsSection({ section }: { section: T }) {
   const {
@@ -10,7 +11,7 @@ export default function NeighbourhoodDetailsSection({ section }: { section: T })
     ctaUrl,
     categories = [],
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   return (
     <section

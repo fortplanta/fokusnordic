@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { HeroSection as T } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 export default function HeroSection({ section }: { section: T }) {
   const {
@@ -17,7 +18,7 @@ export default function HeroSection({ section }: { section: T }) {
     headlineRow1 = 'A WORLD AWAY',
     headlineRow2 = 'FROM THE NOISE',
   } = section
-  const Tag = (headingLevel ?? 'h1') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel, 'h1')
 
   const heroImgSrc = image?.asset?.url
     ? urlFor(image).width(2400).url()

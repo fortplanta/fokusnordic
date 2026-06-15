@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { JournalSection as T, JournalPost } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 const PLACEHOLDER_IMAGES = [
   '/assets/img-detail.jpg',
@@ -30,7 +31,7 @@ export default function JournalSection({
     subheading    = 'From the building',
     allPostsLabel = 'View all',
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   return (
     <section className="journal" id="journal" aria-label="Journal" data-section-theme={colorTheme ?? 'light'}>

@@ -1,4 +1,5 @@
 import type { RationalCaseSection as T } from '@/types/sanity'
+import { cleanHeadingTag } from '@/lib/stega'
 
 const DEFAULT_FACTS = [
   {
@@ -33,7 +34,7 @@ export default function RationalCaseSection({ section }: { section: T }) {
     facts       = DEFAULT_FACTS,
     closingLine = 'Managed by PPP Group, who have looked after buildings like this long enough to know the details are the point.',
   } = section
-  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
+  const Tag = cleanHeadingTag(headingLevel)
 
   const activeFacts = facts.length > 0 ? facts : DEFAULT_FACTS
 
