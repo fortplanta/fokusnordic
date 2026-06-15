@@ -207,21 +207,16 @@ export type ViewingSection = {
   ctaUrl?: string
 }
 
-export type GalleryItemImage = {
-  _type: 'galleryItemImage'
+// Flat shape — all fields present on every item, nulled for non-matching type.
+// (Nested conditional projections inside arrays are avoided for Live API compat.)
+export type GalleryItem = {
+  _type: 'galleryItemImage' | 'galleryItemCaption'
   _key: string
   image?: SanityImage
   alt?: string
   span?: 1 | 2 | 3
-}
-
-export type GalleryItemCaption = {
-  _type: 'galleryItemCaption'
-  _key: string
   text?: string
 }
-
-export type GalleryItem = GalleryItemImage | GalleryItemCaption
 
 export type GallerySection = {
   _type: 'gallerySection'

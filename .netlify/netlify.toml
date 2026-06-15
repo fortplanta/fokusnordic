@@ -1,0 +1,34 @@
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[[plugins]]
+origin = "config"
+package = "@netlify/plugin-nextjs"
+
+[plugins.inputs]
+
+[build]
+publish = "/Users/anton/Documents/GitHub/fokusnordic/.claude/worktrees/great-chatterjee-7e2e2b/.next"
+publishOrigin = "config"
+commandOrigin = "config"
+base = "/Users/anton/Documents/GitHub/fokusnordic/.claude/worktrees/great-chatterjee-7e2e2b"
+command = "next build --turbo"
+
+[build.environment]
+NODE_VERSION = "20"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
