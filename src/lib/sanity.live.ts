@@ -20,6 +20,9 @@ export const { sanityFetch, SanityLive } = defineLive({
   client: client.withConfig({
     // Live Content API requires the vX api version
     apiVersion: 'vX',
+    // Draft mode must never go through the CDN — CDN only serves published
+    // content and will silently ignore perspective:'drafts'.
+    useCdn: false,
     // Stega embeds invisible edit-source metadata in strings so the
     // Presentation tool can map click → field. Only active in draft mode.
     stega: { studioUrl: '/studio' },

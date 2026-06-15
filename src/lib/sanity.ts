@@ -126,17 +126,17 @@ export const HOME_PAGE_QUERY = /* groq */ `
       },
 
       // gallerySection — mixed image + caption items
+      // Flat projection (no nested conditionals) for Live API compatibility.
+      // Non-matching fields return null and are ignored in the component.
       _type == "gallerySection" => {
         headingLevel, colorTheme, title,
         galleryItems[] {
           _type,
           _key,
-          _type == "galleryItemImage" => {
-            image { ${IMAGE_FIELDS} },
-            alt,
-            span
-          },
-          _type == "galleryItemCaption" => { text }
+          image { ${IMAGE_FIELDS} },
+          alt,
+          span,
+          text
         }
       },
 
