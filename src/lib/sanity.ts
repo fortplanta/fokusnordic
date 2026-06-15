@@ -181,21 +181,41 @@ export const FLOOR_AVAILABILITY_QUERY = /* groq */ `
 // Outside draft mode it behaves like a cached, tag-revalidated client.fetch.
 
 export async function getSiteSettings() {
-  const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY })
-  return data
+  try {
+    const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY })
+    return data
+  } catch (err) {
+    console.error('[sanityFetch] getSiteSettings failed:', err)
+    return null
+  }
 }
 
 export async function getHomePage() {
-  const { data } = await sanityFetch({ query: HOME_PAGE_QUERY })
-  return data
+  try {
+    const { data } = await sanityFetch({ query: HOME_PAGE_QUERY })
+    return data
+  } catch (err) {
+    console.error('[sanityFetch] getHomePage failed:', err)
+    return null
+  }
 }
 
 export async function getLatestJournalPosts() {
-  const { data } = await sanityFetch({ query: LATEST_JOURNAL_QUERY })
-  return data
+  try {
+    const { data } = await sanityFetch({ query: LATEST_JOURNAL_QUERY })
+    return data
+  } catch (err) {
+    console.error('[sanityFetch] getLatestJournalPosts failed:', err)
+    return []
+  }
 }
 
 export async function getFloorAvailability() {
-  const { data } = await sanityFetch({ query: FLOOR_AVAILABILITY_QUERY })
-  return data
+  try {
+    const { data } = await sanityFetch({ query: FLOOR_AVAILABILITY_QUERY })
+    return data
+  } catch (err) {
+    console.error('[sanityFetch] getFloorAvailability failed:', err)
+    return { available: 0, total: 0 }
+  }
 }
