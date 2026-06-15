@@ -2,10 +2,14 @@
 
 import { useEffect, useRef } from 'react'
 
+const SCROLL_THRESHOLD = 80   // px of accumulated scroll before toggling
+const FOLD_HEIGHT      = 80   // px from top where nav is always shown
+
 export default function Nav({ propertyName }: { propertyName?: string }) {
-  const navRef  = useRef<HTMLElement>(null)
-  const lastY   = useRef(0)
-  const ticking = useRef(false)
+  const navRef      = useRef<HTMLElement>(null)
+  const lastY       = useRef(0)
+  const accumulated = useRef(0)
+  const ticking     = useRef(false)
 
   useEffect(() => {
     const nav = navRef.current
@@ -16,14 +20,35 @@ export default function Nav({ propertyName }: { propertyName?: string }) {
       ticking.current = true
 
       requestAnimationFrame(() => {
-        const y = window.scrollY
-        if (y > 80) {
-          nav.classList.toggle('hidden', y > lastY.current)
-        } else {
-          nav.classList.remove('hidden')
-        }
+        const y     = window.scrollY
+        const delta = y - lastY.current
         lastY.current = y
         ticking.current = false
+
+        // Always show nav near the top of the page
+        if (y <= FOLD_HEIGHT) {
+          nav.classList.remove('hidden')
+          accumulated.current = 0
+          return
+        }
+
+        // Reset accumulator when the scroll direction reverses, so the
+        // threshold must be crossed fresh in the new direction before toggling.
+        if (delta !== 0 && accumulated.current !== 0) {
+          const sameDirection = (delta > 0) === (accumulated.current > 0)
+          if (!sameDirection) accumulated.current = 0
+        }
+
+        accumulated.current += delta
+
+        if (accumulated.current > SCROLL_THRESHOLD) {
+          nav.classList.add('hidden')
+          // Clamp so the next reversal needs the full threshold, not a tiny flick
+          accumulated.current = SCROLL_THRESHOLD
+        } else if (accumulated.current < -SCROLL_THRESHOLD) {
+          nav.classList.remove('hidden')
+          accumulated.current = -SCROLL_THRESHOLD
+        }
       })
     }
 
