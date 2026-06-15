@@ -69,7 +69,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
       // testimonialSection
       _type == "testimonialSection" => {
         headingLevel, colorTheme,
-        eyebrow, quote, authorName, authorRole,
+        eyebrow, quote, authorName, authorRole, textSize,
         image { ${IMAGE_FIELDS} },
         projectCard {
           image { ${IMAGE_FIELDS} },

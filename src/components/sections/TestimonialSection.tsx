@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { TestimonialSection as T } from '@/types/sanity'
 import { urlFor } from '@/lib/sanity'
+import { stegaClean } from '@sanity/client/stega'
 
 // Suppresses known-placeholder values so they never render in the live layout.
 // Real content must replace these before launch (see CONTENT-CHECKLIST.md).
@@ -14,9 +15,13 @@ export default function TestimonialSection({ section }: { section: T }) {
     quote,
     authorName,
     authorRole,
+    textSize,
     image,
     projectCard,
   } = section
+
+  const quoteSize = stegaClean(textSize) ?? 'large'
+  const quoteSizeClass = `testi__quote testi__quote--${quoteSize}`
 
   const imgSrc = image?.asset?.url
     ? urlFor(image).width(1200).url()
@@ -57,7 +62,7 @@ export default function TestimonialSection({ section }: { section: T }) {
             </div>
 
             {showQuote && (
-              <blockquote className="testi__quote" data-fade>
+              <blockquote className={quoteSizeClass} data-fade>
                 <p>&ldquo;{quote}&rdquo;</p>
                 {showAttribution && (
                   <footer className="testi__owner">

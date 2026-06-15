@@ -162,10 +162,12 @@ export default function PageAnimations() {
       })
 
       // ── Intro image parallax ─────────────────────────────────────────────
+      // Image is height:130%, top:-15% — safe travel budget is ±10% of
+      // image height (= ±13% of container), well within the 15% buffer.
       const introImg = document.querySelector<HTMLElement>('.intro__media img')
       if (introImg) {
         gsap.to(introImg, {
-          y: '-12%',
+          y: '-10%',
           ease: 'none',
           scrollTrigger: {
             trigger: '.intro__media',

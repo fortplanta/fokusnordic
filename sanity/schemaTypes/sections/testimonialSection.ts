@@ -32,6 +32,21 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'textSize',
+      title: 'Quote text size',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Large', value: 'large' },
+          { title: 'Medium', value: 'medium' },
+          { title: 'Small', value: 'small' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'large',
+      description: 'Use Medium or Small for longer quotes that overflow the Large size.',
+    }),
+    defineField({
       name: 'image',
       title: 'Wide image (left side)',
       type: 'image',

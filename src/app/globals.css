@@ -109,6 +109,7 @@
   --font-sans:    'Mona Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 
   /* Fluid type scale */
+  --step-micro: clamp(0.5rem, 0.46rem + 0.12vw, 0.6rem);  /* ~8-10px — map attribution/tooltips only */
   --step-00:   clamp(0.78rem, 0.74rem + 0.18vw, 0.86rem);
   --step-0:    clamp(0.95rem, 0.90rem + 0.25vw, 1.10rem);
   --step-1:    clamp(1.10rem, 1.00rem + 0.45vw, 1.40rem);
