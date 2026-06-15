@@ -60,6 +60,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
       _type == "statementSection" => {
         statement, headingLevel, colorTheme,
         media { ${IMAGE_FIELDS} },
+        enableParallax,
         ledgerLabel, bodyParagraphs, ctaLabel, ctaUrl
       },
 
@@ -69,7 +70,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
       // testimonialSection
       _type == "testimonialSection" => {
         headingLevel, colorTheme,
-        eyebrow, quote, authorName, authorRole, textSize,
+        eyebrow, quote, authorName, authorRole, textSize, typographicStyle,
         image { ${IMAGE_FIELDS} },
         projectCard {
           image { ${IMAGE_FIELDS} },

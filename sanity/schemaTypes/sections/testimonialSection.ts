@@ -47,6 +47,23 @@ export default defineType({
       description: 'Use Medium or Small for longer quotes that overflow the Large size.',
     }),
     defineField({
+      name: 'typographicStyle',
+      title: 'Typographic style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Body — Small',  value: 'body-sm'  },
+          { title: 'Body — Regular', value: 'body-md' },
+          { title: 'Body — Large',  value: 'body-lg'  },
+          { title: 'Quote (Mona Sans light)', value: 'quote' },
+          { title: 'Display (serif)', value: 'display' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'quote',
+      description: 'Controls font-family and weight. textSize above still sets the size for Quote and Display styles.',
+    }),
+    defineField({
       name: 'image',
       title: 'Wide image (left side)',
       type: 'image',

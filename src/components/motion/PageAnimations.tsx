@@ -162,28 +162,38 @@ export default function PageAnimations() {
       })
 
       // ── Intro image parallax ─────────────────────────────────────────────
-      // Image is height:130%, top:-15% — safe travel budget is ±10% of
-      // image height (= ±13% of container), well within the 15% buffer.
-      const introImg = document.querySelector<HTMLElement>('.intro__media img')
-      if (introImg) {
-        gsap.to(introImg, {
-          y: '-10%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.intro__media',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.2,
-          },
-        })
+      // Image: top:50%, height:120%. GSAP owns transform entirely (no CSS transform
+      // on the img). yPercent=-50 centers it; we animate ±5 around that midpoint.
+      // Travel: ±5% × 1.2 container = ±6% container — well within the 10% buffer.
+      // Only runs when editor has enabled parallax via data-parallax attribute.
+      const introMedia = document.querySelector<HTMLElement>('.intro__media[data-parallax]')
+      if (introMedia) {
+        const introImg = introMedia.querySelector<HTMLElement>('img')
+        if (introImg) {
+          gsap.fromTo(introImg,
+            { yPercent: -45 },
+            {
+              yPercent: -55,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: introMedia,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.2,
+              },
+            }
+          )
+        }
       }
 
       // ── Journal card images parallax ─────────────────────────────────────
+      // Image: top:50%, height:120%. yPercent=-50 centers; animate ±6 around it.
+      // CSS `scale` property handles hover independently — no transform conflict.
       document.querySelectorAll<HTMLElement>('.jcard__img img').forEach((img) => {
         gsap.fromTo(img,
-          { y: '6%' },
+          { yPercent: -44 },
           {
-            y: '-6%',
+            yPercent: -56,
             ease: 'none',
             scrollTrigger: {
               trigger: img.closest('.jcard__img') as Element,

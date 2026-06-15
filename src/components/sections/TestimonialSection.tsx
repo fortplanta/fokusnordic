@@ -16,12 +16,18 @@ export default function TestimonialSection({ section }: { section: T }) {
     authorName,
     authorRole,
     textSize,
+    typographicStyle,
     image,
     projectCard,
   } = section
 
-  const quoteSize = stegaClean(textSize) ?? 'large'
-  const quoteSizeClass = `testi__quote testi__quote--${quoteSize}`
+  const quoteSize  = stegaClean(textSize)          ?? 'large'
+  const quoteStyle = stegaClean(typographicStyle)
+  const quoteSizeClass = [
+    'testi__quote',
+    `testi__quote--${quoteSize}`,
+    quoteStyle && `testi__quote--style-${quoteStyle}`,
+  ].filter(Boolean).join(' ')
 
   const imgSrc = image?.asset?.url
     ? urlFor(image).width(1200).url()

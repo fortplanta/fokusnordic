@@ -102,6 +102,7 @@ export type StatementSection = {
     headingLevel?: HeadingLevel
     colorTheme?: SectionColorTheme
     media?: SanityImage
+    enableParallax?: boolean
     ledgerLabel?: string
     bodyParagraphs?: unknown[]
     ctaLabel?: string
@@ -126,6 +127,7 @@ export type TestimonialSection = {
     authorName?: string
     authorRole?: string
     textSize?: 'large' | 'medium' | 'small'
+    typographicStyle?: 'body-sm' | 'body-md' | 'body-lg' | 'quote' | 'display'
     image?: SanityImage
     projectCard?: {
         image?: SanityImage
