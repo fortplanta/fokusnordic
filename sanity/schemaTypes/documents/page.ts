@@ -31,6 +31,8 @@ export default defineType({
         { type: 'rationalCaseSection' },
         { type: 'journalSection' },
         { type: 'viewingSection' },
+        { type: 'gallerySection' },
+        { type: 'neighbourhoodDetailsSection' },
       ],
       options: {
         // Enables drag-to-reorder in Studio

@@ -207,6 +207,54 @@ export type ViewingSection = {
   ctaUrl?: string
 }
 
+export type GalleryItemImage = {
+  _type: 'galleryItemImage'
+  _key: string
+  image?: SanityImage
+  alt?: string
+  span?: 1 | 2 | 3
+}
+
+export type GalleryItemCaption = {
+  _type: 'galleryItemCaption'
+  _key: string
+  text?: string
+}
+
+export type GalleryItem = GalleryItemImage | GalleryItemCaption
+
+export type GallerySection = {
+  _type: 'gallerySection'
+  _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
+  title?: string
+  galleryItems?: GalleryItem[]
+}
+
+export type NeighbourhoodDetailsItem = {
+  itemName: string
+  itemDetail?: string
+}
+
+export type NeighbourhoodDetailsCategory = {
+  _key: string
+  categoryName: string
+  items?: NeighbourhoodDetailsItem[]
+}
+
+export type NeighbourhoodDetailsSection = {
+  _type: 'neighbourhoodDetailsSection'
+  _key: string
+  headingLevel?: HeadingLevel
+  colorTheme?: SectionColorTheme
+  title?: string
+  introText?: string
+  ctaText?: string
+  ctaUrl?: string
+  categories?: NeighbourhoodDetailsCategory[]
+}
+
 export type PageSection =
   | HeroSection
   | StatementSection
@@ -218,3 +266,5 @@ export type PageSection =
   | RationalCaseSection
   | JournalSection
   | ViewingSection
+  | GallerySection
+  | NeighbourhoodDetailsSection

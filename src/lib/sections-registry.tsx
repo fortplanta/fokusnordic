@@ -1,14 +1,16 @@
 import type { PageSection, JournalPost, LeasingContact } from '@/types/sanity'
-import HeroSection          from '@/components/sections/HeroSection'
-import StatementSection     from '@/components/sections/StatementSection'
-import FiguresSection       from '@/components/sections/FiguresSection'
-import TestimonialSection   from '@/components/sections/TestimonialSection'
-import BridgeSection        from '@/components/sections/BridgeSection'
-import FloorsSection        from '@/components/sections/FloorsSection'
-import NeighbourhoodSection  from '@/components/sections/NeighbourhoodSection'
-import RationalCaseSection  from '@/components/sections/RationalCaseSection'
-import JournalSection        from '@/components/sections/JournalSection'
-import ViewingSection       from '@/components/sections/ViewingSection'
+import HeroSection                   from '@/components/sections/HeroSection'
+import StatementSection              from '@/components/sections/StatementSection'
+import FiguresSection                from '@/components/sections/FiguresSection'
+import TestimonialSection            from '@/components/sections/TestimonialSection'
+import BridgeSection                 from '@/components/sections/BridgeSection'
+import FloorsSection                 from '@/components/sections/FloorsSection'
+import NeighbourhoodSection          from '@/components/sections/NeighbourhoodSection'
+import RationalCaseSection           from '@/components/sections/RationalCaseSection'
+import JournalSection                from '@/components/sections/JournalSection'
+import ViewingSection                from '@/components/sections/ViewingSection'
+import GallerySection                from '@/components/sections/GallerySection'
+import NeighbourhoodDetailsSection   from '@/components/sections/NeighbourhoodDetailsSection'
 
 type RegistryProps = {
   section:  PageSection
@@ -38,6 +40,10 @@ export function SectionRenderer({ section, posts, contact }: RegistryProps) {
       return <JournalSection section={section} posts={posts} />
     case 'viewingSection':
       return <ViewingSection section={section} contact={contact} />
+    case 'gallerySection':
+      return <GallerySection section={section} />
+    case 'neighbourhoodDetailsSection':
+      return <NeighbourhoodDetailsSection section={section} />
     default:
       return null
   }
