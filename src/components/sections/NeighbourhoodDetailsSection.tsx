@@ -9,8 +9,8 @@ export default function NeighbourhoodDetailsSection({ section }: { section: T })
     introText,
     ctaText,
     ctaUrl,
-    categories = [],
   } = section
+  const categories = section.categories ?? []
   const Tag = cleanHeadingTag(headingLevel)
 
   return (
