@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
+import { VisualEditing } from 'next-sanity/visual-editing'
 import './globals.css'
 import { SanityLive }        from '@/lib/sanity.live'
 import JsFlag               from '@/components/motion/JsFlag'
@@ -28,9 +30,10 @@ export const metadata: Metadata = {
     : { index: false, follow: false },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { isEnabled: isDraftMode } = await draftMode()
   return (
     <html lang="en">
       <head>
@@ -52,6 +55,7 @@ export default function RootLayout({
         {/* Live content event stream — revalidates published content and
             streams drafts to the Presentation preview in real time */}
         <SanityLive />
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   )
