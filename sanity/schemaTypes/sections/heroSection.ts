@@ -1,10 +1,13 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 export default defineType({
   name: 'heroSection',
   title: 'Hero',
   type: 'object',
   fields: [
+    headingLevelField('h1'),
+    colorThemeField('dark'),
     defineField({
       name: 'mediaType',
       title: 'Media type',

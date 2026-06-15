@@ -12,7 +12,7 @@ export default function FiguresSection({ section }: { section: T }) {
   const figures = section.figures?.length ? section.figures : DEFAULTS
 
   return (
-    <section className="figures" aria-label="Key figures">
+    <section className="figures" aria-label="Key figures" data-section-theme={section.colorTheme ?? 'light'}>
       <div className="container">
         <dl className="figures__grid">
           {figures.map((fig, i) => (

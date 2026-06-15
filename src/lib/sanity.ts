@@ -48,6 +48,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // heroSection
       _type == "heroSection" => {
+        headingLevel, colorTheme,
         mediaType, videoUrl,
         image { ${IMAGE_FIELDS} },
         posterImage { ${IMAGE_FIELDS} },
@@ -63,10 +64,11 @@ export const HOME_PAGE_QUERY = /* groq */ `
       },
 
       // figuresSection
-      _type == "figuresSection" => { figures },
+      _type == "figuresSection" => { headingLevel, colorTheme, figures },
 
       // testimonialSection
       _type == "testimonialSection" => {
+        headingLevel, colorTheme,
         eyebrow, quote, authorName, authorRole,
         image { ${IMAGE_FIELDS} },
         projectCard {
@@ -77,12 +79,14 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // bridgeSection — two-column: ceiling-height stat + architectural drawing
       _type == "bridgeSection" => {
+        headingLevel, colorTheme,
         eyebrow, headline, supportingLine,
         drawing { ${IMAGE_FIELDS} }
       },
 
       // floorsSection — dereference floor documents
       _type == "floorsSection" => {
+        headingLevel, colorTheme,
         heading, label,
         floors[]-> {
           _id, label, status, areaSqm, ceilingHeightM,
@@ -93,6 +97,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // neighbourhoodSection — dereference poi documents
       _type == "neighbourhoodSection" => {
+        headingLevel, colorTheme,
         heading, label, supportingLine,
         pois[]-> {
           _id, name, description, category,
@@ -102,6 +107,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // rationalCaseSection — procurement / ESG block
       _type == "rationalCaseSection" => {
+        headingLevel, colorTheme,
         orientLine, eyebrow, headline,
         facts[] { _key, label, value },
         closingLine
@@ -109,11 +115,13 @@ export const HOME_PAGE_QUERY = /* groq */ `
 
       // journalSection (posts fetched separately via LATEST_JOURNAL_QUERY)
       _type == "journalSection" => {
+        headingLevel, colorTheme,
         heading, subheading, allPostsLabel
       },
 
       // viewingSection
       _type == "viewingSection" => {
+        headingLevel, colorTheme,
         heading, bodyText, ctaLabel, ctaType, ctaUrl
       },
     }

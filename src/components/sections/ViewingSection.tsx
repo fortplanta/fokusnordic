@@ -11,16 +11,19 @@ export default function ViewingSection({
   contact?: LeasingContact
 }) {
   const {
+    headingLevel,
+    colorTheme,
     heading  = 'See it in person.',
     bodyText = 'Spaces like this read differently in photographs. The light, the volume, the quiet — come and spend an hour.',
   } = section
+  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 
   const photoSrc = contact?.photo?.asset?.url
     ? urlFor(contact.photo).width(400).url()
     : '/assets/img-portrait.jpg'
 
   return (
-    <section className="viewing" id="viewing" aria-label="Arrange a viewing">
+    <section className="viewing" id="viewing" aria-label="Arrange a viewing" data-section-theme={colorTheme ?? 'light'}>
       <div className="container">
         <div className="viewing__grid">
           {/* Agent */}
@@ -56,7 +59,7 @@ export default function ViewingSection({
 
           {/* Body */}
           <div className="viewing__body" data-fade>
-            <h2>{heading}</h2>
+            <Tag>{heading}</Tag>
             <p>{bodyText}</p>
           </div>
 

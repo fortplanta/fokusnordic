@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { headingLevelField, colorThemeField } from '../fields/sectionMeta'
 
 // The five key-figure numbers band
 export default defineType({
@@ -6,6 +7,8 @@ export default defineType({
   title: 'Key Figures',
   type: 'object',
   fields: [
+    headingLevelField('h2'),
+    colorThemeField('light'),
     defineField({
       name: 'figures',
       title: 'Figures',

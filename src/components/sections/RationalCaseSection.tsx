@@ -25,24 +25,27 @@ const DEFAULT_FACTS = [
 
 export default function RationalCaseSection({ section }: { section: T }) {
   const {
+    headingLevel,
+    colorTheme,
     orientLine  = 'Barnängshuset — Nackagatan 4, Södermalm. A 1917 textile mill, restored for office use.',
     eyebrow     = 'The case',
     headline    = 'Everything the spreadsheet needs.',
     facts       = DEFAULT_FACTS,
     closingLine = 'Managed by PPP Group, who have looked after buildings like this long enough to know the details are the point.',
   } = section
+  const Tag = (headingLevel ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 
   const activeFacts = facts.length > 0 ? facts : DEFAULT_FACTS
 
   return (
-    <section className="rcase" id="the-case" aria-label="The business case">
+    <section className="rcase" id="the-case" aria-label="The business case" data-section-theme={colorTheme ?? 'light'}>
       <div className="container">
 
         {/* Header */}
         <div className="rcase__header">
           <p className="rcase__orient" data-fade>{orientLine}</p>
           <p className="rcase__eyebrow" data-fade data-delay="0.08">{eyebrow}</p>
-          <h2 className="rcase__headline">{headline}</h2>
+          <Tag className="rcase__headline">{headline}</Tag>
         </div>
 
         <div className="rcase__divider" aria-hidden="true" />

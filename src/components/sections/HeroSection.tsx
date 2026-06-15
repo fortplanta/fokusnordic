@@ -4,6 +4,8 @@ import { urlFor } from '@/lib/sanity'
 
 export default function HeroSection({ section }: { section: T }) {
   const {
+    headingLevel,
+    colorTheme,
     mediaType = 'image',
     image,
     videoUrl,
@@ -15,6 +17,7 @@ export default function HeroSection({ section }: { section: T }) {
     headlineRow1 = 'A WORLD AWAY',
     headlineRow2 = 'FROM THE NOISE',
   } = section
+  const Tag = (headingLevel ?? 'h1') as 'h1' | 'h2' | 'h3' | 'h4'
 
   const heroImgSrc = image?.asset?.url
     ? urlFor(image).width(2400).url()
@@ -25,7 +28,7 @@ export default function HeroSection({ section }: { section: T }) {
     : '/assets/img-hero.jpg'
 
   return (
-    <section className="hero" aria-label="Hero">
+    <section className="hero" aria-label="Hero" data-section-theme={colorTheme ?? 'dark'}>
       {/* Media */}
       <div className="hero__media" aria-hidden="true">
         {mediaType === 'video' && videoUrl ? (
@@ -76,14 +79,14 @@ export default function HeroSection({ section }: { section: T }) {
         </div>
 
         {/* Giant headline anchored to bottom */}
-        <h1 className="hero__h1 container">
+        <Tag className="hero__h1 container">
           <span className="row">
             <span>{headlineRow1}</span>
           </span>
           <span className="row">
             <span className="push">{headlineRow2}</span>
           </span>
-        </h1>
+        </Tag>
       </div>
 
       <span className="hero__cue" aria-hidden="true">Scroll</span>

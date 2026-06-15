@@ -9,6 +9,7 @@ const isPlaceholder = (s?: string | null) =>
 
 export default function TestimonialSection({ section }: { section: T }) {
   const {
+    colorTheme,
     eyebrow    = 'From our tenants',
     quote,
     authorName,
@@ -37,7 +38,7 @@ export default function TestimonialSection({ section }: { section: T }) {
   const showAttribution = showAuthorName || showAuthorRole
 
   return (
-    <section className="testi" aria-label="Testimonial">
+    <section className="testi" aria-label="Testimonial" data-section-theme={colorTheme ?? 'light'}>
       <div className="container">
         <p className="testi__eyebrow" data-fade>{eyebrow}</p>
 
