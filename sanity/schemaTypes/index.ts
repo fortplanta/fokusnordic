@@ -16,6 +16,8 @@ import neighbourhoodSection  from './sections/neighbourhoodSection'
 import rationalCaseSection  from './sections/rationalCaseSection'
 import journalSection        from './sections/journalSection'
 import viewingSection       from './sections/viewingSection'
+import gallerySection       from './sections/gallerySection'
+import neighbourhoodDetailsSection from './sections/neighbourhoodDetailsSection'
 
 export const schemaTypes = [
   // Documents
@@ -35,4 +37,6 @@ export const schemaTypes = [
   rationalCaseSection,
   journalSection,
   viewingSection,
+  gallerySection,
+  neighbourhoodDetailsSection,
 ]

@@ -124,6 +124,32 @@ export const HOME_PAGE_QUERY = /* groq */ `
         headingLevel, colorTheme,
         heading, bodyText, ctaLabel, ctaType, ctaUrl
       },
+
+      // gallerySection — mixed image + caption items
+      _type == "gallerySection" => {
+        headingLevel, colorTheme, title,
+        galleryItems[] {
+          _type,
+          _key,
+          _type == "galleryItemImage" => {
+            image { ${IMAGE_FIELDS} },
+            alt,
+            span
+          },
+          _type == "galleryItemCaption" => { text }
+        }
+      },
+
+      // neighbourhoodDetailsSection — intro + categorised place listings
+      _type == "neighbourhoodDetailsSection" => {
+        headingLevel, colorTheme, title,
+        introText, ctaText, ctaUrl,
+        categories[] {
+          _key,
+          categoryName,
+          items[] { itemName, itemDetail }
+        }
+      },
     }
   }
 `
