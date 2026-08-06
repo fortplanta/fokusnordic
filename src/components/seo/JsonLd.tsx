@@ -13,7 +13,7 @@ export default function JsonLd({ settings }: { settings?: SiteSettings }) {
     '@type': 'LocalBusiness',
     name:        settings?.propertyName ?? 'Barnängshuset',
     description: settings?.metaDescription ??
-      'A restored 1917 cotton mill at Nackagatan 4, Södermalm — two floors of calm, focused workspace.',
+      'Up to 9,762 m² of office space across three principal floors at Nackagatan 4, Södermalm.',
     url: siteUrl,
     address: {
       '@type':          'PostalAddress',

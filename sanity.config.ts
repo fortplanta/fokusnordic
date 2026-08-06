@@ -8,7 +8,7 @@ import {
 import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './sanity/schemaTypes'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? 'wvgj6m8r'
 const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
 
 export default defineConfig({
@@ -39,30 +39,6 @@ export default defineConfig({
             select: { title: 'title' },
             resolve: () => ({
               locations: [{ title: 'Home', href: '/' }],
-            }),
-          }),
-          floor: defineLocations({
-            select: { label: 'label' },
-            resolve: (doc) => ({
-              locations: [
-                { title: `Floor plan — ${doc?.label ?? 'unit'}`, href: '/#spaces' },
-              ],
-            }),
-          }),
-          poi: defineLocations({
-            select: { name: 'name' },
-            resolve: (doc) => ({
-              locations: [
-                { title: `Neighbourhood — ${doc?.name ?? 'POI'}`, href: '/#neighbourhood' },
-              ],
-            }),
-          }),
-          journalPost: defineLocations({
-            select: { title: 'title' },
-            resolve: (doc) => ({
-              locations: [
-                { title: `Journal — ${doc?.title ?? 'post'}`, href: '/#journal' },
-              ],
             }),
           }),
           siteSettings: defineLocations({
@@ -97,11 +73,6 @@ export default defineConfig({
                   .schemaType('page')
                   .documentId('homePage')
               ),
-            S.divider(),
-            // Collections
-            S.documentTypeListItem('floor').title('Floors / Units'),
-            S.documentTypeListItem('journalPost').title('Journal'),
-            S.documentTypeListItem('poi').title('Neighbourhood POIs'),
           ]),
     }),
     visionTool(),

@@ -39,6 +39,37 @@ export const SITE_SETTINGS_QUERY = /* groq */ `
   }
 `
 
+/** Current editorial home page — every visible text and image is CMS-owned. */
+export const CURRENT_HOME_QUERY = /* groq */ `
+  *[_type == "page" && _id == "homePage"][0] {
+    title,
+    hero { heading, body, ctaLabel, image { ${IMAGE_FIELDS} } },
+    building { kicker, heading, body, image { ${IMAGE_FIELDS} } },
+    volume {
+      kicker, heading,
+      mainImage { ${IMAGE_FIELDS} }, detailImage { ${IMAGE_FIELDS} },
+      qualities[] { _key, label, value }
+    },
+    gallery {
+      kicker, heading, body,
+      items[] { _key, caption, layout, image { ${IMAGE_FIELDS} } }
+    },
+    opportunity {
+      kicker, heading, body, ctaLabel,
+      facts[] { _key, label, value }, image { ${IMAGE_FIELDS} }
+    },
+    materials {
+      kicker, heading, body,
+      mainImage { ${IMAGE_FIELDS} }, detailImage { ${IMAGE_FIELDS} }
+    },
+    place {
+      kicker, heading, body, nearby[] { _key, name, detail },
+      image { ${IMAGE_FIELDS} }
+    },
+    viewing { kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }
+  }
+`
+
 /** Home page — sections with all references dereferenced */
 export const HOME_PAGE_QUERY = /* groq */ `
   *[_type == "page" && _id == "homePage"][0] {
@@ -197,6 +228,16 @@ export async function getHomePage() {
     return data
   } catch (err) {
     console.error('[sanityFetch] getHomePage failed:', err)
+    return null
+  }
+}
+
+export async function getCurrentHomePage() {
+  try {
+    const { data } = await sanityFetch({ query: CURRENT_HOME_QUERY })
+    return data
+  } catch (err) {
+    console.error('[sanityFetch] getCurrentHomePage failed:', err)
     return null
   }
 }

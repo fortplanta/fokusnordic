@@ -1,0 +1,100 @@
+'use client'
+
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+
+type CmsImage = { alt?: string; asset?: { url?: string } }
+type Pair = { _key?: string; label: string; value: string }
+type Nearby = { _key?: string; name: string; detail: string }
+type GalleryItem = { _key?: string; caption: string; layout?: string; image?: CmsImage }
+type Content = {
+  hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
+  building: { kicker: string; heading: string; body: string; image?: CmsImage }
+  volume: { kicker: string; heading: string; qualities: Pair[]; mainImage?: CmsImage; detailImage?: CmsImage }
+  gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
+  opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
+  materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
+  place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
+  viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
+}
+
+type Contact = { name: string; role?: string; email: string; phone?: string; photo?: CmsImage }
+type Identity = { propertyName?: string; address?: string }
+
+const fallbacks = {
+  hero: '/assets/img-hero.jpg', building: '/assets/img-editorial.jpg', volume: '/assets/img-lifestyle.png',
+  stair: '/assets/img-detail.jpg', opportunity: '/assets/img-hero.jpg', material: '/assets/img-moodboard.png',
+  detail: '/assets/img-detail.jpg', place: '/assets/img-street.jpg', viewing: '/assets/img-portrait.jpg',
+}
+
+function Media({ image, fallback, className = '', priority = false, sizes = '100vw' }: { image?: CmsImage; fallback: string; className?: string; priority?: boolean; sizes?: string }) {
+  const src = image?.asset?.url || fallback
+  return <figure className={`site-media ${className}`}><Image src={src} alt={image?.alt || ''} fill priority={priority} sizes={sizes} /></figure>
+}
+
+function TextLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return <a className="text-link" href={href}><span>{children}</span><span aria-hidden="true">↗</span></a>
+}
+
+export default function BarnangshusetSite({ content, contact, identity }: { content: Content; contact: Contact; identity?: Identity }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    const close = (event: KeyboardEvent) => event.key === 'Escape' && setMenuOpen(false)
+    window.addEventListener('keydown', close)
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', close) }
+  }, [menuOpen])
+
+  const mailto = `mailto:${contact.email}?subject=Viewing%20at%20Barn%C3%A4ngshuset`
+  return <div className="bh-site">
+    <header className="site-header">
+      <a className="wordmark" href="#top" aria-label="Barnängshuset, home"><Image src="/assets/barnangshuset_logo-neg.svg" alt="" width={600} height={391} priority /></a>
+      <nav className="desktop-nav" aria-label="Primary navigation"><a href="#building">Building</a><a href="#gallery">Gallery</a><a href="#spaces">Space</a><a href="#place">Address</a></nav>
+      <a className="header-action" href="#viewing">Arrange a viewing</a>
+      <button className="menu-button" type="button" aria-controls="site-menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'Close' : 'Menu'}</button>
+    </header>
+    <div id="site-menu" className={`menu-panel ${menuOpen ? 'is-open' : ''}`} aria-hidden={!menuOpen}><nav aria-label="Menu">{[['#building','Building'],['#gallery','Gallery'],['#spaces','Space'],['#place','Address'],['#viewing','Arrange a viewing']].map(([href,label])=><a href={href} key={href} tabIndex={menuOpen?0:-1} onClick={()=>setMenuOpen(false)}>{label}</a>)}</nav></div>
+    <main id="top">
+      <section className="hero" aria-labelledby="hero-title">
+        <Media image={content.hero.image} fallback={fallbacks.hero} className="hero-media" priority />
+        <div className="hero-heading" data-motion-hero><h1 id="hero-title">{content.hero.heading}</h1></div>
+        <div className="hero-summary" data-motion-hero><p className="lede">{content.hero.body}</p><TextLink href="#spaces">{content.hero.ctaLabel}</TextLink></div>
+      </section>
+      <section className="origin grid-section" id="building">
+        <Media image={content.building.image} fallback={fallbacks.building} className="origin-archive motion-media" sizes="58vw" />
+        <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
+      </section>
+      <section className="volume grid-section" aria-labelledby="volume-title">
+        <div className="volume-title" data-motion-copy><p className="kicker">{content.volume.kicker}</p><h2 id="volume-title">{content.volume.heading}</h2></div>
+        <Media image={content.volume.mainImage} fallback={fallbacks.volume} className="volume-main motion-media" sizes="66vw" />
+        <dl className="qualities" aria-label="Property qualities">{content.volume.qualities.map((item)=><div className="quality" key={item._key || item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
+        <Media image={content.volume.detailImage} fallback={fallbacks.stair} className="volume-detail" sizes="25vw" />
+      </section>
+      <section className="gallery grid-section" id="gallery" aria-labelledby="gallery-title">
+        <div className="gallery-stream">{content.gallery.items.map((item,index)=><Media key={item._key || item.caption} image={item.image} fallback={[fallbacks.hero,fallbacks.stair,fallbacks.volume,fallbacks.detail][index%4]} className={`gallery-item gallery-${item.layout || 'wide'}`} sizes="58vw" />)}</div>
+        <aside className="gallery-aside" data-motion-copy><p className="kicker">{content.gallery.kicker}</p><h2 id="gallery-title">{content.gallery.heading}</h2><p>{content.gallery.body}</p></aside>
+      </section>
+      <section className="spaces grid-section" id="spaces" aria-labelledby="spaces-title">
+        <div className="spaces-heading" data-motion-copy><p className="kicker">{content.opportunity.kicker}</p><h2 id="spaces-title">{content.opportunity.heading}</h2><p>{content.opportunity.body}</p></div>
+        <div className="opportunity-facts"><dl>{content.opportunity.facts.map((fact)=><div key={fact._key || fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl><TextLink href="#viewing">{content.opportunity.ctaLabel}</TextLink></div>
+        <Media image={content.opportunity.image} fallback={fallbacks.opportunity} className="opportunity-image motion-media" sizes="100vw" />
+      </section>
+      <section className="materials grid-section" aria-labelledby="materials-title">
+        <div className="materials-copy" data-motion-copy><p className="kicker">{content.materials.kicker}</p><h2 id="materials-title">{content.materials.heading}</h2><p>{content.materials.body}</p></div>
+        <Media image={content.materials.mainImage} fallback={fallbacks.material} className="material-board motion-media" sizes="50vw" />
+        <Media image={content.materials.detailImage} fallback={fallbacks.detail} className="material-detail" sizes="25vw" />
+      </section>
+      <section className="place grid-section" id="place">
+        <div className="place-copy" data-motion-copy><p className="kicker">{content.place.kicker}</p><h2>{content.place.heading}</h2><p>{content.place.body}</p></div>
+        <Media image={content.place.image} fallback={fallbacks.place} className="place-view motion-media" sizes="50vw" />
+        <div className="nearby-list">{content.place.nearby.map((item)=><div key={item._key || item.name}><strong>{item.name}</strong><span>{item.detail}</span></div>)}</div>
+      </section>
+      <section className="viewing grid-section" id="viewing">
+        <div className="viewing-copy" data-motion-copy><p className="kicker">{content.viewing.kicker}</p><h2>{content.viewing.heading}</h2></div>
+        <div className="contact-copy"><p>{content.viewing.body}</p><p><strong>{contact.name}</strong><br />{contact.role}<br /><a href={`mailto:${contact.email}`}>{contact.email}</a>{contact.phone && <><br /><a href={`tel:${contact.phone.replace(/\s/g,'')}`}>{contact.phone}</a></>}</p><TextLink href={mailto}>{content.viewing.ctaLabel}</TextLink></div>
+        <Media image={content.viewing.image || contact.photo} fallback={fallbacks.viewing} className="contact-portrait motion-media" sizes="20vw" />
+      </section>
+    </main>
+    <footer className="site-footer"><p>{identity?.propertyName || 'Barnängshuset'}<br />{identity?.address || 'Nackagatan 4, 116 40 Stockholm'}</p><p><a href="#building">Building</a><br /><a href="#spaces">Space</a><br /><a href="#place">Address</a></p><button type="button" onClick={()=>window.scrollTo({top:0})}>Back to top ↑</button><a className="footer-mark" href="#top" aria-label="Barnängshuset, back to top"><Image src="/assets/barnangshuset_logo-neg.svg" alt="" width={600} height={391} /></a><p className="footer-legal">© {new Date().getFullYear()} {identity?.propertyName || 'Barnängshuset'} · Privacy</p></footer>
+  </div>
+}

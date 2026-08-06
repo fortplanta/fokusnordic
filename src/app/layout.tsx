@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default:  'Barnängshuset — Office Space in Södermalm',
   },
   description:
-    'A restored 1917 cotton mill at Nackagatan 4, Södermalm. Two floors of calm, focused workspace for founders, studios, and small teams.',
+    'Up to 9,762 m² of office space across three principal floors at Nackagatan 4, Södermalm.',
   openGraph: {
     siteName: 'Barnängshuset',
     locale:   'en_SE',
@@ -37,8 +37,6 @@ export default function RootLayout({
       <head>
         {/* Preconnect to external origins used in the critical path */}
         <link rel="preconnect" href="https://cdn.sanity.io" />
-        <link rel="preconnect" href="https://api.maptiler.com" />
-        <link rel="dns-prefetch" href="https://tiles.maptiler.com" />
       </head>
       <body>
         {/* Skip-to-content for keyboard users */}

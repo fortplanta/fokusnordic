@@ -52,8 +52,8 @@ export default defineType({
       type: 'object',
       group: 'contact',
       fields: [
-        defineField({ name: 'name',  title: 'Full name', type: 'string', initialValue: 'Anna Lindqvist' }),
-        defineField({ name: 'role',  title: 'Role',      type: 'string', initialValue: 'Leasing Manager' }),
+        defineField({ name: 'name',  title: 'Full name', type: 'string', initialValue: 'Nina de Besche' }),
+        defineField({ name: 'role',  title: 'Role',      type: 'string', initialValue: 'Managing Partner' }),
         defineField({ name: 'email', title: 'Email',     type: 'string' }),
         defineField({ name: 'phone', title: 'Phone',     type: 'string' }),
         defineField({
@@ -132,7 +132,7 @@ export default defineType({
       title: 'Footer invite headline',
       type: 'string',
       description: 'The oversized serif line at the top of the footer.',
-      initialValue: 'Work somewhere worth coming back to.',
+      initialValue: 'Barnängshuset',
       group: 'identity',
     }),
   ],

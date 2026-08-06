@@ -1,46 +1,102 @@
 import { defineField, defineType } from 'sanity'
 
-/*
-  Singleton home page document — page-builder pattern.
-  The sections[] array is reorderable in the Studio; each _type maps to a
-  React component via the sections registry (src/lib/sections-registry.ts).
-*/
+const copy = (name: string, title: string, rows = 3) => defineField({
+  name,
+  title,
+  type: rows > 1 ? 'text' : 'string',
+  ...(rows > 1 ? { rows } : {}),
+})
+
+const image = (name: string, title: string) => defineField({
+  name,
+  title,
+  type: 'image',
+  options: { hotspot: true },
+  fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string', validation: (r) => r.required() })],
+})
+
+const sectionCopy = [copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), copy('body', 'Body')]
+
 export default defineType({
   name: 'page',
   title: 'Home Page',
   type: 'document',
+  groups: [
+    { name: 'hero', title: 'Hero' },
+    { name: 'building', title: 'Building' },
+    { name: 'volume', title: 'Light & volume' },
+    { name: 'gallery', title: 'Gallery' },
+    { name: 'opportunity', title: 'Opportunity' },
+    { name: 'materials', title: 'Materials' },
+    { name: 'place', title: 'Address' },
+    { name: 'viewing', title: 'Viewing' },
+  ],
   fields: [
+    defineField({ name: 'title', title: 'Internal title', type: 'string', initialValue: 'Home' }),
     defineField({
-      name: 'title',
-      title: 'Internal title',
-      type: 'string',
-      initialValue: 'Home',
+      name: 'hero', title: 'Hero', type: 'object', group: 'hero',
+      fields: [
+        copy('heading', 'Heading', 1), copy('body', 'Body'), copy('ctaLabel', 'CTA label', 1), image('image', 'Background image'),
+      ],
     }),
     defineField({
-      name: 'sections',
-      title: 'Page sections',
-      type: 'array',
-      of: [
-        { type: 'heroSection' },
-        { type: 'statementSection' },
-        { type: 'figuresSection' },
-        { type: 'testimonialSection' },
-        { type: 'bridgeSection' },
-        { type: 'floorsSection' },
-        { type: 'neighbourhoodSection' },
-        { type: 'rationalCaseSection' },
-        { type: 'journalSection' },
-        { type: 'viewingSection' },
-        { type: 'gallerySection' },
-        { type: 'neighbourhoodDetailsSection' },
+      name: 'building', title: 'Building', type: 'object', group: 'building',
+      fields: [...sectionCopy, image('image', 'Historical image')],
+    }),
+    defineField({
+      name: 'volume', title: 'Light and volume', type: 'object', group: 'volume',
+      fields: [
+        ...sectionCopy.slice(0, 2), image('mainImage', 'Main interior image'), image('detailImage', 'Detail image'),
+        defineField({
+          name: 'qualities', title: 'Property qualities', type: 'array',
+          of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
+        }),
       ],
-      options: {
-        // Enables drag-to-reorder in Studio
-        sortable: true,
-      },
+    }),
+    defineField({
+      name: 'gallery', title: 'Gallery', type: 'object', group: 'gallery',
+      fields: [
+        ...sectionCopy,
+        defineField({
+          name: 'items', title: 'Images', type: 'array',
+          of: [{
+            type: 'object',
+            fields: [image('image', 'Image'), copy('caption', 'Caption', 1), defineField({
+              name: 'layout', title: 'Layout', type: 'string', initialValue: 'wide',
+              options: { list: [{ title: 'Wide', value: 'wide' }, { title: 'Portrait', value: 'portrait' }, { title: 'Compact', value: 'compact' }] },
+            })],
+          }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'opportunity', title: 'Opportunity', type: 'object', group: 'opportunity',
+      fields: [
+        ...sectionCopy, copy('ctaLabel', 'CTA label', 1), image('image', 'Opportunity image'),
+        defineField({
+          name: 'facts', title: 'Facts', type: 'array',
+          of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'materials', title: 'Materials', type: 'object', group: 'materials',
+      fields: [...sectionCopy, image('mainImage', 'Main material image'), image('detailImage', 'Material detail')],
+    }),
+    defineField({
+      name: 'place', title: 'Address', type: 'object', group: 'place',
+      fields: [
+        ...sectionCopy, image('image', 'Neighbourhood image'),
+        defineField({
+          name: 'nearby', title: 'Nearby', type: 'array',
+          of: [{ type: 'object', fields: [copy('name', 'Place', 1), copy('detail', 'Distance / detail', 1)] }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'viewing', title: 'Viewing', type: 'object', group: 'viewing',
+      fields: [...sectionCopy, copy('ctaLabel', 'CTA label', 1), image('image', 'Viewing image')],
     }),
   ],
-  preview: {
-    prepare: () => ({ title: 'Home Page' }),
-  },
+  preview: { prepare: () => ({ title: 'Home Page' }) },
 })
