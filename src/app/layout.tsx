@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import './globals.css'
 import { SanityLive }        from '@/lib/sanity.live'
@@ -29,9 +30,11 @@ export const metadata: Metadata = {
     : { index: false, follow: false },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { isEnabled: isDraftMode } = await draftMode()
+
   return (
     <html lang="en">
       <head>
@@ -51,12 +54,9 @@ export default function RootLayout({
         {/* Live content event stream — revalidates published content and
             streams drafts to the Presentation preview in real time */}
         <SanityLive />
-        {/* VisualEditing connects the page to the Studio Presentation tool.
-            The component detects the Presentation iframe via postMessage and
-            is a no-op for regular visitors — safe to render unconditionally.
-            Gating on draftMode() creates a chicken-and-egg: the component
-            can't mount to establish the connection needed to enable drafts. */}
-        <VisualEditing />
+        {/* The Presentation tool enters through /api/draft-mode/enable, so the
+            visual editing runtime is only needed in an authenticated preview. */}
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   )
