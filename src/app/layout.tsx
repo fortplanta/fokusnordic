@@ -3,9 +3,7 @@ import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import './globals.css'
 import { SanityLive }        from '@/lib/sanity.live'
-import JsFlag               from '@/components/motion/JsFlag'
-import SmoothScrollProvider  from '@/components/motion/SmoothScrollProvider'
-import PageAnimations        from '@/components/motion/PageAnimations'
+import SiteMotion            from '@/components/motion/SiteMotion'
 import SkipLink              from '@/components/layout/SkipLink'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://barnangshuset.se'
@@ -44,19 +42,11 @@ export default async function RootLayout({
       <body>
         {/* Skip-to-content for keyboard users */}
         <SkipLink />
-        {/* Adds .js to <html> on hydration — activates animation CSS */}
-        <JsFlag />
-        {/* Lenis smooth scroll + GSAP ticker */}
-        <SmoothScrollProvider>
-          {children}
-          <PageAnimations />
-        </SmoothScrollProvider>
-        {/* Live content event stream — revalidates published content and
-            streams drafts to the Presentation preview in real time */}
-        <SanityLive />
-        {/* The Presentation tool enters through /api/draft-mode/enable, so the
-            visual editing runtime is only needed in an authenticated preview. */}
-        {isDraftMode && <VisualEditing />}
+        {children}
+        <SiteMotion />
+        {/* The Presentation tool enters through /api/draft-mode/enable. Keep
+            its event stream and editing runtime out of the public bundle. */}
+        {isDraftMode && <><SanityLive /><VisualEditing /></>}
       </body>
     </html>
   )

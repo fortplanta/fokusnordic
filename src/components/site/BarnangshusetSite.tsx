@@ -1,7 +1,5 @@
-'use client'
-
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import SiteHeader from './SiteHeader'
 
 type CmsImage = { alt?: string; asset?: { url?: string } }
 type Pair = { _key?: string; label: string; value: string }
@@ -37,23 +35,9 @@ function TextLink({ href, children }: { href: string; children: React.ReactNode 
 }
 
 export default function BarnangshusetSite({ content, contact, identity }: { content: Content; contact: Contact; identity?: Identity }) {
-  const [menuOpen, setMenuOpen] = useState(false)
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    const close = (event: KeyboardEvent) => event.key === 'Escape' && setMenuOpen(false)
-    window.addEventListener('keydown', close)
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', close) }
-  }, [menuOpen])
-
   const mailto = `mailto:${contact.email}?subject=Viewing%20at%20Barn%C3%A4ngshuset`
   return <div className="bh-site">
-    <header className="site-header">
-      <a className="wordmark" href="#top" aria-label="Barnängshuset, home"><Image src="/assets/barnangshuset_logo-neg.svg" alt="" width={600} height={391} priority /></a>
-      <nav className="desktop-nav" aria-label="Primary navigation"><a href="#building">Building</a><a href="#gallery">Gallery</a><a href="#spaces">Space</a><a href="#place">Address</a></nav>
-      <a className="header-action" href="#viewing">Arrange a viewing</a>
-      <button className="menu-button" type="button" aria-controls="site-menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'Close' : 'Menu'}</button>
-    </header>
-    <div id="site-menu" className={`menu-panel ${menuOpen ? 'is-open' : ''}`} aria-hidden={!menuOpen}><nav aria-label="Menu">{[['#building','Building'],['#gallery','Gallery'],['#spaces','Space'],['#place','Address'],['#viewing','Arrange a viewing']].map(([href,label])=><a href={href} key={href} tabIndex={menuOpen?0:-1} onClick={()=>setMenuOpen(false)}>{label}</a>)}</nav></div>
+    <SiteHeader />
     <main id="top">
       <section className="hero" aria-labelledby="hero-title">
         <Media image={content.hero.image} fallback={fallbacks.hero} className="hero-media" priority />
@@ -95,6 +79,6 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.viewing.image || contact.photo} fallback={fallbacks.viewing} className="contact-portrait motion-media" sizes="20vw" />
       </section>
     </main>
-    <footer className="site-footer"><p>{identity?.propertyName || 'Barnängshuset'}<br />{identity?.address || 'Nackagatan 4, 116 40 Stockholm'}</p><p><a href="#building">Building</a><br /><a href="#spaces">Space</a><br /><a href="#place">Address</a></p><button type="button" onClick={()=>window.scrollTo({top:0})}>Back to top ↑</button><a className="footer-mark" href="#top" aria-label="Barnängshuset, back to top"><Image src="/assets/barnangshuset_logo-neg.svg" alt="" width={600} height={391} /></a><p className="footer-legal">© {new Date().getFullYear()} {identity?.propertyName || 'Barnängshuset'} · Privacy</p></footer>
+    <footer className="site-footer"><p>{identity?.propertyName || 'Barnängshuset'}<br />{identity?.address || 'Nackagatan 4, 116 40 Stockholm'}</p><p><a href="#building">Building</a><br /><a href="#spaces">Space</a><br /><a href="#place">Address</a></p><a className="back-to-top" href="#top">Back to top ↑</a><a className="footer-mark" href="#top" aria-label="Barnängshuset, back to top"><Image src="/assets/barnangshuset_logo-neg.svg" alt="" width={600} height={391} /></a><p className="footer-legal">© {new Date().getFullYear()} {identity?.propertyName || 'Barnängshuset'} · Privacy</p></footer>
   </div>
 }
