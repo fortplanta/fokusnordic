@@ -19,6 +19,33 @@ export default defineConfig({
   dataset,
 
   plugins: [
+    // The document editor is the everyday entry point. Keep Presentation as
+    // the secondary tool for previewing and locating fields visually.
+    structureTool({
+      structure: (S: any) =>
+        S.list()
+          .title('Content')
+          .items([
+            // Singletons — no list view, open directly
+            S.listItem()
+              .title('Site Settings')
+              .id('siteSettings')
+              .child(
+                S.document()
+                  .schemaType('siteSettings')
+                  .documentId('siteSettings')
+              ),
+            S.listItem()
+              .title('Home Page')
+              .id('homePage')
+              .child(
+                S.document()
+                  .schemaType('page')
+                  .documentId('homePage')
+              ),
+          ]),
+    }),
+
     // Live preview — split view: document editor left, running site right.
     // The Studio is embedded in the Next.js app, so the preview origin is the
     // same origin; /api/draft-mode/enable lets the preview iframe see drafts.
@@ -51,30 +78,6 @@ export default defineConfig({
       },
     }),
 
-    structureTool({
-      structure: (S: any) =>
-        S.list()
-          .title('Content')
-          .items([
-            // Singletons — no list view, open directly
-            S.listItem()
-              .title('Site Settings')
-              .id('siteSettings')
-              .child(
-                S.document()
-                  .schemaType('siteSettings')
-                  .documentId('siteSettings')
-              ),
-            S.listItem()
-              .title('Home Page')
-              .id('homePage')
-              .child(
-                S.document()
-                  .schemaType('page')
-                  .documentId('homePage')
-              ),
-          ]),
-    }),
     visionTool(),
   ],
 

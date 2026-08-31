@@ -39,7 +39,7 @@ export default async function HomePage() {
   const content = page?.hero?.heading ? page : homeFallback
   const cmsContact = settings?.leasingContact
   const contact = cmsContact?.email && cmsContact?.name
-    ? cmsContact
+    ? { ...cmsContact, email: cmsContact.email }
     : contactFallback
 
   return (

@@ -39,6 +39,48 @@ export type SiteSettings = {
     footerInvite?: string
 }
 
+export type CurrentHomePage = {
+    title?: string
+    hero: { heading: string; body: string; ctaLabel: string; image?: SanityImage }
+    building: { kicker: string; heading: string; body: string; image?: SanityImage }
+    volume: {
+        kicker: string
+        heading: string
+        qualities: Array<{ _key?: string; label: string; value: string }>
+        mainImage?: SanityImage
+        detailImage?: SanityImage
+    }
+    gallery: {
+        kicker: string
+        heading: string
+        body: string
+        items: Array<{ _key?: string; caption: string; layout?: string; image?: SanityImage }>
+    }
+    opportunity: {
+        kicker: string
+        heading: string
+        body: string
+        ctaLabel: string
+        facts: Array<{ _key?: string; label: string; value: string }>
+        image?: SanityImage
+    }
+    materials: {
+        kicker: string
+        heading: string
+        body: string
+        mainImage?: SanityImage
+        detailImage?: SanityImage
+    }
+    place: {
+        kicker: string
+        heading: string
+        body: string
+        nearby: Array<{ _key?: string; name: string; detail: string }>
+        image?: SanityImage
+    }
+    viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
+}
+
 export type Floor = {
     _id: string
     label: string

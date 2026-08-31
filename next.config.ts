@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next'
-import path from 'path'
 
 const nextConfig: NextConfig = {
   // Prevent server/SSR webpack bundle from bundling Sanity at all.
@@ -12,28 +11,6 @@ const nextConfig: NextConfig = {
     '@sanity/ui',
     '@sanity/icons',
   ],
-
-  webpack(config, { isServer }) {
-    // Next.js aliases "react" → next/dist/compiled/react (a canary build,
-    // currently 19.2.0-canary) which does NOT export useEffectEvent.
-    // sanity/structureTool imports useEffectEvent from "react" directly and
-    // crashes in the browser.
-    //
-    // Client bundle only: override the alias so every package — including
-    // Sanity — resolves to the single installed react@19.2.6 (stable), which
-    // has useEffectEvent. One module ID, one React instance, no hook errors.
-    //
-    // Server bundle is left untouched: Next.js's RSC runtime, SSR internals,
-    // and dev-tools all expect the vendored React on the server side.
-    if (!isServer) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        react: path.resolve('./node_modules/react'),
-        'react-dom': path.resolve('./node_modules/react-dom'),
-      }
-    }
-    return config
-  },
 
   images: {
     // Serve AVIF first (best compression), WebP as fallback — both auto-handled by next/image

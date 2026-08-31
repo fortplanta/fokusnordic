@@ -3,6 +3,7 @@
 export { client, urlFor } from './sanity.client'
 
 import { sanityFetch } from './sanity.live'
+import type { CurrentHomePage, SiteSettings } from '@/types/sanity'
 
 // ─── Reusable image projection ────────────────────────────────────────────────
 
@@ -215,7 +216,7 @@ export const FLOOR_AVAILABILITY_QUERY = /* groq */ `
 export async function getSiteSettings() {
   try {
     const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY })
-    return data
+    return data as SiteSettings | null
   } catch (err) {
     console.error('[sanityFetch] getSiteSettings failed:', err)
     return null
@@ -235,7 +236,7 @@ export async function getHomePage() {
 export async function getCurrentHomePage() {
   try {
     const { data } = await sanityFetch({ query: CURRENT_HOME_QUERY })
-    return data
+    return data as CurrentHomePage | null
   } catch (err) {
     console.error('[sanityFetch] getCurrentHomePage failed:', err)
     return null
