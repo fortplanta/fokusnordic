@@ -12,6 +12,7 @@ export const homeFallback = {
   volume: {
     kicker: 'Light and volume',
     heading: 'Daylight, all the way through.',
+    body: 'High ceilings and tall factory windows bring daylight deep into each principal floor.',
     qualities: [
       { _key: 'ceiling', label: 'Ceiling height', value: '4.9 metres' },
       { _key: 'windows', label: 'Windows', value: 'Floor to ceiling' },

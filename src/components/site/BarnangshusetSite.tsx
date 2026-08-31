@@ -8,7 +8,7 @@ type GalleryItem = { _key?: string; caption: string; layout?: string; image?: Cm
 type Content = {
   hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
   building: { kicker: string; heading: string; body: string; image?: CmsImage }
-  volume: { kicker: string; heading: string; qualities: Pair[]; mainImage?: CmsImage; detailImage?: CmsImage }
+  volume: { kicker: string; heading: string; body?: string; qualities: Pair[]; mainImage?: CmsImage; detailImage?: CmsImage }
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
@@ -49,7 +49,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
       </section>
       <section className="volume grid-section" aria-labelledby="volume-title">
-        <div className="volume-title" data-motion-copy><p className="kicker">{content.volume.kicker}</p><h2 id="volume-title">{content.volume.heading}</h2></div>
+        <div className="volume-title" data-motion-copy><p className="kicker">{content.volume.kicker}</p><h2 id="volume-title">{content.volume.heading}</h2>{content.volume.body && <p>{content.volume.body}</p>}</div>
         <Media image={content.volume.mainImage} fallback={fallbacks.volume} className="volume-main motion-media" sizes="66vw" />
         <dl className="qualities" aria-label="Property qualities">{content.volume.qualities.map((item)=><div className="quality" key={item._key || item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
         <Media image={content.volume.detailImage} fallback={fallbacks.stair} className="volume-detail" sizes="25vw" />

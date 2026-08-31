@@ -46,6 +46,7 @@ export type CurrentHomePage = {
     volume: {
         kicker: string
         heading: string
+        body?: string
         qualities: Array<{ _key?: string; label: string; value: string }>
         mainImage?: SanityImage
         detailImage?: SanityImage

@@ -46,7 +46,7 @@ export default defineType({
     defineField({
       name: 'volume', title: 'Light and volume', type: 'object', group: 'volume',
       fields: [
-        ...sectionCopy.slice(0, 2), image('mainImage', 'Main interior image'), image('detailImage', 'Detail image'),
+        ...sectionCopy, image('mainImage', 'Main interior image'), image('detailImage', 'Detail image'),
         defineField({
           name: 'qualities', title: 'Property qualities', type: 'array',
           of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
