@@ -75,7 +75,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       </section>
       <section className="viewing grid-section" id="viewing">
         <div className="viewing-copy" data-motion-copy><p className="kicker">{content.viewing.kicker}</p><h2>{content.viewing.heading}</h2></div>
-        <div className="contact-copy"><p>{content.viewing.body}</p><p><strong>{contact.name}</strong><br />{contact.role}<br /><a href={`mailto:${contact.email}`}>{contact.email}</a>{contact.phone && <><br /><a href={`tel:${contact.phone.replace(/\s/g,'')}`}>{contact.phone}</a></>}</p><TextLink href={mailto}>{content.viewing.ctaLabel}</TextLink></div>
+        <div className="contact-copy" data-motion-copy><p>{content.viewing.body}</p><p><strong>{contact.name}</strong><br />{contact.role}<br /><a href={`mailto:${contact.email}`}>{contact.email}</a>{contact.phone && <><br /><a href={`tel:${contact.phone.replace(/\s/g,'')}`}>{contact.phone}</a></>}</p><TextLink href={mailto}>{content.viewing.ctaLabel}</TextLink></div>
         <Media image={content.viewing.image || contact.photo} fallback={fallbacks.viewing} className="contact-portrait motion-media" sizes="20vw" />
       </section>
     </main>
