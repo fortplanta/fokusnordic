@@ -6,7 +6,12 @@ import type { FloorPlanConfiguration, FloorPlanSection, SanityImage } from '@/ty
 
 function PlanImage({ image, sizes }: { image?: SanityImage; sizes: string }) {
   if (!image?.asset?.url) {
-    return <div className="floor-plan-empty">Drawing to be added</div>
+    return (
+      <div className="floor-plan-empty">
+        <span>Floor-plan drawing</span>
+        <small>To be added in Sanity</small>
+      </div>
+    )
   }
 
   return (
@@ -97,11 +102,11 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
 
   return (
     <section className="floor-plans grid-section" id="floor-plans" aria-labelledby={`${id}-title`}>
-      <div className="floor-plans-intro" data-motion-copy>
+      <header className="floor-plans-intro" data-motion-copy>
         <p className="kicker">{content.kicker}</p>
         <h2 id={`${id}-title`}>{content.heading}</h2>
         <p>{content.body}</p>
-      </div>
+      </header>
 
       <div className="floor-plan-browser">
         <div className="floor-tabs" role="group" aria-label="Select floor">
@@ -118,33 +123,41 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           ))}
         </div>
 
-        <div className="configuration-tabs" role="group" aria-label={`${floor.label} configurations`}>
-          {floor.configurations.map((item, index) => (
-            <button
-              type="button"
-              aria-pressed={configurationIndex === index}
-              className={configurationIndex === index ? 'is-active' : ''}
-              onClick={() => setConfigurationIndex(index)}
-              key={item._key || item.title}
-            >
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              {item.title}
-            </button>
-          ))}
-        </div>
+        <div className="floor-plan-panel" id={`${id}-panel`} key={`${floor._key}-${configuration._key}`}>
+          <div className="floor-plan-identity" aria-live="polite">
+            <p>{String(floorIndex + 1).padStart(2, '0')} / {String(floors.length).padStart(2, '0')}</p>
+            <h3>{floor.label}</h3>
+          </div>
 
-        <div className="floor-plan-panel" id={`${id}-panel`}>
-          <div className="floor-plan-summary" aria-live="polite">
-            <p className="floor-plan-count">{floor.label} · {configurationIndex + 1} / {floor.configurations.length}</p>
-            <h3>{configuration.title}</h3>
+          <div className="floor-plan-preview" aria-label={`${floor.label}, ${configuration.title}`}>
+            <PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 58vw" />
+          </div>
+
+          <div className="floor-plan-summary">
+            <p className="floor-plan-count">Current planning study</p>
+            <h4>{configuration.title}</h4>
             {configuration.body && <p>{configuration.body}</p>}
             <ConfigurationFacts configuration={configuration} />
-            <button ref={triggerRef} className="floor-plan-open" type="button" onClick={() => setDrawerOpen(true)}>
-              Open detailed plans <span aria-hidden="true">↗</span>
-            </button>
           </div>
-          <div className="floor-plan-preview">
-            <PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 58vw" />
+
+          <div className="floor-plan-actions">
+            <div className="configuration-tabs" role="group" aria-label={`${floor.label} configurations`}>
+              {floor.configurations.map((item, index) => (
+                <button
+                  type="button"
+                  aria-pressed={configurationIndex === index}
+                  className={configurationIndex === index ? 'is-active' : ''}
+                  onClick={() => setConfigurationIndex(index)}
+                  key={item._key || item.title}
+                >
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {item.title}
+                </button>
+              ))}
+            </div>
+            <button ref={triggerRef} className="floor-plan-open" type="button" onClick={() => setDrawerOpen(true)}>
+              Open detailed drawings <span aria-hidden="true">↗</span>
+            </button>
           </div>
         </div>
       </div>
