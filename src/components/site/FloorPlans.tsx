@@ -8,8 +8,8 @@ function PlanImage({ image, sizes }: { image?: SanityImage; sizes: string }) {
   if (!image?.asset?.url) {
     return (
       <div className="floor-plan-empty">
-        <span>Floor-plan drawing</span>
-        <small>To be added in Sanity</small>
+        <span className="font-display text-2xl leading-tight md:text-3xl">Floor-plan drawing</span>
+        <small className="text-xs font-semibold uppercase tracking-wider">To be added in Sanity</small>
       </div>
     )
   }
@@ -125,8 +125,8 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
 
         <div className="floor-plan-panel" id={`${id}-panel`} key={`${floor._key}-${configuration._key}`}>
           <div className="floor-plan-identity" aria-live="polite">
-            <p>{String(floorIndex + 1).padStart(2, '0')} / {String(floors.length).padStart(2, '0')}</p>
-            <h3>{floor.label}</h3>
+            <p className="text-xs uppercase tracking-wider">{String(floorIndex + 1).padStart(2, '0')} / {String(floors.length).padStart(2, '0')}</p>
+            <h3 className="mt-6 max-w-full font-display text-5xl leading-none tracking-tight md:text-6xl">{floor.label}</h3>
           </div>
 
           <div className="floor-plan-preview" aria-label={`${floor.label}, ${configuration.title}`}>
@@ -134,8 +134,8 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           </div>
 
           <div className="floor-plan-summary">
-            <p className="floor-plan-count">Current planning study</p>
-            <h4>{configuration.title}</h4>
+            <p className="floor-plan-count text-xs uppercase tracking-wider">Current planning study</p>
+            <h4 className="mt-4 font-display text-2xl leading-tight tracking-tight">{configuration.title}</h4>
             {configuration.body && <p>{configuration.body}</p>}
             <ConfigurationFacts configuration={configuration} />
           </div>
