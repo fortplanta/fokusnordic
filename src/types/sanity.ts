@@ -45,7 +45,9 @@ export type FloorPlanConfiguration = {
     body?: string
     facts?: Array<{ _key?: string; label: string; value: string }>
     planImage?: SanityImage
+    planCaption?: string
     explodedImage?: SanityImage
+    explodedCaption?: string
 }
 
 export type FloorPlanSection = {
