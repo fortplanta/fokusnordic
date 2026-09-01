@@ -65,8 +65,7 @@ export const CURRENT_HOME_QUERY = /* groq */ `
         _key, label,
         configurations[] {
           _key, title, body, facts[] { _key, label, value },
-          planImage { ${IMAGE_FIELDS} }, planCaption,
-          explodedImage { ${IMAGE_FIELDS} }, explodedCaption
+          planImage { ${IMAGE_FIELDS} }, explodedImage { ${IMAGE_FIELDS} }
         }
       }
     },

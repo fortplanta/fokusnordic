@@ -123,6 +123,10 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
             <h3 className="mt-6 max-w-full font-display text-5xl leading-none tracking-tight md:text-6xl">{floor.label}</h3>
           </div>
 
+          <div className="floor-plan-preview" aria-label={`${floor.label}, ${configuration.title}`}>
+            <PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 58vw" />
+          </div>
+
           <div className="floor-plan-summary">
             <p className="floor-plan-count text-xs uppercase tracking-wider">Current planning study</p>
             <h4 className="mt-4 font-display text-2xl leading-tight tracking-tight">{configuration.title}</h4>
@@ -172,11 +176,11 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
             <div className="floor-plan-drawer-body">
               <figure className="floor-plan-drawing floor-plan-drawing-main">
                 <PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 72vw" />
-                <figcaption>{configuration.planCaption || 'Bird’s-eye floor plan'}</figcaption>
+                <figcaption>Bird’s-eye floor plan</figcaption>
               </figure>
               <figure className="floor-plan-drawing floor-plan-drawing-exploded">
                 <PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 100vw, 30vw" />
-                <figcaption>{configuration.explodedCaption || 'Exploded building view'}</figcaption>
+                <figcaption>Exploded building view</figcaption>
               </figure>
             </div>
 
