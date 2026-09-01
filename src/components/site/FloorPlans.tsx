@@ -123,7 +123,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           ))}
         </div>
 
-        <div className="floor-plan-panel" id={`${id}-panel`} key={`${floor._key}-${configuration._key}`}>
+        <div className="floor-plan-panel" id={`${id}-panel`}>
           <div className="floor-plan-identity" aria-live="polite">
             <p className="text-xs uppercase tracking-wider">{String(floorIndex + 1).padStart(2, '0')} / {String(floors.length).padStart(2, '0')}</p>
             <h3 className="mt-6 max-w-full font-display text-5xl leading-none tracking-tight md:text-6xl">{floor.label}</h3>
