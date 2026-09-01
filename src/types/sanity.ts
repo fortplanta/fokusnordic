@@ -39,6 +39,26 @@ export type SiteSettings = {
     footerInvite?: string
 }
 
+export type FloorPlanConfiguration = {
+    _key?: string
+    title: string
+    body?: string
+    facts?: Array<{ _key?: string; label: string; value: string }>
+    planImage?: SanityImage
+    explodedImage?: SanityImage
+}
+
+export type FloorPlanSection = {
+    kicker: string
+    heading: string
+    body: string
+    floors: Array<{
+        _key?: string
+        label: string
+        configurations: FloorPlanConfiguration[]
+    }>
+}
+
 export type CurrentHomePage = {
     title?: string
     hero: { heading: string; body: string; ctaLabel: string; image?: SanityImage }
@@ -65,6 +85,7 @@ export type CurrentHomePage = {
         facts: Array<{ _key?: string; label: string; value: string }>
         image?: SanityImage
     }
+    floorPlans?: FloorPlanSection
     materials: {
         kicker: string
         heading: string

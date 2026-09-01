@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import type { FloorPlanSection } from '@/types/sanity'
+import FloorPlans from './FloorPlans'
 import SiteHeader from './SiteHeader'
 
 type CmsImage = { alt?: string; asset?: { url?: string } }
@@ -11,6 +13,7 @@ type Content = {
   volume: { kicker: string; heading: string; body?: string; qualities: Pair[]; mainImage?: CmsImage; detailImage?: CmsImage }
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
+  floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
   place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
@@ -63,6 +66,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <div className="opportunity-facts"><dl>{content.opportunity.facts.map((fact)=><div key={fact._key || fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl><TextLink href="#viewing">{content.opportunity.ctaLabel}</TextLink></div>
         <Media image={content.opportunity.image} fallback={fallbacks.opportunity} className="opportunity-image motion-media" sizes="100vw" />
       </section>
+      {content.floorPlans && <FloorPlans content={content.floorPlans} />}
       <section className="materials grid-section" aria-labelledby="materials-title">
         <div className="materials-copy" data-motion-copy><p className="kicker">{content.materials.kicker}</p><h2 id="materials-title">{content.materials.heading}</h2><p>{content.materials.body}</p></div>
         <Media image={content.materials.mainImage} fallback={fallbacks.material} className="material-board motion-media" sizes="50vw" />

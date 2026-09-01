@@ -27,6 +27,7 @@ export default defineType({
     { name: 'volume', title: 'Light & volume' },
     { name: 'gallery', title: 'Gallery' },
     { name: 'opportunity', title: 'Opportunity' },
+    { name: 'floorPlans', title: 'Floor plans' },
     { name: 'materials', title: 'Materials' },
     { name: 'place', title: 'Address' },
     { name: 'viewing', title: 'Viewing' },
@@ -76,6 +77,50 @@ export default defineType({
         defineField({
           name: 'facts', title: 'Facts', type: 'array',
           of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'floorPlans', title: 'Floor plans', type: 'object', group: 'floorPlans',
+      fields: [
+        ...sectionCopy,
+        defineField({
+          name: 'floors', title: 'Floors', type: 'array',
+          validation: (rule) => rule.min(1),
+          of: [{
+            type: 'object',
+            fields: [
+              copy('label', 'Floor label', 1),
+              defineField({
+                name: 'configurations', title: 'Configurations', type: 'array',
+                validation: (rule) => rule.min(1),
+                of: [{
+                  type: 'object',
+                  fields: [
+                    copy('title', 'Configuration title', 1),
+                    copy('body', 'Description'),
+                    defineField({
+                      name: 'facts', title: 'Facts', type: 'array',
+                      of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
+                    }),
+                    image('planImage', 'Bird’s-eye floor plan'),
+                    image('explodedImage', 'Exploded building view'),
+                  ],
+                  preview: {
+                    select: { title: 'title', media: 'planImage' },
+                    prepare: ({ title, media }) => ({ title: title || 'Untitled configuration', media }),
+                  },
+                }],
+              }),
+            ],
+            preview: {
+              select: { title: 'label', configurations: 'configurations' },
+              prepare: ({ title, configurations }) => ({
+                title: title || 'Untitled floor',
+                subtitle: `${configurations?.length || 0} configuration${configurations?.length === 1 ? '' : 's'}`,
+              }),
+            },
+          }],
         }),
       ],
     }),

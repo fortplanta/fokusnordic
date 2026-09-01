@@ -29,6 +29,9 @@ async function seed() {
     (Object.keys(figmaImageMap) as ImageKey[]).map(async (key) => [key, await uploadImage(key)] as const),
   )
   const image = Object.fromEntries(entries) as Record<ImageKey, Awaited<ReturnType<typeof uploadImage>>>
+  const existingHomePage = await client.fetch<{ floorPlans?: unknown } | null>(
+    `*[_id == "homePage"][0]{floorPlans}`,
+  )
 
   await client.createOrReplace({
     _id: 'siteSettings',
@@ -99,6 +102,7 @@ async function seed() {
         { _key: 'move-in', label: 'Move-in', value: 'By agreement' },
       ],
     },
+    ...(existingHomePage?.floorPlans ? { floorPlans: existingHomePage.floorPlans } : {}),
     materials: {
       kicker: 'Material character',
       heading: 'Brick, steel, oak and stone.',

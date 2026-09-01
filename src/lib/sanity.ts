@@ -59,6 +59,16 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       kicker, heading, body, ctaLabel,
       facts[] { _key, label, value }, image { ${IMAGE_FIELDS} }
     },
+    floorPlans {
+      kicker, heading, body,
+      floors[] {
+        _key, label,
+        configurations[] {
+          _key, title, body, facts[] { _key, label, value },
+          planImage { ${IMAGE_FIELDS} }, explodedImage { ${IMAGE_FIELDS} }
+        }
+      }
+    },
     materials {
       kicker, heading, body,
       mainImage { ${IMAGE_FIELDS} }, detailImage { ${IMAGE_FIELDS} }
