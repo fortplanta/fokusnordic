@@ -101,13 +101,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   }
 
   return (
-    <section className="floor-plans grid-section" id="floor-plans" aria-labelledby={`${id}-title`}>
-      <header className="floor-plans-intro" data-motion-copy>
-        <p className="kicker">{content.kicker}</p>
-        <h2 id={`${id}-title`}>{content.heading}</h2>
-        <p>{content.body}</p>
-      </header>
-
+    <section className="floor-plans grid-section" id="floor-plans" aria-label="Floor plans">
       <div className="floor-plan-browser">
         <div className="floor-tabs" role="group" aria-label="Select floor">
           {floors.map((item, index) => (
