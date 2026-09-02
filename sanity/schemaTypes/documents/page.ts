@@ -47,10 +47,24 @@ export default defineType({
     defineField({
       name: 'volume', title: 'Light and volume', type: 'object', group: 'volume',
       fields: [
-        ...sectionCopy, image('mainImage', 'Main interior image'), image('detailImage', 'Detail image'),
+        ...sectionCopy,
         defineField({
-          name: 'qualities', title: 'Property qualities', type: 'array',
-          of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
+          name: 'featureStatements', title: 'Key building conditions', type: 'array',
+          description: 'Editorial facts shown in the upper information register.',
+          of: [{
+            type: 'object',
+            fields: [copy('heading', 'Fact heading', 1), copy('body', 'Explanation', 4)],
+            preview: { select: { title: 'heading', subtitle: 'body' } },
+          }],
+        }),
+        defineField({
+          name: 'specifications', title: 'Technical specifications', type: 'array',
+          description: 'Concise label-and-value facts shown beneath the key conditions.',
+          of: [{
+            type: 'object',
+            fields: [copy('label', 'Label', 1), copy('value', 'Value', 2)],
+            preview: { select: { title: 'label', subtitle: 'value' } },
+          }],
         }),
       ],
     }),

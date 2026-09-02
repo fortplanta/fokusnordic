@@ -1,36 +1,42 @@
-# Floor-plan exploded view — design QA
+# Light and volume information register — design QA
 
 ## Evidence
 
-- Source sketch: `/var/folders/55/58r0fmnj6yx3cxl1s2ws5s6m0000gn/T/codex-clipboard-a4b18c5c-4004-4ceb-85d2-fe2b3f89851e.png`
-- Implementation capture: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/floor-plans-implementation-final.png`
-- Side-by-side comparison: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/floor-plans-comparison.png`
-- Implementation viewport: 1280 × 900 CSS pixels
-- Reference normalized to: 1280 × 653 from the 4096 × 2090 source
-- State: Ground floor, Configuration 01
+- Source visual truth: `/var/folders/55/58r0fmnj6yx3cxl1s2ws5s6m0000gn/T/codex-clipboard-a54e6dce-c12e-473a-90d5-e4ea086a95b2.png`
+- Browser-rendered implementation: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/volume-information-implementation.png`
+- Side-by-side comparison: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/volume-information-comparison.png`
+- Reference pixels: 2710 × 1530, normalized to 1440 × 1000 on a white comparison canvas.
+- Implementation pixels: 1440 × 1000 at a 1440 × 1000 CSS viewport and device density 1.
+- State: the top of the Light and volume section, all primary building-condition entries loaded.
 
-The entire floor-plan section is the focused component, so the full-section capture also serves as the focused comparison.
+The full viewport clearly shows the heading, introductory column, register grid, typography, rules, and six of eight primary statements. A separate focused crop was not needed because these elements remain readable in the normalized comparison; the longer technical register was checked directly in the rendered page.
 
-## Review
+## Findings
 
-- Layout: the floor tabs remain above the plan, the configuration-specific exploded view replaces the former floor heading in the left column, the configuration navigation remains below it, and the main floor plan retains the dominant right-hand field.
-- Typography: existing site type tokens and Tailwind utilities are preserved; no screenshot-specific text scale was introduced.
-- Spacing and color: all new dimensions, ratios, and colors resolve through existing CSS custom-property tokens.
-- Imagery: both views use independent Sanity image fields. The exploded image is rendered as a transparent `next/image` asset and changes with the selected configuration. Missing assets receive an editor-facing fallback rather than a fabricated image.
-- Copy: the visible floor-name heading was removed as requested. Existing configuration titles and labels remain CMS-driven.
+No actionable P0, P1, or P2 mismatch remains.
 
-## Interaction and responsive checks
+- Fonts and typography: the source hierarchy is reproduced with the project's existing display and sans families rather than importing the reference brand's fonts. The lead remains dominant; labels are small, uppercase, and optically distinct from body copy.
+- Spacing and layout rhythm: the source's full-width lead, quiet left introduction, offset right-hand register, horizontal rules, and two-column information rhythm are retained. The implementation intentionally extends vertically because it contains substantially more supplied information than the source.
+- Colors and tokens: the section uses the existing Barnängshuset paper/blush, ink, muted-text, rule, spacing, and type tokens. No new palette was introduced.
+- Image quality: the replacement section contains no imagery, matching the requested facts-first treatment; no placeholder or fabricated asset is present.
+- Copy and content: all eight supplied editorial statements and all 25 technical specifications are populated from Sanity-backed arrays. The existing kicker, headline, and introduction remain editable.
+- Responsiveness: at 390 × 844 the register becomes a single-column sequence, retains the label/body relationship, and produces no horizontal overflow.
+- Accessibility: semantic headings, articles, and a definition list preserve document structure; labels do not depend on color alone.
 
-- Switching configurations changes both `planImage` and `explodedImage` from the same configuration object.
-- Switching to a configuration without an exploded asset shows the fallback; switching back restores the corresponding image.
-- At 390 × 844, the exploded view stacks above the main plan without horizontal overflow.
-- Desktop and mobile checks reported no console errors or warnings.
-- The page query already fetches `explodedImage` per configuration; the deployed schema now labels this field explicitly as “Exploded view for this configuration”.
+## Primary checks
 
-## Iteration history
+- Desktop rendering inspected at 1440 × 1000.
+- Mobile rendering inspected at 390 × 844.
+- Eight feature statements and 25 technical specifications confirmed in the browser.
+- Browser console checked with no errors or warnings attributable to the section.
+- Sanity schema deployed and the current `homePage.volume` document populated.
 
-The first production-style capture exposed stale CMS data from the cached build and Sanity CDN. The client now relies on Next revalidation against Sanity's API, the build cache was regenerated, and the final capture confirms the current floor and configuration data.
+## Comparison history
 
-## Result
+The initial implementation capture was taken before the section entered the viewport, so its one-time reveal state obscured the content. The section was then scrolled into view and recaptured after the progressive motion layer completed. The normalized side-by-side comparison confirms the intended structural match.
 
-Passed for the requested state and responsive behavior.
+## Follow-up polish
+
+- P3: The supplied content makes the completed section taller than the reference. This is an intentional information-density difference rather than a layout defect; content can be shortened or reordered directly in Sanity later.
+
+final result: passed

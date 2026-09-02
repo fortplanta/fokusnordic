@@ -2,6 +2,7 @@ import { createReadStream } from 'node:fs'
 import { resolve } from 'node:path'
 import { getCliClient } from 'sanity/cli'
 import { figmaImageMap } from './figma-image-map'
+import { homeFallback } from '../src/content/homeFallback'
 
 const client = getCliClient({ apiVersion: '2025-01-01' })
 
@@ -67,18 +68,7 @@ async function seed() {
       body: 'Barnängshuset began as a cotton-spinning mill. The reason for its scale was practical: large working floors, ceilings approaching five metres and windows that carried daylight deep into the building. Refurbished between 2019 and 2023, those conditions now frame up to 9,762 m² of office space.',
       image: image.building,
     },
-    volume: {
-      kicker: 'Light and volume',
-      heading: 'Daylight, all the way through.',
-      mainImage: image.volumeMain,
-      detailImage: image.volumeDetail,
-      qualities: [
-        { _key: 'ceiling', label: 'Ceiling height', value: '4.9 metres' },
-        { _key: 'windows', label: 'Windows', value: 'Floor to ceiling' },
-        { _key: 'breeam', label: 'Environmental standard', value: 'BREEAM In-Use · Excellent' },
-        { _key: 'ventilation', label: 'Ventilation capacity', value: '1 person per 8 m²' },
-      ],
-    },
+    volume: homeFallback.volume,
     gallery: {
       kicker: 'A closer look',
       heading: 'From Nackagatan to the floorplate.',

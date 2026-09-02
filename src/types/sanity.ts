@@ -67,9 +67,8 @@ export type CurrentHomePage = {
         kicker: string
         heading: string
         body?: string
-        qualities: Array<{ _key?: string; label: string; value: string }>
-        mainImage?: SanityImage
-        detailImage?: SanityImage
+        featureStatements: Array<{ _key?: string; heading: string; body: string }>
+        specifications: Array<{ _key?: string; label: string; value: string }>
     }
     gallery: {
         kicker: string

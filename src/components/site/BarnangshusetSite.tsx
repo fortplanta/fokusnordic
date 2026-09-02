@@ -10,7 +10,13 @@ type GalleryItem = { _key?: string; caption: string; layout?: string; image?: Cm
 type Content = {
   hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
   building: { kicker: string; heading: string; body: string; image?: CmsImage }
-  volume: { kicker: string; heading: string; body?: string; qualities: Pair[]; mainImage?: CmsImage; detailImage?: CmsImage }
+  volume: {
+    kicker: string
+    heading: string
+    body?: string
+    featureStatements: Array<{ _key?: string; heading: string; body: string }>
+    specifications: Pair[]
+  }
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
   floorPlans?: FloorPlanSection
@@ -52,10 +58,29 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
       </section>
       <section className="volume grid-section" aria-labelledby="volume-title">
-        <div className="volume-title" data-motion-copy><p className="kicker">{content.volume.kicker}</p><h2 id="volume-title">{content.volume.heading}</h2>{content.volume.body && <p>{content.volume.body}</p>}</div>
-        <Media image={content.volume.mainImage} fallback={fallbacks.volume} className="volume-main motion-media" sizes="66vw" />
-        <dl className="qualities" aria-label="Property qualities">{content.volume.qualities.map((item)=><div className="quality" key={item._key || item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
-        <Media image={content.volume.detailImage} fallback={fallbacks.stair} className="volume-detail" sizes="25vw" />
+        <header className="volume-title" data-motion-copy>
+          <p className="kicker">{content.volume.kicker}</p>
+          <h2 id="volume-title">{content.volume.heading}</h2>
+        </header>
+        {content.volume.body && <p className="volume-introduction" data-motion-copy>{content.volume.body}</p>}
+        <div className="volume-register">
+          <div className="volume-statements" aria-label="Building conditions">
+            {content.volume.featureStatements.map((item) => (
+              <article className="volume-statement" key={item._key || item.heading}>
+                <h3>{item.heading}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))}
+          </div>
+          <dl className="volume-specifications" aria-label="Property specifications">
+            {content.volume.specifications.map((item) => (
+              <div className="volume-specification" key={item._key || item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
       <section className="gallery grid-section" id="gallery" aria-labelledby="gallery-title">
         <div className="gallery-stream">{content.gallery.items.map((item,index)=><Media key={item._key || item.caption} image={item.image} fallback={[fallbacks.hero,fallbacks.stair,fallbacks.volume,fallbacks.detail][index%4]} className={`gallery-item gallery-${item.layout || 'wide'}`} sizes="58vw" />)}</div>

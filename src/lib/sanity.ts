@@ -48,8 +48,8 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     building { kicker, heading, body, image { ${IMAGE_FIELDS} } },
     volume {
       kicker, heading, body,
-      mainImage { ${IMAGE_FIELDS} }, detailImage { ${IMAGE_FIELDS} },
-      qualities[] { _key, label, value }
+      featureStatements[] { _key, heading, body },
+      specifications[] { _key, label, value }
     },
     gallery {
       kicker, heading, body,
