@@ -104,7 +104,7 @@ export default defineType({
                       of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
                     }),
                     image('planImage', 'Bird’s-eye floor plan'),
-                    image('explodedImage', 'Exploded building view'),
+                    image('explodedImage', 'Exploded view for this configuration'),
                   ],
                   preview: {
                     select: { title: 'title', media: 'planImage' },

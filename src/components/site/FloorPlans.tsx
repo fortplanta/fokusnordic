@@ -4,11 +4,11 @@ import Image from 'next/image'
 import { useEffect, useId, useRef, useState } from 'react'
 import type { FloorPlanConfiguration, FloorPlanSection, SanityImage } from '@/types/sanity'
 
-function PlanImage({ image, sizes }: { image?: SanityImage; sizes: string }) {
+function PlanImage({ image, sizes, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; emptyLabel?: string }) {
   if (!image?.asset?.url) {
     return (
       <div className="floor-plan-empty">
-        <span className="font-display text-2xl leading-tight md:text-3xl">Floor-plan drawing</span>
+        <span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span>
         <small className="text-xs font-semibold uppercase tracking-wider">To be added in Sanity</small>
       </div>
     )
@@ -119,8 +119,9 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
 
         <div className="floor-plan-panel" id={`${id}-panel`}>
           <div className="floor-plan-identity" aria-live="polite">
-            <p className="text-xs uppercase tracking-wider">{String(floorIndex + 1).padStart(2, '0')} / {String(floors.length).padStart(2, '0')}</p>
-            <h3 className="mt-6 max-w-full font-display text-5xl leading-none tracking-tight md:text-6xl">{floor.label}</h3>
+            <div className="floor-plan-exploded-preview" aria-label={`${floor.label}, ${configuration.title} exploded view`}>
+              <PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 48vw, 24vw" emptyLabel="Exploded view" />
+            </div>
           </div>
 
           <div className="floor-plan-preview" aria-label={`${floor.label}, ${configuration.title}`}>
@@ -179,7 +180,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
                 <figcaption>Bird’s-eye floor plan</figcaption>
               </figure>
               <figure className="floor-plan-drawing floor-plan-drawing-exploded">
-                <PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 100vw, 30vw" />
+                <PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 100vw, 30vw" emptyLabel="Exploded view" />
                 <figcaption>Exploded building view</figcaption>
               </figure>
             </div>

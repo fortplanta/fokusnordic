@@ -10,7 +10,9 @@ export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? 'wvgj6m8r',
   dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
   apiVersion: '2024-01-01',
-  useCdn: process.env.NODE_ENV === 'production',
+  // The page is revalidated by Next. Reading through Sanity's CDN here can
+  // preserve superseded image references across production builds.
+  useCdn: false,
   // Token only needed for draft previews — set SANITY_API_READ_TOKEN in .env.local
   token: process.env.SANITY_API_READ_TOKEN,
 })
