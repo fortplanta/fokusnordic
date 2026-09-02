@@ -26,10 +26,12 @@ export default defineType({
     { name: 'building', title: 'Building' },
     { name: 'volume', title: 'Light & volume' },
     { name: 'gallery', title: 'Gallery' },
+    { name: 'mosaicGallery', title: 'Scrolling gallery' },
     { name: 'opportunity', title: 'Opportunity' },
     { name: 'floorPlans', title: 'Floor plans' },
     { name: 'materials', title: 'Materials' },
     { name: 'place', title: 'Address' },
+    { name: 'areaMap', title: 'Area map' },
     { name: 'viewing', title: 'Viewing' },
   ],
   fields: [
@@ -89,6 +91,27 @@ export default defineType({
               name: 'layout', title: 'Layout', type: 'string', initialValue: 'wide',
               options: { list: [{ title: 'Wide', value: 'wide' }, { title: 'Portrait', value: 'portrait' }, { title: 'Compact', value: 'compact' }] },
             })],
+          }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'mosaicGallery', title: 'Scrolling gallery', type: 'object', group: 'mosaicGallery',
+      fields: [
+        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1),
+        defineField({
+          name: 'items', title: 'Images', type: 'array',
+          of: [{
+            type: 'object',
+            fields: [image('image', 'Image'), copy('caption', 'Caption', 1), defineField({
+              name: 'layout', title: 'Image position and size', type: 'string', initialValue: 'large-left',
+              options: { list: [
+                { title: 'Large · left', value: 'large-left' }, { title: 'Large · right', value: 'large-right' },
+                { title: 'Small · left', value: 'small-left' }, { title: 'Small · right', value: 'small-right' },
+                { title: 'Wide · left', value: 'wide-left' }, { title: 'Wide · right', value: 'wide-right' },
+              ] },
+            })],
+            preview: { select: { title: 'caption', media: 'image', subtitle: 'layout' } },
           }],
         }),
       ],
@@ -158,6 +181,25 @@ export default defineType({
         defineField({
           name: 'nearby', title: 'Nearby', type: 'array',
           of: [{ type: 'object', fields: [copy('name', 'Place', 1), copy('detail', 'Distance / detail', 1)] }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'areaMap', title: 'Area map', type: 'object', group: 'areaMap',
+      fields: [
+        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), image('mapImage', 'Static map image'),
+        defineField({
+          name: 'markers', title: 'Locations', type: 'array',
+          of: [{
+            type: 'object',
+            fields: [
+              copy('name', 'Name', 1), copy('detail', 'Detail', 1), copy('category', 'Category', 1),
+              defineField({ name: 'url', title: 'Link', type: 'url' }),
+              defineField({ name: 'x', title: 'Horizontal position (%)', type: 'number', validation: (r) => r.required().min(0).max(100) }),
+              defineField({ name: 'y', title: 'Vertical position (%)', type: 'number', validation: (r) => r.required().min(0).max(100) }),
+            ],
+            preview: { select: { title: 'name', subtitle: 'detail' } },
+          }],
         }),
       ],
     }),

@@ -74,6 +74,18 @@ export const homeFallback = {
       { _key: 'material', caption: 'Material detail · brick and stone', layout: 'compact' },
     ],
   },
+  mosaicGallery: {
+    kicker: '',
+    heading: '',
+    items: [
+      { _key: 'mosaic-1', caption: 'The principal working floor', layout: 'large-left' },
+      { _key: 'mosaic-2', caption: 'Original windows and structure', layout: 'small-right' },
+      { _key: 'mosaic-3', caption: 'Material detail', layout: 'small-left' },
+      { _key: 'mosaic-4', caption: 'The building from Nackagatan', layout: 'wide-right' },
+      { _key: 'mosaic-5', caption: 'Stair and circulation', layout: 'large-left' },
+      { _key: 'mosaic-6', caption: 'Space for a shared workplace', layout: 'wide-right' },
+    ],
+  },
   opportunity: {
     kicker: 'The opportunity',
     heading: 'Nearly 10,000 m² on Södermalm.',
@@ -99,6 +111,20 @@ export const homeFallback = {
       { _key: 'slussen', name: 'Slussen', detail: '9 min by bus' },
       { _key: 'skanstull', name: 'Skanstull', detail: '2 min by metro' },
       { _key: 'kanal', name: 'Hammarby kanal', detail: 'Future metro, 2030' },
+    ],
+  },
+  areaMap: {
+    kicker: 'In the area',
+    heading: 'Close at hand.',
+    markers: [
+      { _key: 'vita', name: 'Vitabergsparken', detail: 'Park', category: 'Outdoors', x: 47, y: 34 },
+      { _key: 'nytorget', name: 'Nytorget', detail: 'Restaurants and cafés', category: 'Food', x: 30, y: 29 },
+      { _key: 'urban-deli', name: 'Urban Deli', detail: 'Grocer and restaurant', category: 'Food', x: 27, y: 37 },
+      { _key: 'bleck', name: 'Restaurang Bleck', detail: 'Restaurant', category: 'Food', x: 42, y: 57 },
+      { _key: 'skanstull', name: 'Skanstull', detail: 'Metro', category: 'Transport', x: 12, y: 67 },
+      { _key: 'hammarby', name: 'Hammarby kanal', detail: 'Future metro', category: 'Transport', x: 52, y: 73 },
+      { _key: 'barnangsparken', name: 'Barnängsparken', detail: 'Park and waterfront', category: 'Outdoors', x: 73, y: 58 },
+      { _key: 'kajen', name: 'Barnängsbryggan', detail: 'Waterfront', category: 'Outdoors', x: 78, y: 69 },
     ],
   },
   viewing: {

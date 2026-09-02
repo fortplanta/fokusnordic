@@ -1,46 +1,37 @@
-# Split Light and volume sections — design QA
+# Scrolling gallery, information registers, and area map — design QA
 
 ## Evidence
 
-- Source visual truth: `/var/folders/55/58r0fmnj6yx3cxl1s2ws5s6m0000gn/T/codex-clipboard-d26cdbb0-cb6d-416b-ba0d-05a1a094fe1e.png`
-- Browser-rendered implementation: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/volume-categorized-implementation.png`
-- Browser-rendered editorial section: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/volume-editorial-third-section.png`
-- Side-by-side comparison: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/volume-categorized-comparison.png`
-- Reference pixels: 3452 × 1952, normalized to the implementation viewport for comparison.
-- Implementation viewport: 1389 × 1204 at device density 1.
-- State: editorial conditions in the third section; technical specifications immediately before Viewing.
-
-The viewport shows the complete third section: a three-column introduction, one-column gap, and eight-column editorial list. The separate technical section was checked near the bottom in the same browser session.
+- Gallery reference: `/var/folders/55/58r0fmnj6yx3cxl1s2ws5s6m0000gn/T/codex-clipboard-d63380f9-3583-435d-9c3e-b7743c0d16d1.png`
+- Gallery implementation: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/mosaic-gallery-implementation.png`
+- Gallery comparison: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/mosaic-gallery-comparison.png`
+- Map reference: `/var/folders/55/58r0fmnj6yx3cxl1s2ws5s6m0000gn/T/TemporaryItems/NSIRD_screencaptureui_l6aAxs/Screenshot 2026-09-02 at 20.25.08.png`
+- Map implementation: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/area-map-implementation.png`
+- Map comparison: `/Users/anton/Documents/GitHub/fokusnordic-cms-final/area-map-comparison.png`
+- Desktop viewport: 1389 × 1204. Mobile check: 390 × 844.
 
 ## Findings
 
 No actionable P0, P1, or P2 mismatch remains.
 
-- Fonts and typography: the source hierarchy is reproduced with the project's existing display and sans families rather than importing the reference brand's fonts. The lead remains dominant; labels are small, uppercase, and optically distinct from body copy.
-- Spacing and layout rhythm: the source's full-width lead, quiet left column, offset right-hand register, horizontal rules, and two-column category rhythm are retained. The supplied information is denser than the source, so the implementation continues vertically rather than compressing the type.
-- Colors and tokens: the section uses the existing Barnängshuset paper/blush, ink, muted-text, rule, spacing, and type tokens. No new palette was introduced.
-- Image quality: the rejected image-card treatment has been removed; this section is intentionally typographic.
-- Copy and content: the third section contains only the eight editorial conditions. The lower section contains only the six technical specification categories. Both draw from distinct arrays inside the same Sanity section object.
-- Layout ratio: both sections use three of twelve columns for the heading and introduction, leave one column empty, and give the information grid the remaining eight columns.
-- Responsiveness: both sections place the introduction before a single-column information sequence at 390 × 844; no horizontal overflow occurs.
-- Accessibility: each condition remains a semantic article with a heading and paragraph. There are no controls or implied interactions.
+- Gallery composition: the implementation reproduces the reference's long editorial scroll, alternating edge alignment, deliberately uneven image scale, large areas of negative space, and small captions. It uses the project's own imagery, typography, colors, and spacing tokens.
+- Information hierarchy: both Light and volume registers now place each label above its paragraph or list. Item-level divider rules were removed; spacing alone creates the grouping.
+- Map composition: the implementation follows the reference's list-left/map-right structure, with a static Sanity image and percentage-positioned linked markers layered above it.
+- CMS ownership: gallery order, image, caption, and layout are editable. Map image, heading, marker name, detail, category, URL, and X/Y position are editable.
+- Responsiveness: the mosaic becomes a controlled single stream on mobile, the map and list stack, and both information registers remain single-column. No horizontal overflow was detected.
+- Accessibility: map markers have descriptive accessible names and link back to their corresponding list entry; location text remains available outside the image.
 
-## Primary checks
+## Verification
 
-- Desktop rendering inspected at 1389 × 1204.
-- Mobile rendering inspected at 390 × 844.
-- The editorial section is the third `main` section and contains eight statements with zero technical categories.
-- The technical section is immediately before Viewing and contains six categories with zero editorial statements.
-- Desktop information areas measured at eight grid columns; mobile confirmed as a single sequence.
-- Browser console checked with no errors or warnings attributable to the section.
-- Sanity schema deployed and the current `homePage.volume` document populated.
+- Six gallery items rendered.
+- Eight area-map markers and eight matching list items rendered.
+- The map follows the Address section in the DOM.
+- Zero item-level divider rules remain in either Light and volume register.
+- Production build and TypeScript passed.
+- Sanity schema deployed and current `homePage` content populated.
 
-## Comparison history
+## P3 follow-up
 
-The previously combined register is now split by purpose: experiential building conditions appear early, while formal property data acts as detailed substantiation before the viewing invitation.
-
-## Follow-up polish
-
-- No open visual follow-up remains for this change.
+- The temporary static map plate is cropped from the supplied reference and therefore still contains its original printed markers underneath the live overlays. The map image is independently replaceable in Sanity; replacing it with the final clean exported map will not require code changes.
 
 final result: passed

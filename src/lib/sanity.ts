@@ -55,6 +55,10 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       kicker, heading, body,
       items[] { _key, caption, layout, image { ${IMAGE_FIELDS} } }
     },
+    mosaicGallery {
+      kicker, heading,
+      items[] { _key, caption, layout, image { ${IMAGE_FIELDS} } }
+    },
     opportunity {
       kicker, heading, body, ctaLabel,
       facts[] { _key, label, value }, image { ${IMAGE_FIELDS} }
@@ -76,6 +80,10 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     place {
       kicker, heading, body, nearby[] { _key, name, detail },
       image { ${IMAGE_FIELDS} }
+    },
+    areaMap {
+      kicker, heading, mapImage { ${IMAGE_FIELDS} },
+      markers[] { _key, name, detail, category, url, x, y }
     },
     viewing { kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }
   }

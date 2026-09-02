@@ -7,6 +7,7 @@ type CmsImage = { alt?: string; asset?: { url?: string } }
 type Pair = { _key?: string; label: string; value: string }
 type Nearby = { _key?: string; name: string; detail: string }
 type GalleryItem = { _key?: string; caption: string; layout?: string; image?: CmsImage }
+type MapMarker = { _key?: string; name: string; detail?: string; category?: string; url?: string; x: number; y: number }
 type Content = {
   hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
   building: { kicker: string; heading: string; body: string; image?: CmsImage }
@@ -18,10 +19,12 @@ type Content = {
     specificationGroups: Array<{ _key?: string; title: string; facts: Pair[] }>
   }
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
+  mosaicGallery?: { kicker?: string; heading?: string; items: GalleryItem[] }
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
   floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
   place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
+  areaMap?: { kicker: string; heading: string; mapImage?: CmsImage; markers: MapMarker[] }
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
 
@@ -57,6 +60,18 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.building.image} fallback={fallbacks.building} className="origin-archive motion-media" sizes="58vw" />
         <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
       </section>
+      {content.mosaicGallery?.items?.length ? (
+        <section className="mosaic-gallery grid-section" aria-label="Inside the building">
+          <div className="mosaic-gallery-stream">
+            {content.mosaicGallery.items.map((item, index) => (
+              <article className={`mosaic-gallery-item mosaic-${item.layout || 'large-left'}`} key={item._key || item.caption}>
+                <Media image={item.image} fallback={[fallbacks.hero, fallbacks.stair, fallbacks.volume, fallbacks.detail][index % 4]} className="mosaic-gallery-image motion-media" sizes="(max-width: 760px) 100vw, 60vw" />
+                {item.caption && <p className="mosaic-gallery-caption">{item.caption}</p>}
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
       <section className="volume volume-editorial grid-section" aria-labelledby="volume-editorial-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>
@@ -92,6 +107,27 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.place.image} fallback={fallbacks.place} className="place-view motion-media" sizes="50vw" />
         <div className="nearby-list">{content.place.nearby.map((item)=><div key={item._key || item.name}><strong>{item.name}</strong><span>{item.detail}</span></div>)}</div>
       </section>
+      {content.areaMap?.markers?.length ? (
+        <section className="area-map grid-section" aria-labelledby="area-map-title">
+          <div className="area-map-list">
+            <p className="kicker">{content.areaMap.kicker}</p>
+            <h2 id="area-map-title">{content.areaMap.heading}</h2>
+            <ol>{content.areaMap.markers.map((marker, index) => (
+              <li id={`area-location-${marker._key || index}`} key={marker._key || marker.name}>
+                <a href={marker.url || `#area-location-${marker._key || index}`}><span>{String(index + 1).padStart(2, '0')}</span><span><strong>{marker.name}</strong>{marker.detail && <small>{marker.detail}</small>}</span></a>
+              </li>
+            ))}</ol>
+          </div>
+          <div className="area-map-plate">
+            <Media image={content.areaMap.mapImage} fallback={fallbacks.place} className="area-map-image" sizes="75vw" />
+            <div className="area-map-markers" aria-label="Map locations">
+              {content.areaMap.markers.map((marker, index) => (
+                <a className="area-map-marker" href={`#area-location-${marker._key || index}`} style={{ left: `${marker.x}%`, top: `${marker.y}%` }} aria-label={`${marker.name}${marker.detail ? `, ${marker.detail}` : ''}`} key={marker._key || marker.name}>{index + 1}</a>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>

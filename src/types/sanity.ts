@@ -80,6 +80,11 @@ export type CurrentHomePage = {
         body: string
         items: Array<{ _key?: string; caption: string; layout?: string; image?: SanityImage }>
     }
+    mosaicGallery?: {
+        kicker?: string
+        heading?: string
+        items: Array<{ _key?: string; caption: string; layout?: string; image?: SanityImage }>
+    }
     opportunity: {
         kicker: string
         heading: string
@@ -102,6 +107,12 @@ export type CurrentHomePage = {
         body: string
         nearby: Array<{ _key?: string; name: string; detail: string }>
         image?: SanityImage
+    }
+    areaMap?: {
+        kicker: string
+        heading: string
+        mapImage?: SanityImage
+        markers: Array<{ _key?: string; name: string; detail?: string; category?: string; url?: string; x: number; y: number }>
     }
     viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
 }
