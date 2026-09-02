@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 
-const copyTargets = '[data-motion-copy], .volume-statements, .volume-specifications, .opportunity-facts, .nearby-list'
+const copyTargets = '[data-motion-copy], .volume-groups, .opportunity-facts, .nearby-list'
 
 function getMotionItems(element: HTMLElement) {
   if (element.classList.contains('opportunity-facts')) {

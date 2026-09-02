@@ -15,7 +15,7 @@ type Content = {
     heading: string
     body?: string
     featureStatements: Array<{ _key?: string; heading: string; body: string }>
-    specifications: Pair[]
+    specificationGroups: Array<{ _key?: string; title: string; facts: Pair[] }>
   }
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
@@ -62,24 +62,28 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
           <p className="kicker">{content.volume.kicker}</p>
           <h2 id="volume-title">{content.volume.heading}</h2>
         </header>
-        {content.volume.body && <p className="volume-introduction" data-motion-copy>{content.volume.body}</p>}
-        <div className="volume-register">
-          <div className="volume-statements" aria-label="Building conditions">
-            {content.volume.featureStatements.map((item) => (
-              <article className="volume-statement" key={item._key || item.heading}>
-                <h3>{item.heading}</h3>
+        <div className="volume-left-column">
+          {content.volume.body && <p className="volume-introduction" data-motion-copy>{content.volume.body}</p>}
+          <div className="volume-accordion" aria-label="Building conditions">
+            {(content.volume.featureStatements || []).map((item, index) => (
+              <details className="volume-disclosure" name="volume-condition" open={index === 0} key={item._key || item.heading}>
+                <summary>{item.heading}</summary>
                 <p>{item.body}</p>
-              </article>
+              </details>
             ))}
           </div>
-          <dl className="volume-specifications" aria-label="Property specifications">
-            {content.volume.specifications.map((item) => (
-              <div className="volume-specification" key={item._key || item.label}>
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            ))}
-          </dl>
+        </div>
+        <div className="volume-groups" aria-label="Property specifications">
+          {(content.volume.specificationGroups || []).map((group) => (
+            <section className="volume-group" key={group._key || group.title}>
+              <h3>{group.title}</h3>
+              <ul>
+                {group.facts.map((item) => (
+                  <li key={item._key || item.label}>{item.value}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
         </div>
       </section>
       <section className="gallery grid-section" id="gallery" aria-labelledby="gallery-title">

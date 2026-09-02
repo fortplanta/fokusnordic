@@ -58,12 +58,21 @@ export default defineType({
           }],
         }),
         defineField({
-          name: 'specifications', title: 'Technical specifications', type: 'array',
-          description: 'Concise label-and-value facts shown beneath the key conditions.',
+          name: 'specificationGroups', title: 'Technical specification groups', type: 'array',
+          description: 'Categories displayed in the right-hand information register.',
           of: [{
             type: 'object',
-            fields: [copy('label', 'Label', 1), copy('value', 'Value', 2)],
-            preview: { select: { title: 'label', subtitle: 'value' } },
+            fields: [
+              copy('title', 'Category', 1),
+              defineField({
+                name: 'facts', title: 'Facts', type: 'array',
+                of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 2)] }],
+              }),
+            ],
+            preview: {
+              select: { title: 'title', facts: 'facts' },
+              prepare: ({ title, facts }) => ({ title, subtitle: `${facts?.length || 0} facts` }),
+            },
           }],
         }),
       ],

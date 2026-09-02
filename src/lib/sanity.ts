@@ -49,7 +49,7 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     volume {
       kicker, heading, body,
       featureStatements[] { _key, heading, body },
-      specifications[] { _key, label, value }
+      specificationGroups[] { _key, title, facts[] { _key, label, value } }
     },
     gallery {
       kicker, heading, body,

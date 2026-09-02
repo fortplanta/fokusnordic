@@ -68,7 +68,11 @@ export type CurrentHomePage = {
         heading: string
         body?: string
         featureStatements: Array<{ _key?: string; heading: string; body: string }>
-        specifications: Array<{ _key?: string; label: string; value: string }>
+        specificationGroups: Array<{
+            _key?: string
+            title: string
+            facts: Array<{ _key?: string; label: string; value: string }>
+        }>
     }
     gallery: {
         kicker: string
