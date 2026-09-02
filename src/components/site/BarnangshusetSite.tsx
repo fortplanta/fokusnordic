@@ -57,6 +57,21 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.building.image} fallback={fallbacks.building} className="origin-archive motion-media" sizes="58vw" />
         <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
       </section>
+      <section className="volume volume-editorial grid-section" aria-labelledby="volume-editorial-title">
+        <div className="volume-copy" data-motion-copy>
+          <p className="kicker">{content.volume.kicker}</p>
+          <h2 id="volume-editorial-title">{content.volume.heading}</h2>
+          {content.volume.body && <p className="volume-introduction">{content.volume.body}</p>}
+        </div>
+        <div className="volume-statements" aria-label="Building conditions">
+          {(content.volume.featureStatements || []).map((item) => (
+            <article className="volume-statement" key={item._key || item.heading}>
+              <h3>{item.heading}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
       <section className="gallery grid-section" id="gallery" aria-labelledby="gallery-title">
         <div className="gallery-stream">{content.gallery.items.map((item,index)=><Media key={item._key || item.caption} image={item.image} fallback={[fallbacks.hero,fallbacks.stair,fallbacks.volume,fallbacks.detail][index%4]} className={`gallery-item gallery-${item.layout || 'wide'}`} sizes="58vw" />)}</div>
         <aside className="gallery-aside" data-motion-copy><p className="kicker">{content.gallery.kicker}</p><h2 id="gallery-title">{content.gallery.heading}</h2><p>{content.gallery.body}</p></aside>
@@ -77,29 +92,19 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.place.image} fallback={fallbacks.place} className="place-view motion-media" sizes="50vw" />
         <div className="nearby-list">{content.place.nearby.map((item)=><div key={item._key || item.name}><strong>{item.name}</strong><span>{item.detail}</span></div>)}</div>
       </section>
-      <section className="volume grid-section" aria-labelledby="volume-title">
-        <header className="volume-title" data-motion-copy>
+      <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
+        <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>
-          <h2 id="volume-title">{content.volume.heading}</h2>
-        </header>
-        {content.volume.body && <p className="volume-introduction" data-motion-copy>{content.volume.body}</p>}
-        <div className="volume-register">
-          <div className="volume-statements" aria-label="Building conditions">
-            {(content.volume.featureStatements || []).map((item) => (
-              <article className="volume-statement" key={item._key || item.heading}>
-                <h3>{item.heading}</h3>
-                <p>{item.body}</p>
-              </article>
-            ))}
-          </div>
-          <div className="volume-groups" aria-label="Property specifications">
-            {(content.volume.specificationGroups || []).map((group) => (
-              <section className="volume-group" key={group._key || group.title}>
-                <h3>{group.title}</h3>
-                <ul>{group.facts.map((item) => <li key={item._key || item.label}>{item.value}</li>)}</ul>
-              </section>
-            ))}
-          </div>
+          <h2 id="volume-technical-title">{content.volume.heading}</h2>
+          {content.volume.body && <p className="volume-introduction">{content.volume.body}</p>}
+        </div>
+        <div className="volume-groups" aria-label="Property specifications">
+          {(content.volume.specificationGroups || []).map((group) => (
+            <section className="volume-group" key={group._key || group.title}>
+              <h3>{group.title}</h3>
+              <ul>{group.facts.map((item) => <li key={item._key || item.label}>{item.value}</li>)}</ul>
+            </section>
+          ))}
         </div>
       </section>
       <section className="viewing grid-section" id="viewing">
