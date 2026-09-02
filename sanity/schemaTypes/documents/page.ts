@@ -53,7 +53,7 @@ export default defineType({
           description: 'Editorial facts shown in the upper information register.',
           of: [{
             type: 'object',
-            fields: [image('image', 'Image'), copy('heading', 'Fact heading', 1), copy('body', 'Explanation', 4)],
+            fields: [copy('heading', 'Fact heading', 1), copy('body', 'Explanation', 4)],
             preview: { select: { title: 'heading', subtitle: 'body' } },
           }],
         }),
