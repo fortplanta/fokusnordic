@@ -14,7 +14,7 @@ type Content = {
     kicker: string
     heading: string
     body?: string
-    featureStatements: Array<{ _key?: string; heading: string; body: string }>
+    featureStatements: Array<{ _key?: string; heading: string; body: string; image?: CmsImage }>
     specificationGroups: Array<{ _key?: string; title: string; facts: Pair[] }>
   }
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
@@ -57,6 +57,22 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.building.image} fallback={fallbacks.building} className="origin-archive motion-media" sizes="58vw" />
         <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
       </section>
+      <section className="conditions-grid grid-section" aria-label="Building conditions">
+        {(content.volume.featureStatements || []).map((item, index) => (
+          <article className="condition-card" key={item._key || item.heading}>
+            <Media
+              image={item.image}
+              fallback={[fallbacks.volume, fallbacks.stair, fallbacks.building, fallbacks.detail][index % 4]}
+              className="condition-card-image motion-media"
+              sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 25vw"
+            />
+            <div className="condition-card-copy" data-motion-copy>
+              <h3>{item.heading}</h3>
+              <p>{item.body}</p>
+            </div>
+          </article>
+        ))}
+      </section>
       <section className="volume grid-section" aria-labelledby="volume-title">
         <header className="volume-title" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>
@@ -64,14 +80,6 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         </header>
         <div className="volume-left-column">
           {content.volume.body && <p className="volume-introduction" data-motion-copy>{content.volume.body}</p>}
-          <div className="volume-accordion" aria-label="Building conditions">
-            {(content.volume.featureStatements || []).map((item, index) => (
-              <details className="volume-disclosure" name="volume-condition" open={index === 0} key={item._key || item.heading}>
-                <summary>{item.heading}</summary>
-                <p>{item.body}</p>
-              </details>
-            ))}
-          </div>
         </div>
         <div className="volume-groups" aria-label="Property specifications">
           {(content.volume.specificationGroups || []).map((group) => (
