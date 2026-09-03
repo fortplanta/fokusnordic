@@ -101,17 +101,32 @@ export default defineType({
         copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1),
         defineField({
           name: 'items', title: 'Images', type: 'array',
+          description: 'Add, remove and reorder images freely. Size and side are controlled per image.',
           of: [{
             type: 'object',
-            fields: [image('image', 'Image'), copy('caption', 'Caption', 1), defineField({
-              name: 'layout', title: 'Image position and size', type: 'string', initialValue: 'large-left',
-              options: { list: [
-                { title: 'Large · left', value: 'large-left' }, { title: 'Large · right', value: 'large-right' },
-                { title: 'Small · left', value: 'small-left' }, { title: 'Small · right', value: 'small-right' },
-                { title: 'Wide · left', value: 'wide-left' }, { title: 'Wide · right', value: 'wide-right' },
-              ] },
-            })],
-            preview: { select: { title: 'caption', media: 'image', subtitle: 'layout' } },
+            fields: [
+              image('image', 'Image'),
+              copy('caption', 'Caption', 1),
+              defineField({
+                name: 'size', title: 'Image format', type: 'string', initialValue: 'wide',
+                options: { list: [
+                  { title: 'Compact', value: 'compact' },
+                  { title: 'Wide', value: 'wide' },
+                  { title: 'Portrait', value: 'portrait' },
+                ], layout: 'radio' },
+              }),
+              defineField({
+                name: 'side', title: 'Screen position', type: 'string', initialValue: 'left',
+                options: { list: [
+                  { title: 'Left', value: 'left' },
+                  { title: 'Right', value: 'right' },
+                ], layout: 'radio' },
+              }),
+            ],
+            preview: {
+              select: { title: 'caption', media: 'image', size: 'size', side: 'side' },
+              prepare: ({ title, media, size, side }) => ({ title: title || 'Untitled image', media, subtitle: `${size || 'wide'} · ${side || 'left'}` }),
+            },
           }],
         }),
       ],

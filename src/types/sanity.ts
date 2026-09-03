@@ -83,7 +83,7 @@ export type CurrentHomePage = {
     mosaicGallery?: {
         kicker?: string
         heading?: string
-        items: Array<{ _key?: string; caption: string; layout?: string; image?: SanityImage }>
+        items: Array<{ _key?: string; caption: string; size?: string; side?: string; image?: SanityImage }>
     }
     opportunity: {
         kicker: string

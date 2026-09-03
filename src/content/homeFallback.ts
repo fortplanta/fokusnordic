@@ -78,12 +78,12 @@ export const homeFallback = {
     kicker: '',
     heading: '',
     items: [
-      { _key: 'mosaic-1', caption: 'The principal working floor', layout: 'large-left' },
-      { _key: 'mosaic-2', caption: 'Original windows and structure', layout: 'small-right' },
-      { _key: 'mosaic-3', caption: 'Material detail', layout: 'small-left' },
-      { _key: 'mosaic-4', caption: 'The building from Nackagatan', layout: 'wide-right' },
-      { _key: 'mosaic-5', caption: 'Stair and circulation', layout: 'large-left' },
-      { _key: 'mosaic-6', caption: 'Space for a shared workplace', layout: 'wide-right' },
+      { _key: 'mosaic-1', caption: 'The principal working floor', size: 'portrait', side: 'left' },
+      { _key: 'mosaic-2', caption: 'Original windows and structure', size: 'compact', side: 'right' },
+      { _key: 'mosaic-3', caption: 'Material detail', size: 'compact', side: 'left' },
+      { _key: 'mosaic-4', caption: 'The building from Nackagatan', size: 'wide', side: 'right' },
+      { _key: 'mosaic-5', caption: 'Stair and circulation', size: 'portrait', side: 'left' },
+      { _key: 'mosaic-6', caption: 'Space for a shared workplace', size: 'wide', side: 'right' },
     ],
   },
   opportunity: {

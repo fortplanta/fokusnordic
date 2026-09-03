@@ -57,7 +57,7 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     },
     mosaicGallery {
       kicker, heading,
-      items[] { _key, caption, layout, image { ${IMAGE_FIELDS} } }
+      items[] { _key, caption, size, side, image { ${IMAGE_FIELDS} } }
     },
     opportunity {
       kicker, heading, body, ctaLabel,
