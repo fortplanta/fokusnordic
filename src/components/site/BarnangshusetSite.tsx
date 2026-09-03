@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import { stegaClean } from 'next-sanity'
 import type { FloorPlanSection } from '@/types/sanity'
+import { gallerySide, gallerySize } from '@/lib/sanityControls'
 import AreaMap from './AreaMap'
 import FloorPlans from './FloorPlans'
 import SiteHeader from './SiteHeader'
@@ -46,15 +46,6 @@ function Media({ image, fallback, className = '', priority = false, sizes = '100
 
 function TextLink({ href, children }: { href: string; children: React.ReactNode }) {
   return <a className="text-link" href={href}><span>{children}</span><span aria-hidden="true">↗</span></a>
-}
-
-function gallerySize(value?: string) {
-  const cleanValue = stegaClean(value)
-  return cleanValue === 'compact' || cleanValue === 'portrait' || cleanValue === 'wide' ? cleanValue : 'wide'
-}
-
-function gallerySide(value?: string) {
-  return stegaClean(value) === 'right' ? 'right' : 'left'
 }
 
 export default function BarnangshusetSite({ content, contact, identity }: { content: Content; contact: Contact; identity?: Identity }) {

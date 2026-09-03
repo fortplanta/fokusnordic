@@ -1,4 +1,6 @@
 import { getCliClient } from 'sanity/cli'
+import { vercelStegaCombine } from '@vercel/stega'
+import { gallerySide, gallerySize } from '../src/lib/sanityControls'
 
 const expectedProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? 'wvgj6m8r'
 const expectedDataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
@@ -31,6 +33,17 @@ function verifyGallery(document: HomeDocument) {
   })
 }
 
+function verifyPresentationControls() {
+  const metadata = { origin: 'sanity.io', href: studioUrl }
+
+  for (const size of allowedGallerySizes) {
+    assert(gallerySize(vercelStegaCombine(size, metadata)) === size, `Presentation metadata breaks the ${size} gallery format`)
+  }
+  for (const side of allowedGallerySides) {
+    assert(gallerySide(vercelStegaCombine(side, metadata)) === side, `Presentation metadata breaks the ${side} gallery position`)
+  }
+}
+
 async function verifyCors(origin: string) {
   const query = encodeURIComponent('*[_id == "homePage"][0]._id')
   const endpoint = `https://${expectedProjectId}.api.sanity.io/v2025-01-01/data/query/${expectedDataset}?query=${query}`
@@ -56,6 +69,7 @@ async function main() {
   assert(published, 'Published homePage document is missing')
   assert(published._type === 'page', 'Published homePage does not use the page schema')
   documents.forEach(verifyGallery)
+  verifyPresentationControls()
 
   await Promise.all(credentialedOrigins.map(verifyCors))
 
@@ -64,6 +78,7 @@ async function main() {
 
   console.log(`Sanity verified: ${expectedProjectId}/${expectedDataset}`)
   console.log(`Documents checked: ${documents.map((document) => document._id).join(', ')}`)
+  console.log('Presentation control encoding checked: gallery size and side')
   console.log(`Credentialed origins checked: ${credentialedOrigins.join(', ')}`)
   console.log(`Hosted Studio checked: ${studioResponse.url}`)
 }
