@@ -59,3 +59,16 @@ works when published.
   regression check to `npm run verify:sanity` and test it in Presentation.
 - A published-page test alone is insufficient because published strings do not
   expose this failure.
+
+### Sanity Studio deployment rule
+
+The Studio is externally hosted inside the Next.js application at
+`https://barnangshuset.netlify.app/studio`. The Sanity dashboard application must
+point to that exact URL.
+
+- Register Studio updates with
+  `npx sanity deploy --external --url https://barnangshuset.netlify.app/studio --title "Barnängshuset Studio" --yes`.
+- Never pass the full Netlify URL to a normal Sanity-hosted `sanity deploy`; it
+  treats the value as a hostname and produces a malformed `.sanity.studio` URL.
+- After registration, run the same command with `--dry-run --json` and confirm
+  that its reported `url` is exactly the Netlify `/studio` URL.
