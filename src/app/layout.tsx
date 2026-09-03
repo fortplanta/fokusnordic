@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import { draftMode } from 'next/headers'
-import { VisualEditing } from 'next-sanity/visual-editing'
 import './globals.css'
 import '../styles/barnangshuset-site.css'
 import '../styles/floor-plans.css'
-import { SanityLive }        from '@/lib/sanity.live'
 import SiteMotion            from '@/components/motion/SiteMotion'
 import SkipLink              from '@/components/layout/SkipLink'
+import DraftModeTools        from '@/components/sanity/DraftModeTools'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://barnangshuset.se'
 
@@ -48,7 +47,7 @@ export default async function RootLayout({
         <SiteMotion />
         {/* The Presentation tool enters through /api/draft-mode/enable. Keep
             its event stream and editing runtime out of the public bundle. */}
-        {isDraftMode && <><SanityLive /><VisualEditing /></>}
+        {isDraftMode && <DraftModeTools />}
       </body>
     </html>
   )

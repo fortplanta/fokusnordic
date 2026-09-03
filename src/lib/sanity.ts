@@ -83,6 +83,10 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     },
     areaMap {
       kicker, heading, mapImage { ${IMAGE_FIELDS} },
+      buildingMarker {
+        alt, x, y, width,
+        icon { asset->{ _id, url, originalFilename, mimeType } }
+      },
       markers[] { _key, name, detail, category, url, x, y }
     },
     viewing { kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }

@@ -112,6 +112,13 @@ export type CurrentHomePage = {
         kicker: string
         heading: string
         mapImage?: SanityImage
+        buildingMarker?: {
+            alt?: string
+            x: number
+            y: number
+            width: number
+            icon?: { asset?: { url?: string; originalFilename?: string; mimeType?: string } }
+        }
         markers: Array<{ _key?: string; name: string; detail?: string; category?: string; url?: string; x: number; y: number }>
     }
     viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }

@@ -204,14 +204,50 @@ export default defineType({
       fields: [
         copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), image('mapImage', 'Static map image'),
         defineField({
+          name: 'buildingMarker', title: 'Barnängshuset marker', type: 'object',
+          description: 'Upload the building SVG, then position and size it over the map.',
+          fields: [
+            defineField({
+              name: 'icon', title: 'Building SVG', type: 'file',
+              options: { accept: 'image/svg+xml' },
+              validation: (r) => r.required(),
+            }),
+            copy('alt', 'Accessible label', 1),
+            defineField({
+              name: 'x', title: 'Horizontal position (%)', type: 'number', initialValue: 50,
+              description: '0 is the left edge; 100 is the right edge. Decimals are supported.',
+              validation: (r) => r.required().min(0).max(100).precision(2),
+            }),
+            defineField({
+              name: 'y', title: 'Vertical position (%)', type: 'number', initialValue: 50,
+              description: '0 is the top edge; 100 is the bottom edge. Decimals are supported.',
+              validation: (r) => r.required().min(0).max(100).precision(2),
+            }),
+            defineField({
+              name: 'width', title: 'Marker width (% of map)', type: 'number', initialValue: 10,
+              description: 'Controls the displayed SVG width relative to the map.',
+              validation: (r) => r.required().min(2).max(30).precision(2),
+            }),
+          ],
+        }),
+        defineField({
           name: 'markers', title: 'Locations', type: 'array',
+          description: 'Each location creates both a numbered map dot and its corresponding list item. Add, remove and reorder freely.',
           of: [{
             type: 'object',
             fields: [
               copy('name', 'Name', 1), copy('detail', 'Detail', 1), copy('category', 'Category', 1),
               defineField({ name: 'url', title: 'Link', type: 'url' }),
-              defineField({ name: 'x', title: 'Horizontal position (%)', type: 'number', validation: (r) => r.required().min(0).max(100) }),
-              defineField({ name: 'y', title: 'Vertical position (%)', type: 'number', validation: (r) => r.required().min(0).max(100) }),
+              defineField({
+                name: 'x', title: 'Horizontal position (%)', type: 'number',
+                description: '0 is the left edge; 100 is the right edge. Decimals are supported.',
+                validation: (r) => r.required().min(0).max(100).precision(2),
+              }),
+              defineField({
+                name: 'y', title: 'Vertical position (%)', type: 'number',
+                description: '0 is the top edge; 100 is the bottom edge. Decimals are supported.',
+                validation: (r) => r.required().min(0).max(100).precision(2),
+              }),
             ],
             preview: { select: { title: 'name', subtitle: 'detail' } },
           }],

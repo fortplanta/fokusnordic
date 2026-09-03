@@ -18,6 +18,14 @@ type HomeDocument = {
   _id: string
   _type: string
   mosaicGallery?: { items?: GalleryItem[] }
+  volume?: {
+    featureStatements?: Array<{ heading?: string; body?: string }>
+    specificationGroups?: Array<{ title?: string; facts?: Array<{ value?: string }> }>
+  }
+  areaMap?: {
+    mapImage?: { asset?: { _ref?: string } }
+    markers?: Array<{ name?: string; x?: number; y?: number }>
+  }
 }
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -30,6 +38,31 @@ function verifyGallery(document: HomeDocument) {
   items.forEach((item, index) => {
     assert(item.size && allowedGallerySizes.has(item.size), `${document._id}: gallery item ${index + 1} has an invalid or missing size`)
     assert(item.side && allowedGallerySides.has(item.side), `${document._id}: gallery item ${index + 1} has an invalid or missing side`)
+  })
+}
+
+function verifyVolume(document: HomeDocument) {
+  const statements = document.volume?.featureStatements ?? []
+  const groups = document.volume?.specificationGroups ?? []
+
+  assert(statements.length > 0, `${document._id}: Light and volume has no building conditions`)
+  assert(groups.length > 0, `${document._id}: Light and volume has no specification groups`)
+  statements.forEach((item, index) => {
+    assert(item.heading && item.body, `${document._id}: building condition ${index + 1} is incomplete`)
+  })
+  groups.forEach((group, index) => {
+    assert(group.title && group.facts?.length, `${document._id}: specification group ${index + 1} is incomplete`)
+  })
+}
+
+function verifyAreaMap(document: HomeDocument) {
+  const markers = document.areaMap?.markers ?? []
+
+  assert(document.areaMap?.mapImage?.asset?._ref, `${document._id}: Area map has no image`)
+  assert(markers.length > 0, `${document._id}: Area map has no locations`)
+  markers.forEach((marker, index) => {
+    assert(marker.name, `${document._id}: Area map location ${index + 1} has no name`)
+    assert(typeof marker.x === 'number' && typeof marker.y === 'number', `${document._id}: Area map location ${index + 1} has no coordinates`)
   })
 }
 
@@ -62,13 +95,17 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},areaMap{mapImage{asset},markers[]{name,x,y}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 
   assert(published, 'Published homePage document is missing')
   assert(published._type === 'page', 'Published homePage does not use the page schema')
-  documents.forEach(verifyGallery)
+  documents.forEach((document) => {
+    verifyGallery(document)
+    verifyVolume(document)
+    verifyAreaMap(document)
+  })
   verifyPresentationControls()
 
   await Promise.all(credentialedOrigins.map(verifyCors))

@@ -5,9 +5,10 @@ import { useState } from 'react'
 
 type CmsImage = { alt?: string; asset?: { url?: string } }
 type MapMarker = { _key?: string; name: string; detail?: string; category?: string; url?: string; x: number; y: number }
+type BuildingMarker = { alt?: string; x: number; y: number; width: number; icon?: { asset?: { url?: string } } }
 
 export default function AreaMap({ content, fallback }: {
-  content: { kicker: string; heading: string; mapImage?: CmsImage; markers: MapMarker[] }
+  content: { kicker: string; heading: string; mapImage?: CmsImage; buildingMarker?: BuildingMarker; markers: MapMarker[] }
   fallback: string
 }) {
   const [activeMarker, setActiveMarker] = useState<string | null>(null)
@@ -47,6 +48,18 @@ export default function AreaMap({ content, fallback }: {
           <Image src={imageSource} alt={content.mapImage?.alt || ''} fill sizes="75vw" />
         </figure>
         <div className="area-map-markers" aria-label="Map locations">
+          {content.buildingMarker?.icon?.asset?.url && (
+            <img
+              className="area-map-building-marker"
+              src={content.buildingMarker.icon.asset.url}
+              alt={content.buildingMarker.alt || 'Barnängshuset'}
+              style={{
+                left: `${content.buildingMarker.x}%`,
+                top: `${content.buildingMarker.y}%`,
+                width: `${content.buildingMarker.width}%`,
+              }}
+            />
+          )}
           {content.markers.map((marker, index) => {
             const markerKey = keyFor(marker, index)
             return (

@@ -10,6 +10,7 @@ type Pair = { _key?: string; label: string; value: string }
 type Nearby = { _key?: string; name: string; detail: string }
 type GalleryItem = { _key?: string; caption: string; layout?: string; size?: string; side?: string; image?: CmsImage }
 type MapMarker = { _key?: string; name: string; detail?: string; category?: string; url?: string; x: number; y: number }
+type BuildingMarker = { alt?: string; x: number; y: number; width: number; icon?: { asset?: { url?: string } } }
 type Content = {
   hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
   building: { kicker: string; heading: string; body: string; image?: CmsImage }
@@ -26,7 +27,7 @@ type Content = {
   floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
   place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
-  areaMap?: { kicker: string; heading: string; mapImage?: CmsImage; markers: MapMarker[] }
+  areaMap?: { kicker: string; heading: string; mapImage?: CmsImage; buildingMarker?: BuildingMarker; markers: MapMarker[] }
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
 
