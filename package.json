@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start"
+        "start": "next start",
+        "verify:sanity": "sanity exec scripts/verify-sanity.ts --with-user-token && sanity schema list"
     },
     "dependencies": {
         "@maptiler/sdk": "^4.0.2",
