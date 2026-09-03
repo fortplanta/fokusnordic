@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { stegaClean } from 'next-sanity'
 import type { FloorPlanSection } from '@/types/sanity'
 import AreaMap from './AreaMap'
 import FloorPlans from './FloorPlans'
@@ -47,6 +48,15 @@ function TextLink({ href, children }: { href: string; children: React.ReactNode 
   return <a className="text-link" href={href}><span>{children}</span><span aria-hidden="true">↗</span></a>
 }
 
+function gallerySize(value?: string) {
+  const cleanValue = stegaClean(value)
+  return cleanValue === 'compact' || cleanValue === 'portrait' || cleanValue === 'wide' ? cleanValue : 'wide'
+}
+
+function gallerySide(value?: string) {
+  return stegaClean(value) === 'right' ? 'right' : 'left'
+}
+
 export default function BarnangshusetSite({ content, contact, identity }: { content: Content; contact: Contact; identity?: Identity }) {
   const mailto = `mailto:${contact.email}?subject=Viewing%20at%20Barn%C3%A4ngshuset`
   return <div className="bh-site">
@@ -65,7 +75,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <section className="mosaic-gallery grid-section" aria-label="Inside the building">
           <div className="mosaic-gallery-stream">
             {content.mosaicGallery.items.map((item, index) => (
-              <article className={`mosaic-gallery-item mosaic-size-${item.size || 'wide'} mosaic-side-${item.side || 'left'}`} key={item._key || item.caption}>
+              <article className={`mosaic-gallery-item mosaic-size-${gallerySize(item.size)} mosaic-side-${gallerySide(item.side)}`} key={item._key || item.caption}>
                 <Media image={item.image} fallback={[fallbacks.hero, fallbacks.stair, fallbacks.volume, fallbacks.detail][index % 4]} className="mosaic-gallery-image motion-media" sizes="(max-width: 760px) 100vw, 60vw" />
                 {item.caption && <p className="mosaic-gallery-caption">{item.caption}</p>}
               </article>
@@ -89,7 +99,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         </div>
       </section>
       <section className="gallery grid-section" id="gallery" aria-labelledby="gallery-title">
-        <div className="gallery-stream">{content.gallery.items.map((item,index)=><Media key={item._key || item.caption} image={item.image} fallback={[fallbacks.hero,fallbacks.stair,fallbacks.volume,fallbacks.detail][index%4]} className={`gallery-item gallery-${item.layout || 'wide'}`} sizes="58vw" />)}</div>
+        <div className="gallery-stream">{content.gallery.items.map((item,index)=><Media key={item._key || item.caption} image={item.image} fallback={[fallbacks.hero,fallbacks.stair,fallbacks.volume,fallbacks.detail][index%4]} className={`gallery-item gallery-${gallerySize(item.layout)}`} sizes="58vw" />)}</div>
         <aside className="gallery-aside" data-motion-copy><p className="kicker">{content.gallery.kicker}</p><h2 id="gallery-title">{content.gallery.heading}</h2><p>{content.gallery.body}</p></aside>
       </section>
       <section className="spaces grid-section" id="spaces" aria-labelledby="spaces-title">
