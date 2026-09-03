@@ -41,3 +41,21 @@ Definition of done for CMS-backed work:
 
 If Studio authentication prevents visual verification, stop and report that the
 Sanity portion is unverified. Do not describe the site change as complete.
+
+### Sanity Presentation / Stega rule
+
+Sanity Presentation adds invisible Stega edit metadata to string values. A value
+that looks like `compact`, `right`, `available`, or `video` may therefore fail a
+literal comparison or produce an invalid CSS class in draft mode even though it
+works when published.
+
+- Never use a CMS string directly in a CSS class, object lookup, `switch`, or
+  equality comparison when Presentation can supply it.
+- Clean structural/control values with `stegaClean` at the rendering boundary.
+  Keep visible editorial copy encoded so click-to-edit continues to work.
+- Normalize cleaned values through an explicit allow-list and provide a safe
+  fallback.
+- Whenever a Sanity enum controls layout or behavior, add an encoded-value
+  regression check to `npm run verify:sanity` and test it in Presentation.
+- A published-page test alone is insufficient because published strings do not
+  expose this failure.
