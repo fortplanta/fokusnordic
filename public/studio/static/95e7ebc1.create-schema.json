@@ -1,0 +1,3561 @@
+[
+  {
+    "fields": [
+      {
+        "initialValue": "Barnängshuset",
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "propertyName",
+        "type": "string",
+        "title": "Property name"
+      },
+      {
+        "initialValue": "Nackagatan 4, 116 40 Stockholm",
+        "name": "address",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 59.3148,
+            "name": "lat",
+            "type": "number",
+            "title": "Latitude"
+          },
+          {
+            "initialValue": 18.0717,
+            "name": "lng",
+            "type": "number",
+            "title": "Longitude"
+          }
+        ],
+        "name": "coordinates",
+        "type": "object",
+        "title": "Building coordinates"
+      },
+      {
+        "name": "logo",
+        "type": "image",
+        "title": "Logo (SVG or image)"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Nina de Besche",
+            "name": "name",
+            "type": "string",
+            "title": "Full name"
+          },
+          {
+            "initialValue": "Managing Partner",
+            "name": "role",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "type": "string"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "photo",
+            "type": "image",
+            "title": "Headshot"
+          },
+          {
+            "validation": [
+              {
+                "level": "error",
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "description": "Direct booking link for viewing appointments",
+            "name": "calLink",
+            "type": "url",
+            "title": "Cal.com / Calendly link"
+          }
+        ],
+        "name": "leasingContact",
+        "type": "object",
+        "title": "Leasing contact"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    "Instagram",
+                    "LinkedIn",
+                    "Facebook",
+                    "X"
+                  ]
+                },
+                "name": "platform",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "name": "url",
+                "type": "url"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialLinks",
+        "type": "array",
+        "title": "Social links"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "description": "Resend / Mailchimp / Buttondown endpoint for the footer form",
+        "name": "newsletterWebhook",
+        "type": "url",
+        "title": "Newsletter webhook URL"
+      },
+      {
+        "initialValue": "Barnängshuset — Office Space in Södermalm",
+        "name": "metaTitle",
+        "type": "string",
+        "title": "Default meta title"
+      },
+      {
+        "rows": 3,
+        "name": "metaDescription",
+        "type": "text",
+        "title": "Default meta description"
+      },
+      {
+        "name": "ogImage",
+        "type": "image",
+        "title": "OG / share image"
+      },
+      {
+        "initialValue": "Barnängshuset",
+        "description": "The oversized serif line at the top of the footer.",
+        "name": "footerInvite",
+        "type": "string",
+        "title": "Footer invite headline"
+      }
+    ],
+    "name": "siteSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Home",
+        "name": "title",
+        "type": "string",
+        "title": "Internal title"
+      },
+      {
+        "fields": [
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "name": "ctaLabel",
+            "type": "string",
+            "title": "CTA label"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "image",
+            "type": "image",
+            "title": "Background image"
+          }
+        ],
+        "name": "hero",
+        "type": "object"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "image",
+            "type": "image",
+            "title": "Historical image"
+          }
+        ],
+        "name": "building",
+        "type": "object"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "description": "Editorial facts shown in the upper information register.",
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "heading",
+                    "type": "string",
+                    "title": "Fact heading"
+                  },
+                  {
+                    "rows": 4,
+                    "name": "body",
+                    "type": "text",
+                    "title": "Explanation"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "featureStatements",
+            "type": "array",
+            "title": "Key building conditions"
+          },
+          {
+            "description": "Categories displayed in the right-hand information register.",
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "title",
+                    "type": "string",
+                    "title": "Category"
+                  },
+                  {
+                    "of": [
+                      {
+                        "fields": [
+                          {
+                            "name": "label",
+                            "type": "string"
+                          },
+                          {
+                            "rows": 2,
+                            "name": "value",
+                            "type": "text"
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    ],
+                    "name": "facts",
+                    "type": "array"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "specificationGroups",
+            "type": "array",
+            "title": "Technical specification groups"
+          }
+        ],
+        "name": "volume",
+        "type": "object",
+        "title": "Light and volume"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "fields": [
+                      {
+                        "validation": [
+                          {
+                            "level": "error",
+                            "rules": [
+                              {
+                                "flag": "presence",
+                                "constraint": "required"
+                              }
+                            ]
+                          }
+                        ],
+                        "name": "alt",
+                        "type": "string",
+                        "title": "Alt text"
+                      }
+                    ],
+                    "name": "image",
+                    "type": "image"
+                  },
+                  {
+                    "name": "caption",
+                    "type": "string"
+                  },
+                  {
+                    "initialValue": "wide",
+                    "options": {
+                      "list": [
+                        {
+                          "title": "Wide",
+                          "value": "wide"
+                        },
+                        {
+                          "title": "Portrait",
+                          "value": "portrait"
+                        },
+                        {
+                          "title": "Compact",
+                          "value": "compact"
+                        }
+                      ]
+                    },
+                    "name": "layout",
+                    "type": "string"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "items",
+            "type": "array",
+            "title": "Images"
+          }
+        ],
+        "name": "gallery",
+        "type": "object"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "description": "Add, remove and reorder images freely. Size and side are controlled per image.",
+            "of": [
+              {
+                "fields": [
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "fields": [
+                      {
+                        "validation": [
+                          {
+                            "level": "error",
+                            "rules": [
+                              {
+                                "flag": "presence",
+                                "constraint": "required"
+                              }
+                            ]
+                          }
+                        ],
+                        "name": "alt",
+                        "type": "string",
+                        "title": "Alt text"
+                      }
+                    ],
+                    "name": "image",
+                    "type": "image"
+                  },
+                  {
+                    "name": "caption",
+                    "type": "string"
+                  },
+                  {
+                    "initialValue": "wide",
+                    "options": {
+                      "list": [
+                        {
+                          "title": "Compact",
+                          "value": "compact"
+                        },
+                        {
+                          "title": "Wide",
+                          "value": "wide"
+                        },
+                        {
+                          "title": "Portrait",
+                          "value": "portrait"
+                        }
+                      ],
+                      "layout": "radio"
+                    },
+                    "name": "size",
+                    "type": "string",
+                    "title": "Image format"
+                  },
+                  {
+                    "initialValue": "left",
+                    "options": {
+                      "list": [
+                        {
+                          "title": "Left",
+                          "value": "left"
+                        },
+                        {
+                          "title": "Right",
+                          "value": "right"
+                        }
+                      ],
+                      "layout": "radio"
+                    },
+                    "name": "side",
+                    "type": "string",
+                    "title": "Screen position"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "items",
+            "type": "array",
+            "title": "Images"
+          }
+        ],
+        "name": "mosaicGallery",
+        "type": "object",
+        "title": "Scrolling gallery"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "name": "ctaLabel",
+            "type": "string",
+            "title": "CTA label"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "image",
+            "type": "image",
+            "title": "Opportunity image"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "string"
+                  },
+                  {
+                    "name": "value",
+                    "type": "string"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "facts",
+            "type": "array"
+          }
+        ],
+        "name": "opportunity",
+        "type": "object"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "validation": [
+              {
+                "level": "error",
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1
+                  }
+                ]
+              }
+            ],
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "string",
+                    "title": "Floor label"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "level": "error",
+                        "rules": [
+                          {
+                            "flag": "min",
+                            "constraint": 1
+                          }
+                        ]
+                      }
+                    ],
+                    "of": [
+                      {
+                        "fields": [
+                          {
+                            "name": "title",
+                            "type": "string",
+                            "title": "Configuration title"
+                          },
+                          {
+                            "rows": 3,
+                            "name": "body",
+                            "type": "text",
+                            "title": "Description"
+                          },
+                          {
+                            "of": [
+                              {
+                                "fields": [
+                                  {
+                                    "name": "label",
+                                    "type": "string"
+                                  },
+                                  {
+                                    "name": "value",
+                                    "type": "string"
+                                  }
+                                ],
+                                "type": "object"
+                              }
+                            ],
+                            "name": "facts",
+                            "type": "array"
+                          },
+                          {
+                            "options": {
+                              "hotspot": true
+                            },
+                            "fields": [
+                              {
+                                "validation": [
+                                  {
+                                    "level": "error",
+                                    "rules": [
+                                      {
+                                        "flag": "presence",
+                                        "constraint": "required"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "name": "alt",
+                                "type": "string",
+                                "title": "Alt text"
+                              }
+                            ],
+                            "name": "planImage",
+                            "type": "image",
+                            "title": "Bird’s-eye floor plan"
+                          },
+                          {
+                            "options": {
+                              "hotspot": true
+                            },
+                            "fields": [
+                              {
+                                "validation": [
+                                  {
+                                    "level": "error",
+                                    "rules": [
+                                      {
+                                        "flag": "presence",
+                                        "constraint": "required"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "name": "alt",
+                                "type": "string",
+                                "title": "Alt text"
+                              }
+                            ],
+                            "name": "explodedImage",
+                            "type": "image",
+                            "title": "Exploded view for this configuration"
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    ],
+                    "name": "configurations",
+                    "type": "array"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "floors",
+            "type": "array"
+          }
+        ],
+        "name": "floorPlans",
+        "type": "object",
+        "title": "Floor plans"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "mainImage",
+            "type": "image",
+            "title": "Main material image"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "detailImage",
+            "type": "image",
+            "title": "Material detail"
+          }
+        ],
+        "name": "materials",
+        "type": "object"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "image",
+            "type": "image",
+            "title": "Neighbourhood image"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "name",
+                    "type": "string",
+                    "title": "Place"
+                  },
+                  {
+                    "name": "detail",
+                    "type": "string",
+                    "title": "Distance / detail"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "nearby",
+            "type": "array"
+          }
+        ],
+        "name": "place",
+        "type": "object",
+        "title": "Address"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "mapImage",
+            "type": "image",
+            "title": "Static map image"
+          },
+          {
+            "description": "Upload the building SVG, then position and size it over the map.",
+            "fields": [
+              {
+                "options": {
+                  "accept": "image/svg+xml"
+                },
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "icon",
+                "type": "file",
+                "title": "Building SVG"
+              },
+              {
+                "name": "alt",
+                "type": "string",
+                "title": "Accessible label"
+              },
+              {
+                "initialValue": 50,
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 100
+                      },
+                      {
+                        "flag": "precision",
+                        "constraint": 2
+                      }
+                    ]
+                  }
+                ],
+                "description": "0 is the left edge; 100 is the right edge. Decimals are supported.",
+                "name": "x",
+                "type": "number",
+                "title": "Horizontal position (%)"
+              },
+              {
+                "initialValue": 50,
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 100
+                      },
+                      {
+                        "flag": "precision",
+                        "constraint": 2
+                      }
+                    ]
+                  }
+                ],
+                "description": "0 is the top edge; 100 is the bottom edge. Decimals are supported.",
+                "name": "y",
+                "type": "number",
+                "title": "Vertical position (%)"
+              },
+              {
+                "initialValue": 10,
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 2
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 30
+                      },
+                      {
+                        "flag": "precision",
+                        "constraint": 2
+                      }
+                    ]
+                  }
+                ],
+                "description": "Controls the displayed SVG width relative to the map.",
+                "name": "width",
+                "type": "number",
+                "title": "Marker width (% of map)"
+              }
+            ],
+            "name": "buildingMarker",
+            "type": "object",
+            "title": "Barnängshuset marker"
+          },
+          {
+            "description": "Each location creates both a numbered map dot and its corresponding list item. Add, remove and reorder freely.",
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "name": "detail",
+                    "type": "string"
+                  },
+                  {
+                    "name": "category",
+                    "type": "string"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "level": "error",
+                        "rules": [
+                          {
+                            "flag": "uri",
+                            "constraint": {
+                              "options": {
+                                "scheme": [
+                                  "/^http$/",
+                                  "/^https$/"
+                                ],
+                                "allowRelative": false,
+                                "relativeOnly": false,
+                                "allowCredentials": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "name": "url",
+                    "type": "url",
+                    "title": "Link"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "level": "error",
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          },
+                          {
+                            "flag": "min",
+                            "constraint": 0
+                          },
+                          {
+                            "flag": "max",
+                            "constraint": 100
+                          },
+                          {
+                            "flag": "precision",
+                            "constraint": 2
+                          }
+                        ]
+                      }
+                    ],
+                    "description": "0 is the left edge; 100 is the right edge. Decimals are supported.",
+                    "name": "x",
+                    "type": "number",
+                    "title": "Horizontal position (%)"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "level": "error",
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          },
+                          {
+                            "flag": "min",
+                            "constraint": 0
+                          },
+                          {
+                            "flag": "max",
+                            "constraint": 100
+                          },
+                          {
+                            "flag": "precision",
+                            "constraint": 2
+                          }
+                        ]
+                      }
+                    ],
+                    "description": "0 is the top edge; 100 is the bottom edge. Decimals are supported.",
+                    "name": "y",
+                    "type": "number",
+                    "title": "Vertical position (%)"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "markers",
+            "type": "array",
+            "title": "Locations"
+          }
+        ],
+        "name": "areaMap",
+        "type": "object",
+        "title": "Area map"
+      },
+      {
+        "fields": [
+          {
+            "name": "kicker",
+            "type": "string"
+          },
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "body",
+            "type": "text"
+          },
+          {
+            "name": "ctaLabel",
+            "type": "string",
+            "title": "CTA label"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "name": "image",
+            "type": "image",
+            "title": "Viewing image"
+          }
+        ],
+        "name": "viewing",
+        "type": "object"
+      }
+    ],
+    "name": "page",
+    "type": "document",
+    "title": "Home Page"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "description": "E.g. \"Floor 1\" or \"Unit 1A\" — shown in the detail panel",
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Available",
+              "value": "available"
+            },
+            {
+              "title": "Reserved",
+              "value": "reserved"
+            },
+            {
+              "title": "Leased",
+              "value": "leased"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "available",
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "available",
+                  "reserved",
+                  "leased"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ]
+          }
+        ],
+        "name": "areaSqm",
+        "type": "number",
+        "title": "Area (m²)"
+      },
+      {
+        "initialValue": 4.9,
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ]
+          }
+        ],
+        "name": "ceilingHeightM",
+        "type": "number",
+        "title": "Ceiling height (m)"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ]
+          }
+        ],
+        "name": "capacity",
+        "type": "number",
+        "title": "Capacity (people)"
+      },
+      {
+        "description": "E.g. \"South-west, courtyard views\"",
+        "name": "orientation",
+        "type": "string",
+        "title": "Orientation / aspect"
+      },
+      {
+        "options": {
+          "hotspot": false
+        },
+        "description": "The architectural plan for this unit (used in the detail panel)",
+        "name": "planImage",
+        "type": "image",
+        "title": "Floor plan image"
+      },
+      {
+        "description": "E.g. \"Private terrace\", \"Exposed brick\", \"Separate entrance\"",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "features",
+        "type": "array"
+      },
+      {
+        "initialValue": 0,
+        "description": "Lower numbers appear first in the floor plan legend",
+        "name": "sortOrder",
+        "type": "number",
+        "title": "Sort order"
+      }
+    ],
+    "name": "floor",
+    "type": "document",
+    "title": "Floor / Unit"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 80
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "date",
+        "type": "date"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Building",
+              "value": "building"
+            },
+            {
+              "title": "Tenants",
+              "value": "tenants"
+            },
+            {
+              "title": "Neighbourhood",
+              "value": "neighbourhood"
+            },
+            {
+              "title": "Sustainability",
+              "value": "sustainability"
+            },
+            {
+              "title": "Events",
+              "value": "events"
+            }
+          ]
+        },
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "coverImage",
+        "type": "image",
+        "title": "Cover image"
+      },
+      {
+        "rows": 3,
+        "description": "Short summary shown on the card (auto-generated from body if blank)",
+        "name": "excerpt",
+        "type": "text"
+      },
+      {
+        "of": [
+          {
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "level": "error",
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "of": [],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "type": "block"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "name": "caption",
+                "type": "string"
+              }
+            ],
+            "type": "image"
+          }
+        ],
+        "name": "body",
+        "type": "array"
+      }
+    ],
+    "name": "journalPost",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "description": "One line — shown beneath the name in the list",
+        "name": "description",
+        "type": "string",
+        "title": "Short description"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Coffee",
+              "value": "coffee"
+            },
+            {
+              "title": "Park",
+              "value": "park"
+            },
+            {
+              "title": "Transit",
+              "value": "transit"
+            },
+            {
+              "title": "Lunch",
+              "value": "lunch"
+            },
+            {
+              "title": "Run",
+              "value": "run"
+            },
+            {
+              "title": "Wine",
+              "value": "wine"
+            },
+            {
+              "title": "Gym",
+              "value": "gym"
+            },
+            {
+              "title": "Culture",
+              "value": "culture"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "coffee",
+                  "park",
+                  "transit",
+                  "lunch",
+                  "run",
+                  "wine",
+                  "gym",
+                  "culture"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ]
+          }
+        ],
+        "name": "walkingMinutes",
+        "type": "number",
+        "title": "Walking minutes from building"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "lat",
+        "type": "number",
+        "title": "Latitude"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "lng",
+        "type": "number",
+        "title": "Longitude"
+      },
+      {
+        "initialValue": 0,
+        "name": "sortOrder",
+        "type": "number",
+        "title": "Sort order"
+      }
+    ],
+    "name": "poi",
+    "type": "document",
+    "title": "Neighbourhood — Point of Interest"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h1",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "dark",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Image",
+              "value": "image"
+            },
+            {
+              "title": "Video",
+              "value": "video"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "image",
+        "name": "mediaType",
+        "type": "string",
+        "title": "Media type"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "hidden": "conditional",
+        "name": "image",
+        "type": "image",
+        "title": "Hero image"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "description": "Muted MP4 loop — host on S3/CloudFront or Mux",
+        "hidden": "conditional",
+        "name": "videoUrl",
+        "type": "url",
+        "title": "Video URL"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "hidden": "conditional",
+        "name": "posterImage",
+        "type": "image",
+        "title": "Poster image (video fallback)"
+      },
+      {
+        "initialValue": "Södermalm, Stockholm",
+        "name": "tagline",
+        "type": "string",
+        "title": "Tagline (top-left)"
+      },
+      {
+        "initialValue": "About the building",
+        "name": "aboutLabel",
+        "type": "string",
+        "title": "\"About\" label"
+      },
+      {
+        "rows": 3,
+        "initialValue": "A restored 1917 cotton mill — 300m² across two quiet floors, 4.9m ceilings, eight minutes from Slussen.",
+        "name": "aboutText",
+        "type": "text",
+        "title": "About paragraph"
+      },
+      {
+        "initialValue": "View available spaces",
+        "name": "ctaLabel",
+        "type": "string",
+        "title": "CTA label (top-right)"
+      },
+      {
+        "initialValue": "A WORLD AWAY",
+        "name": "headlineRow1",
+        "type": "string",
+        "title": "Headline — row 1"
+      },
+      {
+        "initialValue": "FROM THE NOISE",
+        "name": "headlineRow2",
+        "type": "string",
+        "title": "Headline — row 2"
+      }
+    ],
+    "name": "heroSection",
+    "type": "object",
+    "title": "Hero"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "The room you work in changes the work you do.",
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "statement",
+        "type": "string",
+        "title": "Statement headline"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "media",
+        "type": "image",
+        "title": "Parallax image"
+      },
+      {
+        "initialValue": false,
+        "description": "Enable for photographic images. Disable for flat/vector imagery.",
+        "hidden": "conditional",
+        "name": "enableParallax",
+        "type": "boolean",
+        "title": "Parallax scroll effect"
+      },
+      {
+        "initialValue": "The building",
+        "name": "ledgerLabel",
+        "type": "string",
+        "title": "Ledger label"
+      },
+      {
+        "of": [
+          {
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "level": "error",
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "of": [],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "type": "block"
+          }
+        ],
+        "name": "bodyParagraphs",
+        "type": "array",
+        "title": "Body paragraphs"
+      },
+      {
+        "initialValue": "Read the full story",
+        "name": "ctaLabel",
+        "type": "string",
+        "title": "CTA label"
+      },
+      {
+        "initialValue": "/about",
+        "name": "ctaUrl",
+        "type": "string",
+        "title": "CTA URL"
+      }
+    ],
+    "name": "statementSection",
+    "type": "object",
+    "title": "Intro / Statement"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": [
+          {
+            "_type": "object",
+            "value": "4.9m",
+            "label": "Ceiling height"
+          },
+          {
+            "_type": "object",
+            "value": "2",
+            "label": "Floors"
+          },
+          {
+            "_type": "object",
+            "value": "300m²",
+            "label": "Total area"
+          },
+          {
+            "_type": "object",
+            "value": "8 min",
+            "label": "To Slussen"
+          },
+          {
+            "_type": "object",
+            "value": "1917 / BREEAM",
+            "label": "Built / Certified"
+          }
+        ],
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 8
+              }
+            ]
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "E.g. \"4.9m\" or \"1917 / BREEAM\"",
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "description": "E.g. \"Ceiling height\"",
+                "name": "label",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "figures",
+        "type": "array"
+      }
+    ],
+    "name": "figuresSection",
+    "type": "object",
+    "title": "Key Figures"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "From our tenants",
+        "name": "eyebrow",
+        "type": "string",
+        "title": "Eyebrow label"
+      },
+      {
+        "rows": 4,
+        "description": "PLACEHOLDER — must be replaced with a real, attributed tenant quote before launch.",
+        "name": "quote",
+        "type": "text"
+      },
+      {
+        "name": "authorName",
+        "type": "string",
+        "title": "Author name"
+      },
+      {
+        "name": "authorRole",
+        "type": "string",
+        "title": "Author role / company"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Large",
+              "value": "large"
+            },
+            {
+              "title": "Medium",
+              "value": "medium"
+            },
+            {
+              "title": "Small",
+              "value": "small"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "large",
+        "description": "Use Medium or Small for longer quotes that overflow the Large size.",
+        "name": "textSize",
+        "type": "string",
+        "title": "Quote text size"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Body — Small",
+              "value": "body-sm"
+            },
+            {
+              "title": "Body — Regular",
+              "value": "body-md"
+            },
+            {
+              "title": "Body — Large",
+              "value": "body-lg"
+            },
+            {
+              "title": "Quote (Mona Sans light)",
+              "value": "quote"
+            },
+            {
+              "title": "Display (serif)",
+              "value": "display"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "quote",
+        "description": "Controls font-family and weight. textSize above still sets the size for Quote and Display styles.",
+        "name": "typographicStyle",
+        "type": "string",
+        "title": "Typographic style"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Wide image (left side)"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "image",
+            "type": "image",
+            "title": "Card image"
+          },
+          {
+            "name": "projectName",
+            "type": "string",
+            "title": "Project name"
+          },
+          {
+            "name": "projectType",
+            "type": "string",
+            "title": "Project type"
+          },
+          {
+            "name": "year",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": "string",
+            "title": "Link URL"
+          }
+        ],
+        "name": "projectCard",
+        "type": "object",
+        "title": "Project card (hover reveal, right side)"
+      }
+    ],
+    "name": "testimonialSection",
+    "type": "object",
+    "title": "Testimonial"
+  },
+  {
+    "description": "Two-column section: ceiling-height stat (left) + architectural cross-section drawing (right).",
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "EYEBROW CONTENT",
+        "description": "Small uppercase label above the headline.",
+        "name": "eyebrow",
+        "type": "string",
+        "title": "Eyebrow label"
+      },
+      {
+        "initialValue": "Four point nine / meters",
+        "description": "Display headline. Use \" / \" (space-slash-space) to split across two lines.",
+        "name": "headline",
+        "type": "string"
+      },
+      {
+        "initialValue": "Not a specification. A condition for the kind of work that needs room to happen.",
+        "description": "Quiet line pinned to the bottom of the text column.",
+        "name": "supportingLine",
+        "type": "string",
+        "title": "Supporting line"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Architectural cross-section — black line art on Blekäng ground. Upload the supplied drawing asset here.",
+        "fields": [
+          {
+            "name": "alt",
+            "type": "string",
+            "title": "Alt text"
+          }
+        ],
+        "name": "drawing",
+        "type": "image",
+        "title": "Section drawing"
+      }
+    ],
+    "name": "bridgeSection",
+    "type": "object",
+    "title": "Bridge"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "The spaces",
+        "name": "heading",
+        "type": "string",
+        "title": "Section heading"
+      },
+      {
+        "initialValue": "Floor plan",
+        "name": "label",
+        "type": "string",
+        "title": "Eyebrow label"
+      },
+      {
+        "description": "Reference floor documents here. Order determines display order in the plan.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "floor"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to floor / unit"
+          }
+        ],
+        "name": "floors",
+        "type": "array",
+        "title": "Floors / Units"
+      }
+    ],
+    "name": "floorsSection",
+    "type": "object",
+    "title": "Floor Plan"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "Södermalm has always been where people come to make things.",
+        "name": "heading",
+        "type": "string",
+        "title": "Section heading"
+      },
+      {
+        "initialValue": "The address",
+        "name": "label",
+        "type": "string",
+        "title": "Eyebrow label"
+      },
+      {
+        "rows": 3,
+        "initialValue": "Not to be seen making them — to actually make them. Barnängshuset sits at the quieter end of that tradition, eight minutes from the centre and a world away from its noise.",
+        "description": "One or two sentences below the headline. Shifts the argument from \"convenient\" to \"deliberate\".",
+        "name": "supportingLine",
+        "type": "text",
+        "title": "Supporting line"
+      },
+      {
+        "description": "Each POI feeds both the list and the Maptiler map markers.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "poi"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to neighbourhood — point of interest"
+          }
+        ],
+        "name": "pois",
+        "type": "array",
+        "title": "Points of interest"
+      }
+    ],
+    "name": "neighbourhoodSection",
+    "type": "object",
+    "title": "Neighbourhood"
+  },
+  {
+    "description": "The formal business-case block for CFOs, operations, and procurement. Ink ground. Self-sufficient — must make sense to someone who arrived cold.",
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "Barnängshuset — Nackagatan 4, Södermalm. A 1917 textile mill, restored for office use.",
+        "description": "One line that re-establishes what the building is, for someone who landed here without reading the rest of the page.",
+        "name": "orientLine",
+        "type": "string",
+        "title": "Self-orienting header"
+      },
+      {
+        "initialValue": "The case",
+        "name": "eyebrow",
+        "type": "string"
+      },
+      {
+        "initialValue": "Everything the spreadsheet needs.",
+        "name": "headline",
+        "type": "string"
+      },
+      {
+        "description": "Ordered list of label / copy pairs. These render as a spec-sheet ledger.",
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "E.g. \"BREEAM In-Use\" or \"Lease\"",
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "rows": 3,
+                "name": "value",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "facts",
+        "type": "array"
+      },
+      {
+        "rows": 2,
+        "initialValue": "Managed by PPP Group, who have looked after buildings like this long enough to know the details are the point.",
+        "description": "Final statement below the ledger. Sets the tone on the way out.",
+        "name": "closingLine",
+        "type": "text",
+        "title": "Closing line"
+      }
+    ],
+    "name": "rationalCaseSection",
+    "type": "object",
+    "title": "The Case (Procurement / ESG)"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "A working building, with a life worth following.",
+        "name": "heading",
+        "type": "string",
+        "title": "Section heading"
+      },
+      {
+        "initialValue": "From the building",
+        "name": "subheading",
+        "type": "string"
+      },
+      {
+        "initialValue": "View all",
+        "name": "allPostsLabel",
+        "type": "string",
+        "title": "\"All posts\" link label"
+      }
+    ],
+    "name": "journalSection",
+    "type": "object",
+    "title": "Journal"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "initialValue": "See it in person.",
+        "name": "heading",
+        "type": "string",
+        "title": "Section heading"
+      },
+      {
+        "rows": 3,
+        "initialValue": "Spaces like this read differently in photographs. The light, the volume, the quiet — come and spend an hour.",
+        "name": "bodyText",
+        "type": "text",
+        "title": "Body text"
+      },
+      {
+        "initialValue": "Arrange a viewing",
+        "name": "ctaLabel",
+        "type": "string",
+        "title": "CTA button label"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Email the agent",
+              "value": "mailto"
+            },
+            {
+              "title": "Cal.com / Calendly embed",
+              "value": "calendar"
+            },
+            {
+              "title": "Custom URL",
+              "value": "url"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "mailto",
+        "name": "ctaType",
+        "type": "string",
+        "title": "CTA action"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": "conditional",
+        "name": "ctaUrl",
+        "type": "url",
+        "title": "Custom CTA URL"
+      }
+    ],
+    "name": "viewingSection",
+    "type": "object",
+    "title": "Arrange a Viewing"
+  },
+  {
+    "description": "A freeform grid of images and text captions. Drag items to control layout order.",
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "description": "Optional label above the gallery (e.g. \"The building\").",
+        "name": "title",
+        "type": "string",
+        "title": "Eyebrow label"
+      },
+      {
+        "description": "Mix images and captions in any order. Drag to reorder.",
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "description": "Describe the image for screen readers.",
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Narrow (1 col)",
+                      "value": 1
+                    },
+                    {
+                      "title": "Medium (2 col)",
+                      "value": 2
+                    },
+                    {
+                      "title": "Wide (3 col)",
+                      "value": 3
+                    }
+                  ],
+                  "layout": "radio"
+                },
+                "description": "How many grid columns this image occupies (1–3). Leave blank for auto.",
+                "name": "span",
+                "type": "number",
+                "title": "Column span"
+              }
+            ],
+            "type": "object",
+            "name": "galleryItemImage",
+            "title": "Image"
+          },
+          {
+            "fields": [
+              {
+                "rows": 4,
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "text",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "galleryItemCaption",
+            "title": "Caption / text block"
+          }
+        ],
+        "name": "galleryItems",
+        "type": "array",
+        "title": "Gallery items"
+      }
+    ],
+    "name": "gallerySection",
+    "type": "object",
+    "title": "Gallery"
+  },
+  {
+    "description": "Two-column layout: intro text + CTA on the left, categorised place listings on the right.",
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "h1",
+              "value": "h1"
+            },
+            {
+              "title": "h2",
+              "value": "h2"
+            },
+            {
+              "title": "h3",
+              "value": "h3"
+            },
+            {
+              "title": "h4",
+              "value": "h4"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "h2",
+        "description": "Controls the HTML heading level for SEO and accessibility. Visual size is unchanged. The page should have exactly one h1.",
+        "name": "headingLevel",
+        "type": "string",
+        "title": "Heading level"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light — Blekäng / Beck",
+              "value": "light"
+            },
+            {
+              "title": "Warm — Ängsull / Beck",
+              "value": "warm"
+            },
+            {
+              "title": "Dark — Beck / Blekäng",
+              "value": "dark"
+            },
+            {
+              "title": "Brand — Reseda / Blekäng",
+              "value": "brand"
+            },
+            {
+              "title": "Deep — Mylla / Blekäng",
+              "value": "deep"
+            },
+            {
+              "title": "Neutral — Aska / Beck",
+              "value": "neutral"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "initialValue": "light",
+        "description": "Sets the section’s background and text color. Choose a theme — background and text are paired to ensure contrast and brand consistency.",
+        "name": "colorTheme",
+        "type": "string",
+        "title": "Color theme"
+      },
+      {
+        "description": "Optional section heading.",
+        "name": "title",
+        "type": "string",
+        "title": "Section heading"
+      },
+      {
+        "rows": 5,
+        "description": "Left-column body copy — sets the tone for the neighbourhood.",
+        "name": "introText",
+        "type": "text",
+        "title": "Intro text"
+      },
+      {
+        "description": "e.g. \"See our work\" or \"Learn more\"",
+        "name": "ctaText",
+        "type": "string",
+        "title": "CTA label"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": "conditional",
+        "name": "ctaUrl",
+        "type": "url",
+        "title": "CTA URL"
+      },
+      {
+        "description": "Each category appears as a labelled group in the right column.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "description": "e.g. \"TRANSIT\", \"CULTURE\", \"FOOD\"",
+                "name": "categoryName",
+                "type": "string",
+                "title": "Category name"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "validation": [
+                          {
+                            "level": "error",
+                            "rules": [
+                              {
+                                "flag": "presence",
+                                "constraint": "required"
+                              }
+                            ]
+                          }
+                        ],
+                        "name": "itemName",
+                        "type": "string",
+                        "title": "Name"
+                      },
+                      {
+                        "description": "Supporting info — time, distance, short description, etc.",
+                        "name": "itemDetail",
+                        "type": "string",
+                        "title": "Detail"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "neighbourhoodItem",
+                    "title": "Item"
+                  }
+                ],
+                "name": "items",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "neighbourhoodCategory",
+            "title": "Category"
+          }
+        ],
+        "name": "categories",
+        "type": "array"
+      }
+    ],
+    "name": "neighbourhoodDetailsSection",
+    "type": "object",
+    "title": "Neighbourhood Details"
+  }
+]

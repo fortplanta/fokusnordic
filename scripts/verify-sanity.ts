@@ -112,12 +112,20 @@ async function main() {
 
   const studioResponse = await fetch(studioUrl, { redirect: 'follow' })
   assert(studioResponse.ok, `Hosted Studio is unavailable: ${studioResponse.status}`)
+  const studioHtml = await studioResponse.text()
+  assert(studioHtml.includes('https://core.sanity-cdn.com/bridge.js'), 'Hosted Studio is missing the Sanity Dashboard bridge')
+
+  const manifestResponse = await fetch(`${studioUrl}/static/create-manifest.json`)
+  assert(manifestResponse.ok, `Hosted Studio manifest is unavailable: ${manifestResponse.status}`)
+  const manifest = await manifestResponse.json() as { workspaces?: unknown[] }
+  assert(manifest.workspaces?.length, 'Hosted Studio manifest has no workspaces')
 
   console.log(`Sanity verified: ${expectedProjectId}/${expectedDataset}`)
   console.log(`Documents checked: ${documents.map((document) => document._id).join(', ')}`)
   console.log('Presentation control encoding checked: gallery size and side')
   console.log(`Credentialed origins checked: ${credentialedOrigins.join(', ')}`)
   console.log(`Hosted Studio checked: ${studioResponse.url}`)
+  console.log(`Dashboard bridge and manifest checked: ${studioUrl}/static/create-manifest.json`)
 }
 
 main().catch((error) => {

@@ -72,3 +72,7 @@ point to that exact URL.
   treats the value as a hostname and produces a malformed `.sanity.studio` URL.
 - After registration, run the same command with `--dry-run --json` and confirm
   that its reported `url` is exactly the Netlify `/studio` URL.
+- Because this is an embedded Next.js Studio, keep the Sanity Dashboard bridge
+  mounted in the `/studio` route and keep the extracted manifest files under
+  `public/studio/static`. Registration alone does not make the Studio load in
+  the Sanity Dashboard shell.
