@@ -25,6 +25,13 @@ type HomeDocument = {
   areaMap?: {
     mapImage?: { asset?: { _ref?: string } }
     drawerTitle?: string
+    buildingMarker?: {
+      alt?: string
+      x?: number
+      y?: number
+      width?: number
+      icon?: { asset?: { _ref?: string } }
+    }
     categories?: Array<{
       title?: string
       tone?: string
@@ -66,6 +73,10 @@ function verifyAreaMap(document: HomeDocument) {
 
   assert(document.areaMap?.mapImage?.asset?._ref, `${document._id}: Area map has no image`)
   assert(document.areaMap?.drawerTitle, `${document._id}: Area map has no drawer title`)
+  assert(document.areaMap?.buildingMarker?.icon?.asset?._ref, `${document._id}: Area map has no building marker SVG`)
+  assert(document.areaMap?.buildingMarker?.alt, `${document._id}: Area map building marker has no accessible label`)
+  assert(typeof document.areaMap?.buildingMarker?.x === 'number' && typeof document.areaMap?.buildingMarker?.y === 'number', `${document._id}: Area map building marker has no coordinates`)
+  assert(typeof document.areaMap?.buildingMarker?.width === 'number', `${document._id}: Area map building marker has no width`)
   assert(categories.length > 0, `${document._id}: Area map has no location categories`)
   categories.forEach((category, categoryIndex) => {
     assert(category.title, `${document._id}: Area map category ${categoryIndex + 1} has no title`)
@@ -106,7 +117,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},areaMap{mapImage{asset},drawerTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 

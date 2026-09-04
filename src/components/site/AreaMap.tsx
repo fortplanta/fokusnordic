@@ -15,6 +15,22 @@ function cleanTone(value?: string): Tone {
   return clean === 'coral' || clean === 'ink' ? clean : 'wine'
 }
 
+function ChevronIcon() {
+  return (
+    <svg className="map-chevron" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="m4 6 4 4 4-4" />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="m4 4 8 8M12 4l-8 8" />
+    </svg>
+  )
+}
+
 function Disclosure({ title, desktopOpen = true, mobileOpen = false, className = '', children }: {
   title: string
   desktopOpen?: boolean
@@ -32,7 +48,7 @@ function Disclosure({ title, desktopOpen = true, mobileOpen = false, className =
   return (
     <section className={`map-disclosure ${className}${open ? ' is-open' : ''}`}>
       <button className="map-disclosure-trigger" type="button" aria-expanded={open} aria-controls={contentId} onClick={() => setOpen((current) => !current)}>
-        <span>{title}</span><span aria-hidden="true">{open ? '−' : '+'}</span>
+        <span>{title}</span><ChevronIcon />
       </button>
       <div className="map-disclosure-content" id={contentId} hidden={!open}>{children}</div>
     </section>
@@ -46,6 +62,7 @@ function locationKey(location: Location, categoryIndex: number, locationIndex: n
 export default function AreaMap({ content, fallback }: { content: AreaMapContent; fallback: string }) {
   const [activeMarker, setActiveMarker] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(content.drawerOpenDesktop ?? true)
+  const [nearbyOpen, setNearbyOpen] = useState(content.nearbyOpenDesktop ?? true)
   const drawerId = useId()
   const imageSource = content.mapImage?.asset?.url || fallback
   const categories = content.categories ?? []
@@ -56,6 +73,12 @@ export default function AreaMap({ content, fallback }: { content: AreaMapContent
       : content.drawerOpenDesktop ?? true)
   }, [content.drawerOpenDesktop, content.drawerOpenMobile])
 
+  useEffect(() => {
+    setNearbyOpen(window.matchMedia('(max-width: 760px)').matches
+      ? content.nearbyOpenMobile ?? true
+      : content.nearbyOpenDesktop ?? true)
+  }, [content.nearbyOpenDesktop, content.nearbyOpenMobile])
+
   return (
     <section className="area-map" aria-label={content.heading || content.nearbyTitle || 'Local area map'}>
       <figure className="site-media area-map-image">
@@ -64,7 +87,9 @@ export default function AreaMap({ content, fallback }: { content: AreaMapContent
 
       <div className="area-map-markers" aria-label="Map locations">
         {content.buildingMarker?.icon?.asset?.url && (
-          <img className="area-map-building-marker" src={content.buildingMarker.icon.asset.url} alt={content.buildingMarker.alt || 'Barnängshuset'} style={{ left: `${content.buildingMarker.x}%`, top: `${content.buildingMarker.y}%`, width: `${content.buildingMarker.width}%` }} />
+          <span className="area-map-building-marker" role="img" aria-label={content.buildingMarker.alt || 'Barnängshuset'} style={{ left: `${content.buildingMarker.x}%`, top: `${content.buildingMarker.y}%`, width: `${content.buildingMarker.width}%` }}>
+            <img src={content.buildingMarker.icon.asset.url} alt="" />
+          </span>
         )}
         {categories.flatMap((category, categoryIndex) => (category.locations ?? []).map((location, locationIndex) => {
           const markerKey = locationKey(location, categoryIndex, locationIndex)
@@ -78,27 +103,29 @@ export default function AreaMap({ content, fallback }: { content: AreaMapContent
 
       {!drawerOpen && (
         <button className="area-map-drawer-open" type="button" aria-controls={drawerId} onClick={() => setDrawerOpen(true)}>
-          <span>{content.drawerTitle || 'Map guide'}</span><span aria-hidden="true">+</span>
+          <span>{content.drawerTitle || 'Explore the area'}</span><ChevronIcon />
         </button>
       )}
 
       <aside className={`area-map-drawer${drawerOpen ? ' is-open' : ''}`} id={drawerId} aria-hidden={!drawerOpen}>
-        <div className="area-map-drawer-bar">
-          <p className="kicker">{content.kicker}</p>
-          <button type="button" onClick={() => setDrawerOpen(false)} aria-label="Close map guide">Close</button>
-        </div>
-
-        <Disclosure title={content.nearbyTitle || content.heading || 'Close at hand'} desktopOpen={content.nearbyOpenDesktop ?? true} mobileOpen={content.nearbyOpenMobile ?? true} className="map-nearby">
+        <section className={`map-nearby${nearbyOpen ? ' is-open' : ''}`}>
+          <header className="map-nearby-header">
+            <button className="map-nearby-trigger" type="button" aria-expanded={nearbyOpen} aria-controls={`${drawerId}-nearby`} onClick={() => setNearbyOpen((current) => !current)}>
+              <span><small>{content.kicker}</small>{content.nearbyTitle || content.heading || 'Close at hand'}</span><ChevronIcon />
+            </button>
+            <button className="map-drawer-close" type="button" onClick={() => setDrawerOpen(false)} aria-label="Close map guide"><CloseIcon /></button>
+          </header>
+          <div id={`${drawerId}-nearby`} hidden={!nearbyOpen}>
           <div className="map-category-list">
             {categories.map((category, categoryIndex) => (
-              <Disclosure key={category._key || category.title} title={category.title} desktopOpen={category.openDesktop ?? true} mobileOpen={category.openMobile ?? categoryIndex === 0} className="map-category">
+              <Disclosure key={category._key || category.title} title={category.title} desktopOpen={category.openDesktop ?? true} mobileOpen={category.openMobile ?? categoryIndex === 0} className={`map-category map-category--${cleanTone(category.tone)}`}>
                 <ol>
                   {(category.locations ?? []).map((location, locationIndex) => {
                     const markerKey = locationKey(location, categoryIndex, locationIndex)
                     return (
                       <li className={activeMarker === markerKey ? 'is-active' : undefined} id={`area-location-${markerKey}`} key={markerKey} onMouseEnter={() => setActiveMarker(markerKey)} onMouseLeave={() => setActiveMarker(null)}>
                         <a href={location.url || `#area-location-${markerKey}`} onFocus={() => setActiveMarker(markerKey)} onBlur={() => setActiveMarker(null)}>
-                          <span>{String(locationIndex + 1).padStart(2, '0')}</span><strong>{location.name}</strong>{location.detail && <small>{location.detail}</small>}
+                          <span>{String(locationIndex + 1).padStart(2, '0')}</span><span><strong>{location.name}</strong>{location.detail && <small>{location.detail}</small>}</span>
                         </a>
                       </li>
                     )
@@ -107,7 +134,8 @@ export default function AreaMap({ content, fallback }: { content: AreaMapContent
               </Disclosure>
             ))}
           </div>
-        </Disclosure>
+          </div>
+        </section>
 
         {(content.travelTimes?.length ?? 0) > 0 && (
           <Disclosure title={content.travelTitle || 'Travel times'} desktopOpen={content.travelOpenDesktop ?? true} mobileOpen={content.travelOpenMobile ?? false} className="map-travel">

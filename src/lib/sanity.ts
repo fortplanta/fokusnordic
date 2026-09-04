@@ -86,7 +86,7 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       nearbyTitle, nearbyOpenDesktop, nearbyOpenMobile,
       mapImage { ${IMAGE_FIELDS} },
       buildingMarker {
-        alt, x, y, width,
+        _type, alt, x, y, width,
         icon { asset->{ _id, url, originalFilename, mimeType } }
       },
       categories[] {
