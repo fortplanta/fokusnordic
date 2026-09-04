@@ -116,11 +116,15 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
           {content.volume.body && <p className="volume-introduction">{content.volume.body}</p>}
         </div>
         <div className="volume-groups" aria-label="Property specifications">
-          {(content.volume.specificationGroups || []).map((group) => (
-            <section className="volume-group" key={group._key || group.title}>
+          {(content.volume.specificationGroups || []).map((group, index) => (
+            <details className="volume-group" open={index === 0} key={group._key || group.title}>
+              <summary>
+                <span>{group.title}</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+              </summary>
               <h3>{group.title}</h3>
               <ul>{group.facts.map((item) => <li key={item._key || item.label}>{item.value}</li>)}</ul>
-            </section>
+            </details>
           ))}
         </div>
       </section>
