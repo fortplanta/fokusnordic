@@ -42,6 +42,7 @@ export type SiteSettings = {
 export type FloorPlanConfiguration = {
     _key?: string
     title: string
+    name?: string
     body?: string
     facts?: Array<{ _key?: string; label: string; value: string }>
     planImage?: SanityImage
@@ -52,6 +53,9 @@ export type FloorPlanSection = {
     kicker: string
     heading: string
     body: string
+    detailsLabel?: string
+    ctaLabel?: string
+    ctaUrl?: string
     floors: Array<{
         _key?: string
         label: string

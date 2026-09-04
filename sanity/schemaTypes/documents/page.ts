@@ -145,6 +145,12 @@ export default defineType({
       name: 'floorPlans', title: 'Floor plans', type: 'object', group: 'floorPlans',
       fields: [
         ...sectionCopy,
+        copy('detailsLabel', 'Mobile details button label', 1),
+        copy('ctaLabel', 'Enquiry link label', 1),
+        defineField({
+          name: 'ctaUrl', title: 'Enquiry link', type: 'string',
+          description: 'Use a page anchor such as #viewing, a mailto link, or a full URL.',
+        }),
         defineField({
           name: 'floors', title: 'Floors', type: 'array',
           validation: (rule) => rule.min(1),
@@ -159,6 +165,7 @@ export default defineType({
                   type: 'object',
                   fields: [
                     copy('title', 'Configuration title', 1),
+                    copy('name', 'Suite or option name', 1),
                     copy('body', 'Description'),
                     defineField({
                       name: 'facts', title: 'Facts', type: 'array',

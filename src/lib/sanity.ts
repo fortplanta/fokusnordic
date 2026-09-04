@@ -64,11 +64,11 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       facts[] { _key, label, value }, image { ${IMAGE_FIELDS} }
     },
     floorPlans {
-      kicker, heading, body,
+      kicker, heading, body, detailsLabel, ctaLabel, ctaUrl,
       floors[] {
         _key, label,
         configurations[] {
-          _key, title, body, facts[] { _key, label, value },
+          _key, title, name, body, facts[] { _key, label, value },
           planImage { ${IMAGE_FIELDS} }, explodedImage { ${IMAGE_FIELDS} }
         }
       }

@@ -22,6 +22,15 @@ type HomeDocument = {
     featureStatements?: Array<{ heading?: string; body?: string }>
     specificationGroups?: Array<{ title?: string; facts?: Array<{ value?: string }> }>
   }
+  floorPlans?: {
+    detailsLabel?: string
+    ctaLabel?: string
+    ctaUrl?: string
+    floors?: Array<{
+      label?: string
+      configurations?: Array<{ title?: string; planImage?: { asset?: { _ref?: string } } }>
+    }>
+  }
   areaMap?: {
     mapImage?: { asset?: { _ref?: string } }
     drawerTitle?: string
@@ -88,6 +97,23 @@ function verifyAreaMap(document: HomeDocument) {
   })
 }
 
+function verifyFloorPlans(document: HomeDocument) {
+  const section = document.floorPlans
+  const floors = section?.floors ?? []
+
+  assert(section?.detailsLabel, `${document._id}: Floor plans has no mobile details label`)
+  assert(section?.ctaLabel && section.ctaUrl, `${document._id}: Floor plans has no enquiry link`)
+  assert(floors.length > 0, `${document._id}: Floor plans has no floors`)
+  floors.forEach((floor, floorIndex) => {
+    assert(floor.label, `${document._id}: Floor ${floorIndex + 1} has no label`)
+    assert(floor.configurations?.length, `${document._id}: ${floor.label || `Floor ${floorIndex + 1}`} has no configurations`)
+    floor.configurations.forEach((configuration, configurationIndex) => {
+      assert(configuration.title, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no title`)
+      assert(configuration.planImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no plan image`)
+    })
+  })
+}
+
 function verifyPresentationControls() {
   const metadata = { origin: 'sanity.io', href: studioUrl }
 
@@ -117,7 +143,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 
@@ -126,6 +152,7 @@ async function main() {
   documents.forEach((document) => {
     verifyGallery(document)
     verifyVolume(document)
+    verifyFloorPlans(document)
     verifyAreaMap(document)
   })
   verifyPresentationControls()
