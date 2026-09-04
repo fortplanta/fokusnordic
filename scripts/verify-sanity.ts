@@ -24,7 +24,13 @@ type HomeDocument = {
   }
   areaMap?: {
     mapImage?: { asset?: { _ref?: string } }
-    markers?: Array<{ name?: string; x?: number; y?: number }>
+    drawerTitle?: string
+    categories?: Array<{
+      title?: string
+      tone?: string
+      locations?: Array<{ name?: string; x?: number; y?: number }>
+    }>
+    travelTimes?: Array<{ name?: string; duration?: string }>
   }
 }
 
@@ -56,13 +62,18 @@ function verifyVolume(document: HomeDocument) {
 }
 
 function verifyAreaMap(document: HomeDocument) {
-  const markers = document.areaMap?.markers ?? []
+  const categories = document.areaMap?.categories ?? []
 
   assert(document.areaMap?.mapImage?.asset?._ref, `${document._id}: Area map has no image`)
-  assert(markers.length > 0, `${document._id}: Area map has no locations`)
-  markers.forEach((marker, index) => {
-    assert(marker.name, `${document._id}: Area map location ${index + 1} has no name`)
-    assert(typeof marker.x === 'number' && typeof marker.y === 'number', `${document._id}: Area map location ${index + 1} has no coordinates`)
+  assert(document.areaMap?.drawerTitle, `${document._id}: Area map has no drawer title`)
+  assert(categories.length > 0, `${document._id}: Area map has no location categories`)
+  categories.forEach((category, categoryIndex) => {
+    assert(category.title, `${document._id}: Area map category ${categoryIndex + 1} has no title`)
+    assert(category.locations?.length, `${document._id}: Area map category ${categoryIndex + 1} has no locations`)
+    category.locations.forEach((marker, markerIndex) => {
+      assert(marker.name, `${document._id}: Area map category ${categoryIndex + 1}, location ${markerIndex + 1} has no name`)
+      assert(typeof marker.x === 'number' && typeof marker.y === 'number', `${document._id}: Area map location ${marker.name || markerIndex + 1} has no coordinates`)
+    })
   })
 }
 
@@ -95,7 +106,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},areaMap{mapImage{asset},markers[]{name,x,y}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},areaMap{mapImage{asset},drawerTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 

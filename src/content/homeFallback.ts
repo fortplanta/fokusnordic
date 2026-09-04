@@ -116,15 +116,34 @@ export const homeFallback = {
   areaMap: {
     kicker: 'In the area',
     heading: 'Close at hand.',
-    markers: [
-      { _key: 'vita', name: 'Vitabergsparken', detail: 'Park', category: 'Outdoors', x: 47, y: 34 },
-      { _key: 'nytorget', name: 'Nytorget', detail: 'Restaurants and cafés', category: 'Food', x: 30, y: 29 },
-      { _key: 'urban-deli', name: 'Urban Deli', detail: 'Grocer and restaurant', category: 'Food', x: 27, y: 37 },
-      { _key: 'bleck', name: 'Restaurang Bleck', detail: 'Restaurant', category: 'Food', x: 42, y: 57 },
-      { _key: 'skanstull', name: 'Skanstull', detail: 'Metro', category: 'Transport', x: 12, y: 67 },
-      { _key: 'hammarby', name: 'Hammarby kanal', detail: 'Future metro', category: 'Transport', x: 52, y: 73 },
-      { _key: 'barnangsparken', name: 'Barnängsparken', detail: 'Park and waterfront', category: 'Outdoors', x: 73, y: 58 },
-      { _key: 'kajen', name: 'Barnängsbryggan', detail: 'Waterfront', category: 'Outdoors', x: 78, y: 69 },
+    drawerTitle: 'Map guide',
+    drawerOpenDesktop: true,
+    drawerOpenMobile: false,
+    nearbyTitle: 'Close at hand',
+    nearbyOpenDesktop: true,
+    nearbyOpenMobile: true,
+    categories: [
+      { _key: 'food', title: 'Food & Drinks', tone: 'wine' as const, openDesktop: true, openMobile: true, locations: [
+        { _key: 'nytorget', name: 'Nytorget', detail: 'Restaurants and cafés', x: 30, y: 29 },
+        { _key: 'urban-deli', name: 'Urban Deli', detail: 'Grocer and restaurant', x: 27, y: 37 },
+        { _key: 'bleck', name: 'Restaurang Bleck', detail: 'Restaurant', x: 42, y: 57 },
+      ] },
+      { _key: 'metro', title: 'Metro stations', tone: 'ink' as const, openDesktop: true, openMobile: false, locations: [
+        { _key: 'skanstull', name: 'Skanstull', detail: 'Metro', x: 12, y: 67 },
+        { _key: 'hammarby', name: 'Hammarby kanal', detail: 'Future metro', x: 52, y: 73 },
+      ] },
+      { _key: 'parks', title: 'Parks', tone: 'coral' as const, openDesktop: true, openMobile: false, locations: [
+        { _key: 'vita', name: 'Vitabergsparken', detail: 'Park', x: 47, y: 34 },
+        { _key: 'barnangsparken', name: 'Barnängsparken', detail: 'Park and waterfront', x: 73, y: 58 },
+        { _key: 'kajen', name: 'Barnängsbryggan', detail: 'Waterfront', x: 78, y: 69 },
+      ] },
+    ],
+    travelTitle: 'Travel times',
+    travelOpenDesktop: true,
+    travelOpenMobile: false,
+    travelTimes: [
+      { _key: 'skanstull', name: 'Skanstull', duration: '8 min' },
+      { _key: 'hammarby', name: 'Hammarby kanal', duration: '8 min' },
     ],
   },
   viewing: {

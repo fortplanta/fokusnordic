@@ -82,12 +82,19 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       image { ${IMAGE_FIELDS} }
     },
     areaMap {
-      kicker, heading, mapImage { ${IMAGE_FIELDS} },
+      kicker, heading, drawerTitle, drawerOpenDesktop, drawerOpenMobile,
+      nearbyTitle, nearbyOpenDesktop, nearbyOpenMobile,
+      mapImage { ${IMAGE_FIELDS} },
       buildingMarker {
         alt, x, y, width,
         icon { asset->{ _id, url, originalFilename, mimeType } }
       },
-      markers[] { _key, name, detail, category, url, x, y }
+      categories[] {
+        _key, title, tone, openDesktop, openMobile,
+        locations[] { _key, name, detail, url, x, y }
+      },
+      travelTitle, travelOpenDesktop, travelOpenMobile,
+      travelTimes[] { _key, name, duration }
     },
     viewing { kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }
   }

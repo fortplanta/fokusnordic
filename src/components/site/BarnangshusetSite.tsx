@@ -9,8 +9,6 @@ type CmsImage = { alt?: string; asset?: { url?: string } }
 type Pair = { _key?: string; label: string; value: string }
 type Nearby = { _key?: string; name: string; detail: string }
 type GalleryItem = { _key?: string; caption: string; layout?: string; size?: string; side?: string; image?: CmsImage }
-type MapMarker = { _key?: string; name: string; detail?: string; category?: string; url?: string; x: number; y: number }
-type BuildingMarker = { alt?: string; x: number; y: number; width: number; icon?: { asset?: { url?: string } } }
 type Content = {
   hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
   building: { kicker: string; heading: string; body: string; image?: CmsImage }
@@ -27,7 +25,7 @@ type Content = {
   floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
   place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
-  areaMap?: { kicker: string; heading: string; mapImage?: CmsImage; buildingMarker?: BuildingMarker; markers: MapMarker[] }
+  areaMap?: import('@/types/sanity').CurrentHomePage['areaMap']
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
 
@@ -110,7 +108,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.place.image} fallback={fallbacks.place} className="place-view motion-media" sizes="50vw" />
         <div className="nearby-list">{content.place.nearby.map((item)=><div key={item._key || item.name}><strong>{item.name}</strong><span>{item.detail}</span></div>)}</div>
       </section>
-      {content.areaMap?.markers?.length ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}
+      {content.areaMap?.categories?.some((category) => category.locations?.length) ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>
