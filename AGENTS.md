@@ -76,3 +76,11 @@ point to that exact URL.
   mounted in the `/studio` route and keep the extracted manifest files under
   `public/studio/static`. Registration alone does not make the Studio load in
   the Sanity Dashboard shell.
+- `defineLive` and the exported `SanityLive` component are server-only. Never
+  import either through a `'use client'` module. Mount `SanityLive` from the
+  server layout for the public `(site)` route group only; `/studio` must remain
+  outside that layout or the Dashboard iframe will crash before Studio renders.
+- A successful build and a reachable `/studio` URL do not prove the Dashboard
+  integration works. After deployment, open the registered Studio through the
+  authenticated Sanity Dashboard and confirm that its iframe renders without a
+  client-component/server-only import error.

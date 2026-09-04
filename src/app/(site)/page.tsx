@@ -5,9 +5,6 @@ import { contactFallback, homeFallback } from '@/content/homeFallback'
 import { getCurrentHomePage, getSiteSettings } from '@/lib/sanity'
 import type { SiteSettings } from '@/types/sanity'
 
-// Published content is invalidated by SanityLive when an editor publishes.
-// Keep a long ISR fallback so an ordinary visitor never has to pay for a
-// Netlify function cold start every minute.
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {

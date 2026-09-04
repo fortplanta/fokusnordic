@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import './globals.css'
 import '../styles/barnangshuset-site.css'
 import '../styles/floor-plans.css'
 import SiteMotion            from '@/components/motion/SiteMotion'
 import SkipLink              from '@/components/layout/SkipLink'
-import DraftModeTools        from '@/components/sanity/DraftModeTools'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://barnangshuset.se'
 
@@ -29,11 +27,9 @@ export const metadata: Metadata = {
     : { index: false, follow: false },
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { isEnabled: isDraftMode } = await draftMode()
-
   return (
     <html lang="en">
       <head>
@@ -45,9 +41,6 @@ export default async function RootLayout({
         <SkipLink />
         {children}
         <SiteMotion />
-        {/* The Presentation tool enters through /api/draft-mode/enable. Keep
-            its event stream and editing runtime out of the public bundle. */}
-        {isDraftMode && <DraftModeTools />}
       </body>
     </html>
   )
