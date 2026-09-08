@@ -30,7 +30,12 @@ export default function SpecificationGroup({ group, initiallyOpen }: {
       </button>
     ) : group.title}</h3>
     <ul id={id} hidden={mobile && !open}>
-      {group.facts.map((item) => <li key={item._key || item.label}>{item.value}</li>)}
+      {group.facts.map((item) => (
+        <li key={item._key || item.label}>
+          <span className="spec-label">{item.label}</span>
+          <span>{item.value}</span>
+        </li>
+      ))}
     </ul>
   </article>
 }

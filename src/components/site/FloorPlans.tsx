@@ -122,7 +122,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
             <div className="floor-plan-configurations-row">
               <div role="tablist" aria-label={`${floor.label} configurations`}>
                 {floor.configurations.map((item, index) => (
-                  <button type="button" role="tab" id={`${id}-configuration-${index}`} aria-selected={configurationIndex === index} aria-controls={`${id}-plan`} className={configurationIndex === index ? 'is-active' : ''} onClick={() => { setHasSelectedConfiguration(true); setConfigurationIndex(index) }} key={item._key || item.title}>
+                  <button type="button" role="tab" id={`${id}-configuration-${index}`} aria-selected={configurationIndex === index} aria-controls={`${id}-plan`} aria-label={item.title || `Configuration ${String(index + 1).padStart(2, '0')}`} className={configurationIndex === index ? 'is-active' : ''} onClick={() => { setHasSelectedConfiguration(true); setConfigurationIndex(index) }} key={item._key || item.title}>
                     {String(index + 1).padStart(2, '0')}
                   </button>
                 ))}

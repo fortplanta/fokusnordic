@@ -72,7 +72,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       <section className="volume volume-editorial grid-section" aria-labelledby="volume-editorial-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>
-          <p className="section-display" id="volume-editorial-title">{content.volume.heading}</p>
+          <h2 className="section-display" id="volume-editorial-title">{content.volume.heading}</h2>
           {content.volume.body && <p className="volume-introduction">{content.volume.body}</p>}
         </div>
         <div className="volume-statements" aria-label="Building conditions">
@@ -108,7 +108,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.specifications.kicker}</p>
-          <p className="section-display" id="volume-technical-title">{content.specifications.heading}</p>
+          <h2 className="section-display" id="volume-technical-title">{content.specifications.heading}</h2>
           {content.specifications.body && <p className="volume-introduction">{content.specifications.body}</p>}
         </div>
         <div className="volume-groups" aria-label="Property specifications">

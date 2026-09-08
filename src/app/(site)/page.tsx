@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const image = settings?.ogImage?.asset?.url
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical: siteUrl },
     openGraph: {
