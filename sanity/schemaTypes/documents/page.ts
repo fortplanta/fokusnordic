@@ -49,6 +49,7 @@ export default defineType({
     }),
     defineField({
       name: 'volume', title: 'Light and volume', type: 'object', group: 'volume',
+      description: 'Editorial section — kicker, heading and building conditions. Specification groups have moved to "Property specifications".',
       fields: [
         ...sectionCopy,
         defineField({
@@ -58,24 +59,6 @@ export default defineType({
             type: 'object',
             fields: [copy('heading', 'Fact heading', 1), copy('body', 'Explanation', 4)],
             preview: { select: { title: 'heading', subtitle: 'body' } },
-          }],
-        }),
-        defineField({
-          name: 'specificationGroups', title: 'Technical specification groups', type: 'array',
-          description: 'Categories displayed in the right-hand information register.',
-          of: [{
-            type: 'object',
-            fields: [
-              copy('title', 'Category', 1),
-              defineField({
-                name: 'facts', title: 'Facts', type: 'array',
-                of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 2)] }],
-              }),
-            ],
-            preview: {
-              select: { title: 'title', facts: 'facts' },
-              prepare: ({ title, facts }) => ({ title, subtitle: `${facts?.length || 0} facts` }),
-            },
           }],
         }),
       ],

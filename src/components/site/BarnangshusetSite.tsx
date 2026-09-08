@@ -1,9 +1,10 @@
 import Image from 'next/image'
-import type { FloorPlanSection } from '@/types/sanity'
+import type { CurrentHomePage, FloorPlanSection } from '@/types/sanity'
 import { gallerySide, gallerySize } from '@/lib/sanityControls'
 import AreaMap from './AreaMap'
 import FloorPlans from './FloorPlans'
 import SiteHeader from './SiteHeader'
+import SpecificationGroup from './SpecificationGroup'
 
 type CmsImage = { alt?: string; asset?: { url?: string } }
 type Pair = { _key?: string; label: string; value: string }
@@ -12,26 +13,15 @@ type GalleryItem = { _key?: string; caption: string; layout?: string; size?: str
 type Content = {
   hero: { heading: string; body: string; ctaLabel: string; image?: CmsImage }
   building: { kicker: string; heading: string; body: string; image?: CmsImage }
-  volume: {
-    kicker: string
-    heading: string
-    body?: string
-    featureStatements: Array<{ _key?: string; heading: string; body: string }>
-    specificationGroups: Array<{ _key?: string; title: string; facts: Pair[] }>
-  }
+  volume: CurrentHomePage['volume']
+  specifications: CurrentHomePage['specifications']
   gallery: { kicker: string; heading: string; body: string; items: GalleryItem[] }
   mosaicGallery?: { kicker?: string; heading?: string; items: GalleryItem[] }
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
   floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
   place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
-  areaMap?: import('@/types/sanity').CurrentHomePage['areaMap']
-  specifications?: {
-    kicker: string
-    heading: string
-    body?: string
-    specificationGroups: Array<{ _key?: string; title: string; facts: Pair[] }>
-  }
+  areaMap?: CurrentHomePage['areaMap']
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
 
@@ -117,20 +107,13 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       {content.areaMap?.categories?.some((category) => category.locations?.length) ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>
-          <p className="kicker">{(content.specifications ?? content.volume).kicker}</p>
-          <p className="section-display" id="volume-technical-title">{(content.specifications ?? content.volume).heading}</p>
-          {(content.specifications ?? content.volume).body && <p className="volume-introduction">{(content.specifications ?? content.volume).body}</p>}
+          <p className="kicker">{content.specifications.kicker}</p>
+          <p className="section-display" id="volume-technical-title">{content.specifications.heading}</p>
+          {content.specifications.body && <p className="volume-introduction">{content.specifications.body}</p>}
         </div>
         <div className="volume-groups" aria-label="Property specifications">
-          {((content.specifications ?? content.volume).specificationGroups || []).map((group) => (
-            <details className="volume-group" open key={group._key || group.title}>
-              <summary>
-                <span>{group.title}</span>
-                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
-              </summary>
-              <h3>{group.title}</h3>
-              <ul>{group.facts.map((item) => <li key={item._key || item.label}>{item.value}</li>)}</ul>
-            </details>
+          {(content.specifications.specificationGroups || []).map((group, index) => (
+            <SpecificationGroup key={group._key || group.title} group={group} initiallyOpen={index === 0} />
           ))}
         </div>
       </section>

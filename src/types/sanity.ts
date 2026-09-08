@@ -72,6 +72,11 @@ export type CurrentHomePage = {
         heading: string
         body?: string
         featureStatements: Array<{ _key?: string; heading: string; body: string }>
+    }
+    specifications: {
+        kicker: string
+        heading: string
+        body?: string
         specificationGroups: Array<{
             _key?: string
             title: string
@@ -141,16 +146,6 @@ export type CurrentHomePage = {
         travelOpenDesktop?: boolean
         travelOpenMobile?: boolean
         travelTimes?: Array<{ _key?: string; name: string; duration: string }>
-    }
-    specifications?: {
-        kicker: string
-        heading: string
-        body?: string
-        specificationGroups: Array<{
-            _key?: string
-            title: string
-            facts: Array<{ _key?: string; label: string; value: string }>
-        }>
     }
     viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
 }

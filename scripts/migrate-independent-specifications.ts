@@ -1,40 +1,40 @@
 import { getCliClient } from 'sanity/cli'
-import { homeFallback } from '../src/content/homeFallback'
 
-const client = getCliClient({ apiVersion: '2025-01-01' })
-
-// Copies the specificationGroups (and a distinct kicker/heading) from the
-// existing `volume` field into the new independent `specifications` field.
-// Safe to run multiple times — uses setIfMissing so it won't overwrite edits.
-async function migrateIndependentSpecifications() {
-  const published = await client.fetch<{
+// Additive and revision-guarded: the live site's legacy fields remain usable
+// until the frontend deployment. Existing independent content is never replaced.
+async function main() {
+  const client = getCliClient({ apiVersion: '2025-01-01' }).withConfig({ perspective: 'raw', useCdn: false })
+  const documents = await client.fetch<Array<{
+    _id: string
+    _rev: string
     volume?: { kicker?: string; heading?: string; body?: string; specificationGroups?: unknown[] }
     specifications?: unknown
-  } | null>('*[_id == "homePage"][0]{volume, specifications}')
+  }>>('*[_id in ["homePage", "drafts.homePage"]]{_id,_rev,volume,specifications}')
 
-  if (published?.specifications) {
-    console.log('`specifications` already populated — nothing to migrate.')
-    return
+  let transaction = client.transaction()
+  const changed: string[] = []
+  for (const document of documents) {
+    if (document.specifications != null) continue
+    const source = document.volume
+    if (!source?.heading || !source.specificationGroups) {
+      throw new Error(`${document._id}: source copy or categories are missing; migration aborted`)
+    }
+    const { kicker, heading, body, specificationGroups } = source
+    transaction = transaction.patch(document._id, (patch) => patch
+      .ifRevisionId(document._rev)
+      .set({ specifications: {
+        ...(kicker !== undefined ? { kicker } : {}),
+        heading,
+        ...(body !== undefined ? { body } : {}),
+        specificationGroups,
+      } }))
+    changed.push(document._id)
   }
-
-  const source = published?.volume ?? homeFallback.volume
-  const specs = {
-    kicker: homeFallback.specifications.kicker,
-    heading: homeFallback.specifications.heading,
-    specificationGroups: source.specificationGroups ?? homeFallback.specifications.specificationGroups,
-  }
-
-  await Promise.all([
-    client.patch('homePage').setIfMissing({ specifications: specs }).commit(),
-    client.patch('drafts.homePage').setIfMissing({ specifications: specs }).commit(),
-  ])
-
-  console.log('Migrated specification groups to the independent `specifications` field.')
-  console.log(`Groups: ${(specs.specificationGroups ?? []).length}`)
-  console.log('You can now edit the kicker, heading, and groups for each section independently in Sanity.')
+  if (changed.length) await transaction.commit()
+  console.log(changed.length ? `Created independent specifications in: ${changed.join(', ')}` : 'Independent specifications already exist; no changes made.')
 }
 
-migrateIndependentSpecifications().catch((error) => {
-  console.error(error)
+main().catch((error) => {
+  console.error(error instanceof Error ? error.message : error)
   process.exit(1)
 })

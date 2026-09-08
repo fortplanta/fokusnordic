@@ -2,9 +2,16 @@
 /* Technical specifications share a stable cell rhythm across categories. */
 .volume-technical .volume-groups{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:calc(var(--bh-space-6)*2)}
 .volume-technical .volume-group{align-content:start;grid-template-rows:auto 1fr;display:grid}
-.volume-technical .volume-group summary{display:none}
-.volume-technical .volume-group:not([open])>ul{display:grid}
+.volume-technical .volume-group ul[hidden]{display:none}
 .volume-technical .volume-group ul{align-content:start;gap:0;margin-top:var(--bh-space-2);grid-auto-rows:minmax(var(--bh-space-4),auto)}
 .volume-technical .volume-group li{padding-block:calc(var(--bh-space-1)/2)}
 @media (width<=1100px) and (width>760px){.volume-technical .volume-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (width<=760px){.volume-technical .volume-groups{grid-template-columns:1fr;row-gap:0}.volume-technical .volume-group{display:block}.volume-technical .volume-group summary{min-height:var(--bh-control-size);align-items:center;justify-content:space-between;gap:var(--bh-space-2);font-size:var(--bh-body-size);font-weight:600;cursor:pointer;display:flex;list-style:none}.volume-technical .volume-group summary::-webkit-details-marker{display:none}.volume-technical .volume-group summary svg{width:var(--bh-space-2);height:var(--bh-space-2);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--bh-motion-control) var(--bh-ease)}.volume-technical .volume-group[open] summary svg{transform:rotate(180deg)}.volume-technical .volume-group h3{display:none}.volume-technical .volume-group:not([open])>ul{display:none}.volume-technical .volume-group ul{margin-top:0;padding-bottom:var(--bh-space-3)}}
+@media (width<=760px){
+  .volume-technical .volume-groups{grid-template-columns:1fr;row-gap:var(--bh-space-3)}
+  .volume-technical .volume-group{display:block}
+  .volume-technical .specification-toggle{width:100%;min-height:var(--bh-control-size);align-items:center;justify-content:space-between;gap:var(--bh-space-2);text-align:left;display:flex}
+  .specification-toggle svg{width:var(--bh-space-2);height:var(--bh-space-2);flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--bh-motion-control) var(--bh-ease)}
+  .specification-toggle[aria-expanded=true] svg{transform:rotate(180deg)}
+  .volume-technical .volume-group ul{margin-top:0;padding-bottom:var(--bh-space-3)}
+}
+@media (prefers-reduced-motion:reduce){.specification-toggle svg{transition:none}}

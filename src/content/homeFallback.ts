@@ -23,6 +23,11 @@ export const homeFallback = {
       { _key: 'energy', heading: 'District heating, solar panels, green electricity', body: "Three systems working quietly in the background so the building's environmental commitments don't rely on the people inside remembering to make good choices." },
       { _key: 'transport', heading: 'Close to public transport', body: "Not a consolation — a genuine advantage. Södermalm's connections make sustainable commuting the obvious choice." },
     ],
+  },
+  specifications: {
+    kicker: 'Light and volume',
+    heading: 'Daylight, all the way through.',
+    body: 'High ceilings and tall factory windows bring daylight deep into each principal floor.',
     specificationGroups: [
       { _key: 'building', title: 'Building', facts: [
         { _key: 'project', label: 'Project', value: 'Barnängshuset (Kv Barnängen)' },
@@ -144,49 +149,6 @@ export const homeFallback = {
     travelTimes: [
       { _key: 'skanstull', name: 'Skanstull', duration: '8 min' },
       { _key: 'hammarby', name: 'Hammarby kanal', duration: '8 min' },
-    ],
-  },
-  specifications: {
-    kicker: 'Property',
-    heading: 'In detail.',
-    specificationGroups: [
-      { _key: 'building', title: 'Building', facts: [
-        { _key: 'project', label: 'Project', value: 'Barnängshuset (Kv Barnängen)' },
-        { _key: 'address', label: 'Address', value: 'Nackagatan 4, Stockholm' },
-        { _key: 'premises', label: 'Premises', value: 'Office' },
-        { _key: 'construction', label: 'Construction', value: '1917' },
-        { _key: 'renovation', label: 'Renovation', value: '2019–2023' },
-        { _key: 'total-area', label: 'Total area', value: '12,306 sq m' },
-        { _key: 'floors', label: 'Floors', value: '5, including underground parking' },
-      ] },
-      { _key: 'availability', title: 'Availability', facts: [
-        { _key: 'available-area', label: 'Available area', value: '9,762 sq m' },
-        { _key: 'single-tenant', label: 'Whole solution', value: 'Single tenant' },
-        { _key: 'move-in', label: 'Move-in', value: 'According to agreement' },
-      ] },
-      { _key: 'agreement', title: 'Agreement', facts: [
-        { _key: 'agreement-type', label: 'Type', value: 'First-hand agreement' },
-        { _key: 'term', label: 'Length', value: 'Upon agreement' },
-        { _key: 'security', label: 'Financial security', value: 'Upon agreement' },
-      ] },
-      { _key: 'performance', title: 'Performance', facts: [
-        { _key: 'certification', label: 'Certification', value: 'BREEAM In-Use: Excellent' },
-        { _key: 'electricity', label: 'Electricity', value: 'Own subscription' },
-        { _key: 'waste', label: 'Waste', value: 'Available in the building' },
-        { _key: 'ventilation', label: 'Ventilation', value: '1 person / 8 sq m' },
-        { _key: 'internet', label: 'Internet', value: 'Fiber' },
-        { _key: 'epc', label: 'EPC', value: 'Energy class C, 116 kWh/sq m per year' },
-      ] },
-      { _key: 'access', title: 'Access', facts: [
-        { _key: 'parking', label: 'Car parking', value: '69 spaces, including 2 MC spaces' },
-        { _key: 'bicycles', label: 'Bicycle parking', value: '30 cycle stands' },
-        { _key: 'ev', label: 'EV charging', value: '17 stations' },
-        { _key: 'loading', label: 'Loading', value: 'Loading bay and goods lift' },
-      ] },
-      { _key: 'facilities', title: 'Facilities', facts: [
-        { _key: 'storage', label: 'Storage', value: 'Available in the building' },
-        { _key: 'changing', label: 'Changing room', value: 'Garage level, refurbished in 2023' },
-      ] },
     ],
   },
   viewing: {
