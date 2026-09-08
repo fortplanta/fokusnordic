@@ -32,6 +32,7 @@ export default defineType({
     { name: 'materials', title: 'Materials' },
     { name: 'place', title: 'Address' },
     { name: 'areaMap', title: 'Area map' },
+    { name: 'specifications', title: 'Property specifications' },
     { name: 'viewing', title: 'Viewing' },
   ],
   fields: [
@@ -292,6 +293,31 @@ export default defineType({
           name: 'travelTimes', title: 'Travel times', type: 'array',
           description: 'Independent travel-time rows. These do not create map dots.',
           of: [{ type: 'object', fields: [copy('name', 'Destination', 1), copy('duration', 'Travel time', 1)], preview: { select: { title: 'name', subtitle: 'duration' } } }],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'specifications', title: 'Property specifications', type: 'object', group: 'specifications',
+      description: 'The lower "In detail" register — independent heading and technical spec groups.',
+      fields: [
+        ...sectionCopy,
+        defineField({
+          name: 'specificationGroups', title: 'Specification groups', type: 'array',
+          description: 'Technical categories shown in the lower information register.',
+          of: [{
+            type: 'object',
+            fields: [
+              copy('title', 'Category', 1),
+              defineField({
+                name: 'facts', title: 'Facts', type: 'array',
+                of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 2)] }],
+              }),
+            ],
+            preview: {
+              select: { title: 'title', facts: 'facts' },
+              prepare: ({ title, facts }) => ({ title, subtitle: `${facts?.length || 0} facts` }),
+            },
+          }],
         }),
       ],
     }),

@@ -96,6 +96,10 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       travelTitle, travelOpenDesktop, travelOpenMobile,
       travelTimes[] { _key, name, duration }
     },
+    specifications {
+      kicker, heading, body,
+      specificationGroups[] { _key, title, facts[] { _key, label, value } }
+    },
     viewing { kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }
   }
 `

@@ -26,6 +26,12 @@ type Content = {
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
   place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
   areaMap?: import('@/types/sanity').CurrentHomePage['areaMap']
+  specifications?: {
+    kicker: string
+    heading: string
+    body?: string
+    specificationGroups: Array<{ _key?: string; title: string; facts: Pair[] }>
+  }
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
 
@@ -111,13 +117,13 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       {content.areaMap?.categories?.some((category) => category.locations?.length) ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>
-          <p className="kicker">{content.volume.kicker}</p>
-          <p className="section-display" id="volume-technical-title">{content.volume.heading}</p>
-          {content.volume.body && <p className="volume-introduction">{content.volume.body}</p>}
+          <p className="kicker">{(content.specifications ?? content.volume).kicker}</p>
+          <p className="section-display" id="volume-technical-title">{(content.specifications ?? content.volume).heading}</p>
+          {(content.specifications ?? content.volume).body && <p className="volume-introduction">{(content.specifications ?? content.volume).body}</p>}
         </div>
         <div className="volume-groups" aria-label="Property specifications">
-          {(content.volume.specificationGroups || []).map((group, index) => (
-            <details className="volume-group" open={index === 0} key={group._key || group.title}>
+          {((content.specifications ?? content.volume).specificationGroups || []).map((group) => (
+            <details className="volume-group" open key={group._key || group.title}>
               <summary>
                 <span>{group.title}</span>
                 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
