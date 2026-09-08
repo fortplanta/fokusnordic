@@ -155,7 +155,7 @@ export default defineType({
                       name: 'facts', title: 'Facts', type: 'array',
                       of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
                     }),
-                    image('planImage', 'Bird's-eye floor plan'),
+                    image('planImage', "Bird's-eye floor plan"),
                     image('explodedImage', 'Exploded view for this configuration'),
                   ],
                   preview: {
