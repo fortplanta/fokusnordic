@@ -116,6 +116,7 @@ export type CurrentHomePage = {
         body: string
         nearby: Array<{ _key?: string; name: string; detail: string }>
         image?: SanityImage
+        gallery?: Array<{ _key?: string; caption?: string; image?: SanityImage }>
     }
     areaMap?: {
         kicker: string
@@ -137,7 +138,7 @@ export type CurrentHomePage = {
         categories?: Array<{
             _key?: string
             title: string
-            tone?: 'wine' | 'coral' | 'ink'
+            tone?: 'wine' | 'coral' | 'sage' | 'ink'
             openDesktop?: boolean
             openMobile?: boolean
             locations: Array<{ _key?: string; name: string; detail?: string; url?: string; x: number; y: number }>

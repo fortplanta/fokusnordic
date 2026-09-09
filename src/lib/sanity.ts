@@ -78,7 +78,8 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     },
     place {
       kicker, heading, body, nearby[] { _key, name, detail },
-      image { ${IMAGE_FIELDS} }
+      image { ${IMAGE_FIELDS} },
+      gallery[] { _key, caption, image { ${IMAGE_FIELDS} } }
     },
     areaMap {
       kicker, heading, drawerTitle, drawerOpenDesktop, drawerOpenMobile,

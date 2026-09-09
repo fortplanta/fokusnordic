@@ -187,7 +187,17 @@ export default defineType({
     defineField({
       name: 'place', title: 'Address', type: 'object',
       fields: [
-        ...sectionCopy, image('image', 'Neighbourhood image'),
+        ...sectionCopy,
+        image('image', 'Fallback neighbourhood image'),
+        defineField({
+          name: 'gallery', title: 'Neighbourhood gallery', type: 'array',
+          description: 'Editorial image sequence shown directly beneath the address copy. Add, remove and reorder images freely.',
+          of: [{
+            type: 'object',
+            fields: [image('image', 'Image'), copy('caption', 'Caption', 1)],
+            preview: { select: { media: 'image', title: 'caption' }, prepare: ({ media, title }) => ({ media, title: title || 'Neighbourhood image' }) },
+          }],
+        }),
         defineField({
           name: 'nearby', title: 'Nearby', type: 'array',
           of: [{ type: 'object', fields: [copy('name', 'Place', 1), copy('detail', 'Distance / detail', 1)] }],
@@ -247,6 +257,7 @@ export default defineType({
                 options: { list: [
                   { title: 'Wine', value: 'wine' },
                   { title: 'Coral', value: 'coral' },
+                  { title: 'Sage', value: 'sage' },
                   { title: 'Ink', value: 'ink' },
                 ], layout: 'radio' },
               }),

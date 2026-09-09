@@ -1,6 +1,6 @@
 import { getCliClient } from 'sanity/cli'
 import { vercelStegaCombine } from '@vercel/stega'
-import { gallerySide, gallerySize } from '../src/lib/sanityControls'
+import { gallerySide, gallerySize, mapTone } from '../src/lib/sanityControls'
 
 const expectedProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? 'wvgj6m8r'
 const expectedDataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
@@ -12,14 +12,24 @@ const credentialedOrigins = [
 
 const allowedGallerySizes = new Set(['compact', 'wide', 'portrait'])
 const allowedGallerySides = new Set(['left', 'right'])
+const allowedMapTones = new Set(['wine', 'coral', 'sage', 'ink'])
 
 type GalleryItem = { _key?: string; size?: string; side?: string }
 type HomeDocument = {
   _id: string
   _type: string
   mosaicGallery?: { items?: GalleryItem[] }
+  place?: { gallery?: Array<{ image?: { asset?: { _ref?: string } } }> }
   volume?: {
+    kicker?: string
+    heading?: string
+    body?: string
     featureStatements?: Array<{ heading?: string; body?: string }>
+  }
+  specifications?: {
+    kicker?: string
+    heading?: string
+    body?: string
     specificationGroups?: Array<{ title?: string; facts?: Array<{ value?: string }> }>
   }
   floorPlans?: {
@@ -34,6 +44,7 @@ type HomeDocument = {
   areaMap?: {
     mapImage?: { asset?: { _ref?: string } }
     drawerTitle?: string
+    travelTitle?: string
     buildingMarker?: {
       alt?: string
       x?: number
@@ -65,8 +76,10 @@ function verifyGallery(document: HomeDocument) {
 
 function verifyVolume(document: HomeDocument) {
   const statements = document.volume?.featureStatements ?? []
-  const groups = document.volume?.specificationGroups ?? []
+  const groups = document.specifications?.specificationGroups ?? []
 
+  assert(document.volume?.heading && document.volume?.kicker, `${document._id}: upper section copy is missing`)
+  assert(document.specifications?.heading && document.specifications?.kicker, `${document._id}: independent lower section copy is missing`)
   assert(statements.length > 0, `${document._id}: Light and volume has no building conditions`)
   assert(groups.length > 0, `${document._id}: Light and volume has no specification groups`)
   statements.forEach((item, index) => {
@@ -87,6 +100,9 @@ function verifyAreaMap(document: HomeDocument) {
   assert(typeof document.areaMap?.buildingMarker?.x === 'number' && typeof document.areaMap?.buildingMarker?.y === 'number', `${document._id}: Area map building marker has no coordinates`)
   assert(typeof document.areaMap?.buildingMarker?.width === 'number', `${document._id}: Area map building marker has no width`)
   assert(categories.length > 0, `${document._id}: Area map has no location categories`)
+  assert(document.place?.gallery?.length === 3, `${document._id}: Address gallery must contain the three supplied neighbourhood images`)
+  document.place.gallery.forEach((item, index) => assert(item.image?.asset?._ref, `${document._id}: Address gallery image ${index + 1} is missing`))
+  assert(document.areaMap?.travelTitle?.toLowerCase().includes('bus'), `${document._id}: Travel-time heading does not state the transport mode`)
   categories.forEach((category, categoryIndex) => {
     assert(category.title, `${document._id}: Area map category ${categoryIndex + 1} has no title`)
     assert(category.locations?.length, `${document._id}: Area map category ${categoryIndex + 1} has no locations`)
@@ -123,6 +139,9 @@ function verifyPresentationControls() {
   for (const side of allowedGallerySides) {
     assert(gallerySide(vercelStegaCombine(side, metadata)) === side, `Presentation metadata breaks the ${side} gallery position`)
   }
+  for (const tone of allowedMapTones) {
+    assert(mapTone(vercelStegaCombine(tone, metadata)) === tone, `Presentation metadata breaks the ${tone} map tone`)
+  }
 }
 
 async function verifyCors(origin: string) {
@@ -143,7 +162,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{featureStatements[]{heading,body},specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},place{gallery[]{image{asset}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 
@@ -171,7 +190,7 @@ async function main() {
 
   console.log(`Sanity verified: ${expectedProjectId}/${expectedDataset}`)
   console.log(`Documents checked: ${documents.map((document) => document._id).join(', ')}`)
-  console.log('Presentation control encoding checked: gallery size and side')
+  console.log('Presentation control encoding checked: gallery size, side, and map tone')
   console.log(`Credentialed origins checked: ${credentialedOrigins.join(', ')}`)
   console.log(`Hosted Studio checked: ${studioResponse.url}`)
   console.log(`Dashboard bridge and manifest checked: ${studioUrl}/static/create-manifest.json`)

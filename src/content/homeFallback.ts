@@ -111,6 +111,7 @@ export const homeFallback = {
     kicker: 'The address',
     heading: 'Södermalm, at a quieter edge.',
     body: 'Nackagatan 4 is close to Vitabergsparken, local restaurants and the water.',
+    gallery: [],
     nearby: [
       { _key: 'vita', name: 'Vitabergsparken', detail: 'A short walk' },
       { _key: 'slussen', name: 'Slussen', detail: '9 min by bus' },
@@ -132,8 +133,11 @@ export const homeFallback = {
         { _key: 'nytorget', name: 'Nytorget', detail: 'Restaurants and cafés', x: 30, y: 29 },
         { _key: 'urban-deli', name: 'Urban Deli', detail: 'Grocer and restaurant', x: 27, y: 37 },
         { _key: 'bleck', name: 'Restaurang Bleck', detail: 'Restaurant', x: 42, y: 57 },
+        { _key: 'balue', name: 'Balue', detail: 'Coffee bar', x: 82, y: 54 },
+        { _key: 'stella', name: 'Stella', detail: 'Pizza restaurant', x: 84, y: 61 },
+        { _key: 'svedjan', name: 'Svedjan', detail: 'Bakery', x: 66, y: 70 },
       ] },
-      { _key: 'metro', title: 'Metro stations', tone: 'ink' as const, openDesktop: true, openMobile: false, locations: [
+      { _key: 'metro', title: 'Metro stations', tone: 'sage' as const, openDesktop: true, openMobile: false, locations: [
         { _key: 'skanstull', name: 'Skanstull', detail: 'Metro', x: 12, y: 67 },
         { _key: 'hammarby', name: 'Hammarby kanal', detail: 'Future metro', x: 52, y: 73 },
       ] },
@@ -143,12 +147,13 @@ export const homeFallback = {
         { _key: 'kajen', name: 'Barnängsbryggan', detail: 'Waterfront', x: 78, y: 69 },
       ] },
     ],
-    travelTitle: 'Travel times',
+    travelTitle: 'By bus from Mandelparken',
     travelOpenDesktop: true,
     travelOpenMobile: false,
     travelTimes: [
-      { _key: 'skanstull', name: 'Skanstull', duration: '8 min' },
-      { _key: 'hammarby', name: 'Hammarby kanal', duration: '8 min' },
+      { _key: 'slussen', name: 'Slussen', duration: '9 min' },
+      { _key: 'kungstradgarden', name: 'Kungsträdgården', duration: '15 min' },
+      { _key: 'stureplan', name: 'Stureplan', duration: '19 min' },
     ],
   },
   viewing: {

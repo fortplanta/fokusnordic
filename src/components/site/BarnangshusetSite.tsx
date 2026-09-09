@@ -20,7 +20,7 @@ type Content = {
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
   floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
-  place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
+  place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage; gallery?: Array<{ _key?: string; caption?: string; image?: CmsImage }> }
   areaMap?: CurrentHomePage['areaMap']
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
@@ -101,7 +101,14 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       </section>
       <section className="place grid-section" id="place">
         <div className="place-copy" data-motion-copy><p className="kicker">{content.place.kicker}</p><h2>{content.place.heading}</h2><p>{content.place.body}</p></div>
-        <Media image={content.place.image} fallback={fallbacks.place} className="place-view motion-media" sizes="50vw" />
+        <div className="place-gallery" aria-label="Around the address">
+          {(content.place.gallery?.length ? content.place.gallery : [{ _key: 'fallback', image: content.place.image }]).map((item, index) => (
+            <article className={`place-gallery-item place-gallery-item-${index + 1}`} key={item._key || item.caption || index}>
+              <Media image={item.image} fallback={fallbacks.place} className="place-gallery-image motion-media" sizes="(max-width: 760px) 100vw, 34vw" />
+              {item.caption && <p>{item.caption}</p>}
+            </article>
+          ))}
+        </div>
         <div className="nearby-list">{content.place.nearby.map((item)=><div key={item._key || item.name}><strong>{item.name}</strong><span>{item.detail}</span></div>)}</div>
       </section>
       {content.areaMap?.categories?.some((category) => category.locations?.length) ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}

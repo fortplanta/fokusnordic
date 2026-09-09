@@ -7,11 +7,13 @@ const navigation = [
   ['#building', 'Building'],
   ['#gallery', 'Gallery'],
   ['#spaces', 'Space'],
+  ['#floor-plans', 'Floor plans'],
   ['#place', 'Address'],
 ] as const
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
@@ -23,9 +25,16 @@ export default function SiteHeader() {
     }
   }, [menuOpen])
 
+  useEffect(() => {
+    const updateHeader = () => setScrolled(window.scrollY > 24)
+    updateHeader()
+    window.addEventListener('scroll', updateHeader, { passive: true })
+    return () => window.removeEventListener('scroll', updateHeader)
+  }, [])
+
   return (
     <>
-      <header className="site-header">
+      <header className={`site-header${scrolled ? ' is-scrolled' : ''}${menuOpen ? ' is-menu-open' : ''}`}>
         <a className="wordmark" href="#top" aria-label="Barnängshuset, home">
           <Image src="/assets/barnangshuset_logo-neg.svg" alt="" width={600} height={391} priority />
         </a>

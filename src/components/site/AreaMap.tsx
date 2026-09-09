@@ -2,19 +2,12 @@
 
 import Image from 'next/image'
 import { useEffect, useId, useState } from 'react'
-import { stegaClean } from '@sanity/client/stega'
 import type { CurrentHomePage } from '@/types/sanity'
+import { mapTone } from '@/lib/sanityControls'
 
 type AreaMapContent = NonNullable<CurrentHomePage['areaMap']>
 type Category = NonNullable<AreaMapContent['categories']>[number]
 type Location = Category['locations'][number]
-type Tone = 'wine' | 'coral' | 'ink'
-
-function cleanTone(value?: string): Tone {
-  const clean = stegaClean(value)
-  return clean === 'coral' || clean === 'ink' ? clean : 'wine'
-}
-
 function ChevronIcon() {
   return (
     <svg className="map-chevron" viewBox="0 0 16 16" aria-hidden="true">
@@ -94,7 +87,7 @@ export default function AreaMap({ content, fallback }: { content: AreaMapContent
         {categories.flatMap((category, categoryIndex) => (category.locations ?? []).map((location, locationIndex) => {
           const markerKey = locationKey(location, categoryIndex, locationIndex)
           return (
-            <a className={`area-map-marker area-map-marker--${cleanTone(category.tone)}${activeMarker === markerKey ? ' is-active' : ''}`} href={location.url || `#area-location-${markerKey}`} style={{ left: `${location.x}%`, top: `${location.y}%` }} aria-label={`${location.name}${location.detail ? `, ${location.detail}` : ''}`} key={markerKey} onMouseEnter={() => setActiveMarker(markerKey)} onMouseLeave={() => setActiveMarker(null)} onFocus={() => setActiveMarker(markerKey)} onBlur={() => setActiveMarker(null)}>
+            <a className={`area-map-marker area-map-marker--${mapTone(category.tone)}${activeMarker === markerKey ? ' is-active' : ''}`} href={location.url || `#area-location-${markerKey}`} style={{ left: `${location.x}%`, top: `${location.y}%` }} aria-label={`${location.name}${location.detail ? `, ${location.detail}` : ''}`} key={markerKey} onMouseEnter={() => setActiveMarker(markerKey)} onMouseLeave={() => setActiveMarker(null)} onFocus={() => setActiveMarker(markerKey)} onBlur={() => setActiveMarker(null)}>
               {locationIndex + 1}
             </a>
           )
@@ -118,7 +111,7 @@ export default function AreaMap({ content, fallback }: { content: AreaMapContent
           <div id={`${drawerId}-nearby`} hidden={!nearbyOpen}>
           <div className="map-category-list">
             {categories.map((category, categoryIndex) => (
-              <Disclosure key={category._key || category.title} title={category.title} desktopOpen={category.openDesktop ?? true} mobileOpen={category.openMobile ?? categoryIndex === 0} className={`map-category map-category--${cleanTone(category.tone)}`}>
+              <Disclosure key={category._key || category.title} title={category.title} desktopOpen={category.openDesktop ?? true} mobileOpen={category.openMobile ?? categoryIndex === 0} className={`map-category map-category--${mapTone(category.tone)}`}>
                 <ol>
                   {(category.locations ?? []).map((location, locationIndex) => {
                     const markerKey = locationKey(location, categoryIndex, locationIndex)
