@@ -4,7 +4,10 @@
 .volume-technical .volume-group{align-content:start;grid-template-rows:auto 1fr;display:grid}
 .volume-technical .volume-group ul[hidden]{display:none}
 .volume-technical .volume-group ul{align-content:start;gap:0;margin-top:var(--bh-space-2);grid-auto-rows:minmax(var(--bh-space-4),auto)}
-.volume-technical .volume-group li{padding-block:calc(var(--bh-space-1)/2)}
+.volume-technical .volume-group li{grid-template-columns:1fr;gap:calc(var(--bh-space-1)/2);align-items:start;padding-block:var(--bh-space-1)}
+.volume-technical .volume-group li .spec-label{padding-top:0;color:var(--bh-soft);font-size:var(--bh-body-size);font-weight:400;line-height:var(--bh-register-leading);letter-spacing:0;text-transform:none}
+.volume-technical .volume-group li .spec-label::after{content:':' }
+.volume-technical .volume-group li .spec-label+span{color:var(--bh-ink);font-size:var(--bh-body-size);font-weight:400;line-height:var(--bh-register-leading)}
 @media (width<=1100px) and (width>760px){.volume-technical .volume-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (width<=760px){
   .volume-technical .volume-groups{grid-template-columns:1fr;row-gap:var(--bh-space-3)}
