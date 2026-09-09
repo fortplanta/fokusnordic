@@ -41,3 +41,84 @@
 }
 
 @media (prefers-reduced-motion:reduce){.site-header{transition-duration:.001ms}}
+
+/* Final system pass: readable measures, consistent controls, and Gestalt grouping. */
+.bh-site{
+  --bh-copy-measure:65ch;
+  --bh-heading-measure:24ch;
+  --bh-subheading-measure:32ch;
+  --bh-control-leading:1.2;
+  --bh-control-tracking:.07em;
+  --bh-label-size:12px;
+}
+
+.bh-site h2{max-width:var(--bh-heading-measure)}
+.bh-site h3{max-width:var(--bh-subheading-measure);text-wrap:balance}
+.bh-site p,
+.bh-site dd{max-width:var(--bh-copy-measure);overflow-wrap:break-word}
+.lede,
+.origin-copy>p:last-child,
+.volume-introduction,
+.volume-statement p,
+.gallery-aside>p:last-child,
+.spaces-heading>p:last-child,
+.materials-copy>p:last-child,
+.place-copy>p:last-child,
+.contact-copy>p,
+.floor-plan-description{max-width:var(--bh-copy-measure);overflow-wrap:break-word}
+
+/* Small uppercase type is reserved for interactive controls. */
+.kicker,
+.mosaic-gallery-caption,
+.opportunity-facts dt{
+  font-size:var(--bh-label-size);
+  line-height:var(--bh-register-leading);
+  letter-spacing:0;
+  text-transform:none;
+}
+
+.bh-site :is(
+  .desktop-nav,
+  .header-action,
+  .menu-button,
+  .text-link,
+  .area-map-drawer-open,
+  .map-nearby-trigger,
+  .map-disclosure-trigger,
+  .floor-plan-enquire,
+  .floor-plan-details-open,
+  .floor-plan-floor-selector button,
+  .floor-plan-configurations button,
+  .specification-toggle
+){
+  font-size:var(--bh-label-size);
+  font-weight:600;
+  line-height:var(--bh-control-leading);
+  letter-spacing:var(--bh-control-tracking);
+  text-transform:uppercase;
+}
+
+.map-nearby-trigger small{
+  font-size:var(--bh-label-size);
+  font-weight:400;
+  line-height:var(--bh-register-leading);
+  letter-spacing:0;
+  text-transform:none;
+}
+
+.map-nearby .map-nearby-trigger,
+.map-category>.map-disclosure-trigger,
+.map-travel>.map-disclosure-trigger{
+  font-size:var(--bh-label-size);
+  font-weight:600;
+  line-height:var(--bh-control-leading);
+  letter-spacing:var(--bh-control-tracking);
+  text-transform:uppercase;
+}
+
+.volume-technical .volume-groups{row-gap:var(--bh-space-7)}
+.nearby-list{margin-top:var(--bh-space-5)}
+
+@media (width<=760px){
+  .volume-technical .volume-groups{row-gap:var(--bh-space-5)}
+}
