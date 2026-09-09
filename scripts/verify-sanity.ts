@@ -37,7 +37,11 @@ type HomeDocument = {
     ctaUrl?: string
     floors?: Array<{
       label?: string
-      configurations?: Array<{ title?: string; planImage?: { asset?: { _ref?: string } } }>
+      configurations?: Array<{
+        title?: string
+        planImage?: { asset?: { _ref?: string } }
+        explodedImage?: { alt?: string; asset?: { _ref?: string }; originalFilename?: string }
+      }>
     }>
   }
   areaMap?: {
@@ -125,6 +129,9 @@ function verifyFloorPlans(document: HomeDocument) {
     floor.configurations.forEach((configuration, configurationIndex) => {
       assert(configuration.title, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no title`)
       assert(configuration.planImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no plan image`)
+      assert(configuration.explodedImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no AXO diagram`)
+      assert(configuration.explodedImage?.originalFilename?.toLowerCase().endsWith('.svg'), `${document._id}: ${floor.label} configuration ${configurationIndex + 1} AXO diagram is not an SVG`)
+      assert(configuration.explodedImage?.alt, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} AXO diagram has no alt text`)
     })
   })
 }
@@ -161,7 +168,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset},explodedImage{alt,asset,"originalFilename":asset->originalFilename}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 

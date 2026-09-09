@@ -26,7 +26,7 @@ function PlanImage({ image, sizes, emptyLabel = 'Floor-plan drawing' }: { image?
       </div>
     )
   }
-  return <Image src={image.asset.url} alt={image.alt || ''} fill sizes={sizes} className="floor-plan-image" />
+  return <Image src={image.asset.url} alt={image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
 }
 
 function ConfigurationFacts({ configuration }: { configuration: FloorPlanConfiguration }) {
