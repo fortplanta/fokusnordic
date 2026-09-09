@@ -14,18 +14,24 @@ const photographs = [
     path: resolve(imageDirectory, 'Nytorget_26-09-02__DSF9508_klar-1.jpg'),
     caption: 'Café Nizza',
     alt: 'Café Nizza sign mounted on a brick façade in Södermalm',
+    size: 'portrait',
+    side: 'left',
   },
   {
     key: 'rot',
     path: resolve(imageDirectory, 'Nytorget_26-09-02__DSF9530_klar-1.jpg'),
     caption: 'Local food shops',
     alt: 'Cyclists passing ROT Butik och Kök on Renstiernas gata',
+    size: 'wide',
+    side: 'right',
   },
   {
     key: 'vitabergsparken',
     path: resolve(imageDirectory, 'Nytorget_26-09-02__DSF9494_klar-1.jpg'),
     caption: 'Vitabergsparken',
     alt: 'A footpath through Vitabergsparken overlooking Södermalm',
+    size: 'portrait',
+    side: 'left',
   },
 ] as const
 
@@ -54,6 +60,8 @@ async function main() {
       _key: photograph.key,
       _type: 'object',
       caption: photograph.caption,
+      size: photograph.size,
+      side: photograph.side,
       image: { _type: 'image', alt: photograph.alt, asset: { _type: 'reference', _ref: assetId } },
     })
   }
@@ -65,8 +73,10 @@ async function main() {
       return { ...category, locations: [...(category.locations ?? []).filter((location) => !managedLocationKeys.has(location._key || '')), ...additions] }
     })
 
-    await client.patch(document._id).set({
-      'place.gallery': gallery,
+    await client.patch(document._id).unset(['place.gallery']).set({
+      'mosaicGallery.kicker': '',
+      'mosaicGallery.heading': '',
+      'mosaicGallery.items': gallery,
       'areaMap.categories': categories,
       'areaMap.travelTitle': 'By bus from Mandelparken',
       'areaMap.travelTimes': [

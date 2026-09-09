@@ -111,7 +111,6 @@ export const homeFallback = {
     kicker: 'The address',
     heading: 'Södermalm, at a quieter edge.',
     body: 'Nackagatan 4 is close to Vitabergsparken, local restaurants and the water.',
-    gallery: [],
     nearby: [
       { _key: 'vita', name: 'Vitabergsparken', detail: 'A short walk' },
       { _key: 'slussen', name: 'Slussen', detail: '9 min by bus' },

@@ -38,45 +38,7 @@ export default defineType({
       fields: [...sectionCopy, image('image', 'Historical image')],
     }),
 
-    // ─── 3. Scrolling gallery ──────────────────────────────────────────────────
-    defineField({
-      name: 'mosaicGallery', title: 'Scrolling gallery', type: 'object',
-      fields: [
-        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1),
-        defineField({
-          name: 'items', title: 'Images', type: 'array',
-          description: 'Add, remove and reorder images freely. Size and side are controlled per image.',
-          of: [{
-            type: 'object',
-            fields: [
-              image('image', 'Image'),
-              copy('caption', 'Caption', 1),
-              defineField({
-                name: 'size', title: 'Image format', type: 'string', initialValue: 'wide',
-                options: { list: [
-                  { title: 'Compact', value: 'compact' },
-                  { title: 'Wide', value: 'wide' },
-                  { title: 'Portrait', value: 'portrait' },
-                ], layout: 'radio' },
-              }),
-              defineField({
-                name: 'side', title: 'Screen position', type: 'string', initialValue: 'left',
-                options: { list: [
-                  { title: 'Left', value: 'left' },
-                  { title: 'Right', value: 'right' },
-                ], layout: 'radio' },
-              }),
-            ],
-            preview: {
-              select: { title: 'caption', media: 'image', size: 'size', side: 'side' },
-              prepare: ({ title, media, size, side }) => ({ title: title || 'Untitled image', media, subtitle: `${size || 'wide'} · ${side || 'left'}` }),
-            },
-          }],
-        }),
-      ],
-    }),
-
-    // ─── 4. Light and volume — editorial ──────────────────────────────────────
+    // ─── 3. Light and volume — editorial ──────────────────────────────────────
     defineField({
       name: 'volume', title: 'Light and volume — editorial', type: 'object',
       description: 'Kicker, heading and key building conditions. Spec groups live in "Property specifications" below.',
@@ -94,7 +56,7 @@ export default defineType({
       ],
     }),
 
-    // ─── 5. Gallery ────────────────────────────────────────────────────────────
+    // ─── 4. Gallery ────────────────────────────────────────────────────────────
     defineField({
       name: 'gallery', title: 'Gallery', type: 'object',
       fields: [
@@ -112,7 +74,7 @@ export default defineType({
       ],
     }),
 
-    // ─── 6. Opportunity ────────────────────────────────────────────────────────
+    // ─── 5. Opportunity ────────────────────────────────────────────────────────
     defineField({
       name: 'opportunity', title: 'Opportunity', type: 'object',
       fields: [
@@ -124,7 +86,7 @@ export default defineType({
       ],
     }),
 
-    // ─── 7. Floor plans ────────────────────────────────────────────────────────
+    // ─── 6. Floor plans ────────────────────────────────────────────────────────
     defineField({
       name: 'floorPlans', title: 'Floor plans', type: 'object',
       fields: [
@@ -177,30 +139,59 @@ export default defineType({
       ],
     }),
 
-    // ─── 8. Materials ──────────────────────────────────────────────────────────
+    // ─── 7. Materials ──────────────────────────────────────────────────────────
     defineField({
       name: 'materials', title: 'Materials', type: 'object',
       fields: [...sectionCopy, image('mainImage', 'Main material image'), image('detailImage', 'Material detail')],
     }),
 
-    // ─── 9. Address / place ────────────────────────────────────────────────────
+    // ─── 8. Address / place ────────────────────────────────────────────────────
     defineField({
       name: 'place', title: 'Address', type: 'object',
       fields: [
-        ...sectionCopy,
-        image('image', 'Fallback neighbourhood image'),
-        defineField({
-          name: 'gallery', title: 'Neighbourhood gallery', type: 'array',
-          description: 'Editorial image sequence shown directly beneath the address copy. Add, remove and reorder images freely.',
-          of: [{
-            type: 'object',
-            fields: [image('image', 'Image'), copy('caption', 'Caption', 1)],
-            preview: { select: { media: 'image', title: 'caption' }, prepare: ({ media, title }) => ({ media, title: title || 'Neighbourhood image' }) },
-          }],
-        }),
+        ...sectionCopy, image('image', 'Neighbourhood image'),
         defineField({
           name: 'nearby', title: 'Nearby', type: 'array',
           of: [{ type: 'object', fields: [copy('name', 'Place', 1), copy('detail', 'Distance / detail', 1)] }],
+        }),
+      ],
+    }),
+
+    // ─── 9. Scrolling gallery ──────────────────────────────────────────────────
+    defineField({
+      name: 'mosaicGallery', title: 'Scrolling gallery — after address', type: 'object',
+      description: 'Shown directly after the Address section on the website.',
+      fields: [
+        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1),
+        defineField({
+          name: 'items', title: 'Images', type: 'array',
+          description: 'Add, remove and reorder images freely. Size and side are controlled per image.',
+          of: [{
+            type: 'object',
+            fields: [
+              image('image', 'Image'),
+              copy('caption', 'Caption', 1),
+              defineField({
+                name: 'size', title: 'Image format', type: 'string', initialValue: 'wide',
+                options: { list: [
+                  { title: 'Compact', value: 'compact' },
+                  { title: 'Wide', value: 'wide' },
+                  { title: 'Portrait', value: 'portrait' },
+                ], layout: 'radio' },
+              }),
+              defineField({
+                name: 'side', title: 'Screen position', type: 'string', initialValue: 'left',
+                options: { list: [
+                  { title: 'Left', value: 'left' },
+                  { title: 'Right', value: 'right' },
+                ], layout: 'radio' },
+              }),
+            ],
+            preview: {
+              select: { title: 'caption', media: 'image', size: 'size', side: 'side' },
+              prepare: ({ title, media, size, side }) => ({ title: title || 'Untitled image', media, subtitle: `${size || 'wide'} · ${side || 'left'}` }),
+            },
+          }],
         }),
       ],
     }),

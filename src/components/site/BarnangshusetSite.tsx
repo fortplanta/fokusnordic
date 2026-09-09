@@ -20,7 +20,7 @@ type Content = {
   opportunity: { kicker: string; heading: string; body: string; ctaLabel: string; facts: Pair[]; image?: CmsImage }
   floorPlans?: FloorPlanSection
   materials: { kicker: string; heading: string; body: string; mainImage?: CmsImage; detailImage?: CmsImage }
-  place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage; gallery?: Array<{ _key?: string; caption?: string; image?: CmsImage }> }
+  place: { kicker: string; heading: string; body: string; nearby: Nearby[]; image?: CmsImage }
   areaMap?: CurrentHomePage['areaMap']
   viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: CmsImage }
 }
@@ -57,18 +57,6 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         <Media image={content.building.image} fallback={fallbacks.building} className="origin-archive motion-media" sizes="58vw" />
         <div className="origin-copy" data-motion-copy><p className="kicker">{content.building.kicker}</p><h2>{content.building.heading}</h2><p>{content.building.body}</p></div>
       </section>
-      {content.mosaicGallery?.items?.length ? (
-        <section className="mosaic-gallery grid-section" aria-label="Inside the building">
-          <div className="mosaic-gallery-stream">
-            {content.mosaicGallery.items.map((item, index) => (
-              <article className={`mosaic-gallery-item mosaic-size-${gallerySize(item.size)} mosaic-side-${gallerySide(item.side)}`} key={item._key || item.caption}>
-                <Media image={item.image} fallback={[fallbacks.hero, fallbacks.stair, fallbacks.volume, fallbacks.detail][index % 4]} className="mosaic-gallery-image motion-media" sizes="(max-width: 760px) 100vw, 60vw" />
-                {item.caption && <p className="mosaic-gallery-caption">{item.caption}</p>}
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : null}
       <section className="volume volume-editorial grid-section" aria-labelledby="volume-editorial-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.volume.kicker}</p>
@@ -101,16 +89,21 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
       </section>
       <section className="place grid-section" id="place">
         <div className="place-copy" data-motion-copy><p className="kicker">{content.place.kicker}</p><h2>{content.place.heading}</h2><p>{content.place.body}</p></div>
-        <div className="place-gallery" aria-label="Around the address">
-          {(content.place.gallery?.length ? content.place.gallery : [{ _key: 'fallback', image: content.place.image }]).map((item, index) => (
-            <article className={`place-gallery-item place-gallery-item-${index + 1}`} key={item._key || item.caption || index}>
-              <Media image={item.image} fallback={fallbacks.place} className="place-gallery-image motion-media" sizes="(max-width: 760px) 100vw, 34vw" />
-              {item.caption && <p>{item.caption}</p>}
-            </article>
-          ))}
-        </div>
+        <Media image={content.place.image} fallback={fallbacks.place} className="place-view motion-media" sizes="50vw" />
         <div className="nearby-list">{content.place.nearby.map((item)=><div key={item._key || item.name}><strong>{item.name}</strong><span>{item.detail}</span></div>)}</div>
       </section>
+      {content.mosaicGallery?.items?.length ? (
+        <section className="mosaic-gallery grid-section" aria-label="Around the address">
+          <div className="mosaic-gallery-stream">
+            {content.mosaicGallery.items.map((item, index) => (
+              <article className={`mosaic-gallery-item mosaic-size-${gallerySize(item.size)} mosaic-side-${gallerySide(item.side)}`} key={item._key || item.caption}>
+                <Media image={item.image} fallback={fallbacks.place} className="mosaic-gallery-image motion-media" sizes="(max-width: 760px) 100vw, 60vw" />
+                {item.caption && <p className="mosaic-gallery-caption">{item.caption}</p>}
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
       {content.areaMap?.categories?.some((category) => category.locations?.length) ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>

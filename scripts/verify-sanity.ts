@@ -14,12 +14,11 @@ const allowedGallerySizes = new Set(['compact', 'wide', 'portrait'])
 const allowedGallerySides = new Set(['left', 'right'])
 const allowedMapTones = new Set(['wine', 'coral', 'sage', 'ink'])
 
-type GalleryItem = { _key?: string; size?: string; side?: string }
+type GalleryItem = { _key?: string; size?: string; side?: string; image?: { asset?: { _ref?: string } } }
 type HomeDocument = {
   _id: string
   _type: string
   mosaicGallery?: { items?: GalleryItem[] }
-  place?: { gallery?: Array<{ image?: { asset?: { _ref?: string } } }> }
   volume?: {
     kicker?: string
     heading?: string
@@ -69,6 +68,7 @@ function verifyGallery(document: HomeDocument) {
   const items = document.mosaicGallery?.items ?? []
 
   items.forEach((item, index) => {
+    assert(item.image?.asset?._ref, `${document._id}: gallery item ${index + 1} has no image`)
     assert(item.size && allowedGallerySizes.has(item.size), `${document._id}: gallery item ${index + 1} has an invalid or missing size`)
     assert(item.side && allowedGallerySides.has(item.side), `${document._id}: gallery item ${index + 1} has an invalid or missing side`)
   })
@@ -100,8 +100,7 @@ function verifyAreaMap(document: HomeDocument) {
   assert(typeof document.areaMap?.buildingMarker?.x === 'number' && typeof document.areaMap?.buildingMarker?.y === 'number', `${document._id}: Area map building marker has no coordinates`)
   assert(typeof document.areaMap?.buildingMarker?.width === 'number', `${document._id}: Area map building marker has no width`)
   assert(categories.length > 0, `${document._id}: Area map has no location categories`)
-  assert(document.place?.gallery?.length === 3, `${document._id}: Address gallery must contain the three supplied neighbourhood images`)
-  document.place.gallery.forEach((item, index) => assert(item.image?.asset?._ref, `${document._id}: Address gallery image ${index + 1} is missing`))
+  assert(document.mosaicGallery?.items?.length === 3, `${document._id}: Scrolling gallery must contain the three supplied neighbourhood images`)
   assert(document.areaMap?.travelTitle?.toLowerCase().includes('bus'), `${document._id}: Travel-time heading does not state the transport mode`)
   categories.forEach((category, categoryIndex) => {
     assert(category.title, `${document._id}: Area map category ${categoryIndex + 1} has no title`)
@@ -162,7 +161,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},place{gallery[]{image{asset}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,planImage{asset}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 
