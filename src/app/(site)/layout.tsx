@@ -3,8 +3,8 @@ import { VisualEditing } from 'next-sanity/visual-editing'
 import { SanityLive } from '@/lib/sanity.live'
 
 /**
- * Draft tooling belongs to the public site only. Keeping it in this route
- * group prevents the embedded /studio route from importing defineLive.
+ * Sanity Live belongs to the public site only. Keeping it in this route group
+ * lets published content invalidate cached pages without affecting /studio.
  */
 export default async function SiteLayout({
   children,
@@ -14,12 +14,8 @@ export default async function SiteLayout({
   return (
     <>
       {children}
-      {isEnabled && (
-        <>
-          <SanityLive />
-          <VisualEditing />
-        </>
-      )}
+      <SanityLive />
+      {isEnabled && <VisualEditing />}
     </>
   )
 }
