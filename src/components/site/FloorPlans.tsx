@@ -5,10 +5,6 @@ import { stegaClean } from '@sanity/client/stega'
 import { useEffect, useId, useRef, useState } from 'react'
 import type { FloorPlanConfiguration, FloorPlanSection, SanityImage } from '@/types/sanity'
 
-function ChevronIcon() {
-  return <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
-}
-
 function CloseIcon() {
   return <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg>
 }
@@ -23,175 +19,104 @@ function SliderArrowIcon({ direction }: { direction: 'previous' | 'next' }) {
 
 function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; alt?: string; emptyLabel?: string }) {
   if (!image?.asset?.url) {
-    return (
-      <div className="floor-plan-empty">
-        <span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span>
-        <small className="text-xs font-semibold">To be added in Sanity</small>
-      </div>
-    )
+    return <div className="floor-plan-empty"><span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span><small className="text-xs font-semibold">To be added in Sanity</small></div>
   }
   return <Image src={image.asset.url} alt={alt || image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
 }
 
-function LevelPlan({ label, image, sizes, alt }: { label: string; image?: SanityImage; sizes: string; alt: string }) {
+function LevelPlan({ label, title, planImage, axoImage }: { label: string; title: string; planImage?: SanityImage; axoImage?: SanityImage }) {
+  const [showAxo, setShowAxo] = useState(false)
+  const displayedImage = showAxo ? axoImage : planImage
+  const previewImage = showAxo ? planImage : axoImage
+  const displayedType = showAxo ? 'axonometric view' : 'floor plan'
+  const previewType = showAxo ? 'floor plan' : 'AXO'
+
+  useEffect(() => setShowAxo(false), [title, label])
+
   return (
     <figure className="floor-plan-level">
       <div className="floor-plan-level-image">
-        <PlanImage image={image} sizes={sizes} alt={alt} emptyLabel={`${label} floor plan`} />
-      </div>
-      <figcaption>{label}</figcaption>
-    </figure>
-  )
-}
-
-function AxoSlider({ configuration, id }: { configuration: FloorPlanConfiguration; id: string }) {
-  const levels = [
-    {
-      label: configuration.mainLevelLabel || 'Main level',
-      image: configuration.explodedImage,
-    },
-    {
-      label: configuration.mezzanineLevelLabel || 'Mezzanine',
-      image: configuration.mezzanineExplodedImage,
-    },
-  ]
-  const [levelIndex, setLevelIndex] = useState(0)
-  const touchStartX = useRef<number | null>(null)
-  const level = levels[levelIndex]
-
-  const finishSwipe = (clientX: number) => {
-    if (touchStartX.current === null) return
-    const distance = clientX - touchStartX.current
-    touchStartX.current = null
-    if (Math.abs(distance) < 48) return
-    setLevelIndex(distance < 0 ? 1 : 0)
-  }
-
-  return (
-    <div className="floor-plan-axo">
-      <div className="floor-plan-axo-tabs" role="tablist" aria-label={`${configuration.title} axonometric level`}>
-        {levels.map((item, index) => (
-          <button key={item.label} type="button" role="tab" id={`${id}-axo-tab-${index}`} aria-selected={levelIndex === index} aria-controls={`${id}-axo-panel`} className={levelIndex === index ? 'is-active' : ''} onClick={() => setLevelIndex(index)}>
-            {item.label}
+        <PlanImage image={displayedImage} sizes="(max-width: 760px) 100vw, 35vw" alt={`${title} ${label.toLowerCase()} ${displayedType}`} emptyLabel={`${label} ${displayedType}`} />
+        {previewImage?.asset?.url && (
+          <button className="floor-plan-view-toggle" type="button" aria-pressed={showAxo} aria-label={`View ${previewType} for ${title}, ${label}`} onClick={() => setShowAxo((current) => !current)}>
+            <span className="floor-plan-view-thumbnail" aria-hidden="true"><PlanImage image={previewImage} sizes="(max-width: 760px) 28vw, 9vw" alt="" /></span>
+            <span>View {previewType}</span>
           </button>
-        ))}
+        )}
       </div>
-      <div
-        className="floor-plan-axo-viewport"
-        id={`${id}-axo-panel`}
-        role="tabpanel"
-        aria-labelledby={`${id}-axo-tab-${levelIndex}`}
-        onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }}
-        onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}
-      >
-        <div className="floor-plan-axo-image">
-          <PlanImage image={level.image} sizes="(max-width: 760px) 74vw, 20vw" alt={`${configuration.title} ${level.label.toLowerCase()} axonometric diagram`} emptyLabel="Axonometric view" />
-        </div>
-        <button className="floor-plan-axo-arrow is-previous" type="button" aria-label="Show previous level" disabled={levelIndex === 0} onClick={() => setLevelIndex(0)}><SliderArrowIcon direction="previous" /></button>
-        <button className="floor-plan-axo-arrow is-next" type="button" aria-label="Show next level" disabled={levelIndex === levels.length - 1} onClick={() => setLevelIndex(1)}><SliderArrowIcon direction="next" /></button>
-        <div className="floor-plan-axo-status" aria-live="polite">
-          <span>{level.label} · {levelIndex + 1} of {levels.length}</span>
-          <span className="floor-plan-axo-dots" aria-hidden="true">
-            {levels.map((item, index) => <i className={levelIndex === index ? 'is-active' : ''} key={item.label} />)}
-          </span>
-        </div>
-      </div>
-    </div>
+      <figcaption><span>{label}</span><span>{showAxo ? 'Axonometric view' : 'Floor plan'}</span></figcaption>
+    </figure>
   )
 }
 
 function ConfigurationFacts({ configuration }: { configuration: FloorPlanConfiguration }) {
   if (!configuration.facts?.length) return null
-  return (
-    <dl className="floor-plan-facts">
-      {configuration.facts.map((fact) => (
-        <div key={fact._key || fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
-      ))}
-    </dl>
-  )
+  return <dl className="floor-plan-facts">{configuration.facts.map((fact) => <div key={fact._key || fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>
 }
 
 export default function FloorPlans({ content }: { content: FloorPlanSection }) {
-  const floors = content.floors?.filter((item) => item.configurations?.length) || []
-  const [floorIndex, setFloorIndex] = useState(0)
-  const [configurationIndex, setConfigurationIndex] = useState(0)
-  const [floorMenuOpen, setFloorMenuOpen] = useState(false)
+  const suites = (content.floors || []).flatMap((floor) => (floor.configurations || []).map((configuration) => ({ floor, configuration })))
+  const [suiteIndex, setSuiteIndex] = useState(0)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const touchStartX = useRef<number | null>(null)
   const id = useId()
-  const floor = floors[Math.min(floorIndex, Math.max(floors.length - 1, 0))]
-  const configuration = floor?.configurations[Math.min(configurationIndex, Math.max(floor?.configurations.length - 1, 0))]
+  const selectedIndex = Math.min(suiteIndex, Math.max(suites.length - 1, 0))
+  const selected = suites[selectedIndex]
 
   useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      setFloorMenuOpen(false)
-      setDetailsOpen(false)
-    }
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setDetailsOpen(false) }
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [])
 
-  if (!floor || !configuration) return null
-
-  const selectFloor = (index: number) => {
-    setFloorIndex(index)
-    setConfigurationIndex(0)
-    setFloorMenuOpen(false)
+  if (!selected) return null
+  const { floor, configuration } = selected
+  const selectSuite = (index: number) => { setSuiteIndex(index); setDetailsOpen(false) }
+  const previousSuite = () => selectSuite((selectedIndex - 1 + suites.length) % suites.length)
+  const nextSuite = () => selectSuite((selectedIndex + 1) % suites.length)
+  const finishSwipe = (clientX: number) => {
+    if (touchStartX.current === null) return
+    const distance = clientX - touchStartX.current
+    touchStartX.current = null
+    if (Math.abs(distance) < 48) return
+    if (distance < 0) nextSuite(); else previousSuite()
   }
-
   const ctaUrl = stegaClean(content.ctaUrl) || '#viewing'
+  const suiteTitle = configuration.name || configuration.title
 
   return (
-    <section className="floor-plans" id="floor-plans" aria-label="Floor-plan configurator">
+    <section className="floor-plans" id="floor-plans" aria-label="Floor-plan selector">
       <div className="floor-plan-configurator">
-        <button className={`floor-plan-backdrop${detailsOpen ? ' is-open' : ''}`} type="button" aria-label="Dismiss floor-plan details" tabIndex={detailsOpen ? 0 : -1} onClick={() => setDetailsOpen(false)} />
-
-        <aside className={`floor-plan-details${detailsOpen ? ' is-open' : ''}`} id={`${id}-details`} aria-label="Selected floor-plan details">
-          <button className="floor-plan-details-close" type="button" aria-label="Close floor-plan details" onClick={() => setDetailsOpen(false)}><CloseIcon /></button>
-          <div className="floor-plan-exploded-preview" aria-label={`${floor.label}, ${configuration.title} axonometric views`}>
-            <AxoSlider configuration={configuration} id={`${id}-${floorIndex}-${configurationIndex}`} key={`${floor._key || floor.label}-${configuration._key || configuration.title}`} />
-          </div>
+        <button className={`floor-plan-backdrop${detailsOpen ? ' is-open' : ''}`} type="button" aria-label="Dismiss suite details" tabIndex={detailsOpen ? 0 : -1} onClick={() => setDetailsOpen(false)} />
+        <aside className={`floor-plan-details${detailsOpen ? ' is-open' : ''}`} id={`${id}-details`} aria-label={`${suiteTitle} details`}>
+          <header className="floor-plan-details-header">
+            <div><p>{floor.label}</p><h3>{suiteTitle}</h3></div>
+            <button className="floor-plan-details-close" type="button" aria-label="Close suite details" onClick={() => setDetailsOpen(false)}><CloseIcon /></button>
+          </header>
           <div className="floor-plan-details-copy" aria-live="polite">
-            <p className="floor-plan-eyebrow">{floor.label}</p>
-            <h3>{configuration.title}</h3>
-            {configuration.name && <p className="floor-plan-option-name">{configuration.name}</p>}
+            {configuration.name && configuration.title !== configuration.name && <p className="floor-plan-option-name">{configuration.title}</p>}
             {configuration.body && <p className="floor-plan-description">{configuration.body}</p>}
             <ConfigurationFacts configuration={configuration} />
-            <a className="floor-plan-enquire" href={ctaUrl}><span>{content.ctaLabel || 'Discuss this floor'}</span><ArrowIcon /></a>
+            <a className="floor-plan-enquire" href={ctaUrl}><span>{content.ctaLabel || 'Discuss this suite'}</span><ArrowIcon /></a>
           </div>
         </aside>
-
-        <div className="floor-plan-stage">
-          <button className="floor-plan-details-open" type="button" aria-controls={`${id}-details`} aria-expanded={detailsOpen} onClick={() => setDetailsOpen(true)}><span>{content.detailsLabel || 'View details'}</span><ArrowIcon /></button>
-
-          <div className="floor-plan-configurations">
-            <div className="floor-plan-configurations-row">
-              <div role="tablist" aria-label={`${floor.label} configurations`}>
-                {floor.configurations.map((item, index) => (
-                  <button type="button" role="tab" id={`${id}-configuration-${index}`} aria-selected={configurationIndex === index} aria-controls={`${id}-plan`} aria-label={item.title || `Configuration ${String(index + 1).padStart(2, '0')}`} className={configurationIndex === index ? 'is-active' : ''} onClick={() => setConfigurationIndex(index)} key={item._key || item.title}>
-                    {String(index + 1).padStart(2, '0')}
-                  </button>
-                ))}
+        <div className="floor-plan-stage" onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
+          <div className="floor-plan-suite-header"><p>{floor.label}</p><h3>{suiteTitle}</h3></div>
+          <button className="floor-plan-details-open" type="button" aria-controls={`${id}-details`} aria-expanded={detailsOpen} onClick={() => setDetailsOpen(true)}><span>{content.detailsLabel || 'Suite details'}</span><ArrowIcon /></button>
+          <div className="floor-plan-preview-pair" id={`${id}-suite-panel`} role="group" aria-label={`${floor.label}, ${suiteTitle}, main level and mezzanine`}>
+            <LevelPlan key={`${selectedIndex}-main`} label={configuration.mainLevelLabel || 'Main level'} title={suiteTitle} planImage={configuration.planImage} axoImage={configuration.explodedImage} />
+            <LevelPlan key={`${selectedIndex}-mezzanine`} label={configuration.mezzanineLevelLabel || 'Mezzanine'} title={suiteTitle} planImage={configuration.mezzaninePlanImage} axoImage={configuration.mezzanineExplodedImage} />
+          </div>
+          <nav className="floor-plan-suite-navigation" aria-label="Select suite">
+            <button type="button" className="floor-plan-suite-arrow" onClick={previousSuite} aria-label="Previous suite"><SliderArrowIcon direction="previous" /></button>
+            <div className="floor-plan-suite-status" aria-live="polite">
+              <span>{selectedIndex + 1} of {suites.length}</span>
+              <div className="floor-plan-suite-dots" aria-label="Suites">
+                {suites.map((item, index) => <button type="button" aria-current={selectedIndex === index ? 'true' : undefined} aria-controls={`${id}-suite-panel`} aria-label={item.configuration.name || item.configuration.title || `Suite ${index + 1}`} className={selectedIndex === index ? 'is-active' : ''} onClick={() => selectSuite(index)} key={`${item.floor._key || item.floor.label}-${item.configuration._key || item.configuration.title}`} />)}
               </div>
             </div>
-            <p aria-live="polite">{configuration.name || configuration.title}</p>
-          </div>
-
-          <div className="floor-plan-preview-pair" id={`${id}-plan`} role="tabpanel" aria-labelledby={`${id}-configuration-${configurationIndex}`} aria-label={`${floor.label}, ${configuration.title}, main level and mezzanine`}>
-            <LevelPlan label={configuration.mainLevelLabel || 'Main level'} image={configuration.planImage} sizes="(max-width: 760px) 100vw, 39vw" alt={`${configuration.title} main-level floor plan`} />
-            <LevelPlan label={configuration.mezzanineLevelLabel || 'Mezzanine'} image={configuration.mezzaninePlanImage} sizes="(max-width: 760px) 100vw, 39vw" alt={`${configuration.title} mezzanine floor plan`} />
-          </div>
-
-          <div className="floor-plan-floor-selector">
-            <div className={`floor-plan-floor-menu${floorMenuOpen ? ' is-open' : ''}`} id={`${id}-floors`} role="menu" aria-hidden={!floorMenuOpen}>
-              {floors.map((item, index) => (
-                <button type="button" role="menuitemradio" aria-checked={floorIndex === index} onClick={() => selectFloor(index)} key={item._key || item.label}>
-                  <span>{item.label}</span>{floorIndex === index && <span aria-hidden="true">✓</span>}
-                </button>
-              ))}
-            </div>
-            <button className={floorMenuOpen ? 'is-open' : ''} type="button" aria-expanded={floorMenuOpen} aria-controls={`${id}-floors`} onClick={() => setFloorMenuOpen((current) => !current)}><span>{floor.label}</span><ChevronIcon /></button>
-          </div>
+            <button type="button" className="floor-plan-suite-arrow" onClick={nextSuite} aria-label="Next suite"><SliderArrowIcon direction="next" /></button>
+          </nav>
         </div>
       </div>
     </section>
