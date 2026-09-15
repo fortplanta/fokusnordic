@@ -17,7 +17,11 @@ function ArrowIcon() {
   return <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M6 3h7v7" /></svg>
 }
 
-function PlanImage({ image, sizes, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; emptyLabel?: string }) {
+function SliderArrowIcon({ direction }: { direction: 'previous' | 'next' }) {
+  return <svg className={direction === 'previous' ? 'is-previous' : ''} viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+}
+
+function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; alt?: string; emptyLabel?: string }) {
   if (!image?.asset?.url) {
     return (
       <div className="floor-plan-empty">
@@ -26,17 +30,73 @@ function PlanImage({ image, sizes, emptyLabel = 'Floor-plan drawing' }: { image?
       </div>
     )
   }
-  return <Image src={image.asset.url} alt={image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
+  return <Image src={image.asset.url} alt={alt || image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
 }
 
-function LevelPlan({ label, image, sizes }: { label: string; image?: SanityImage; sizes: string }) {
+function LevelPlan({ label, image, sizes, alt }: { label: string; image?: SanityImage; sizes: string; alt: string }) {
   return (
     <figure className="floor-plan-level">
       <div className="floor-plan-level-image">
-        <PlanImage image={image} sizes={sizes} emptyLabel={`${label} floor plan`} />
+        <PlanImage image={image} sizes={sizes} alt={alt} emptyLabel={`${label} floor plan`} />
       </div>
       <figcaption>{label}</figcaption>
     </figure>
+  )
+}
+
+function AxoSlider({ configuration, id }: { configuration: FloorPlanConfiguration; id: string }) {
+  const levels = [
+    {
+      label: configuration.mainLevelLabel || 'Main level',
+      image: configuration.explodedImage,
+    },
+    {
+      label: configuration.mezzanineLevelLabel || 'Mezzanine',
+      image: configuration.mezzanineExplodedImage,
+    },
+  ]
+  const [levelIndex, setLevelIndex] = useState(0)
+  const touchStartX = useRef<number | null>(null)
+  const level = levels[levelIndex]
+
+  const finishSwipe = (clientX: number) => {
+    if (touchStartX.current === null) return
+    const distance = clientX - touchStartX.current
+    touchStartX.current = null
+    if (Math.abs(distance) < 48) return
+    setLevelIndex(distance < 0 ? 1 : 0)
+  }
+
+  return (
+    <div className="floor-plan-axo">
+      <div className="floor-plan-axo-tabs" role="tablist" aria-label={`${configuration.title} axonometric level`}>
+        {levels.map((item, index) => (
+          <button key={item.label} type="button" role="tab" id={`${id}-axo-tab-${index}`} aria-selected={levelIndex === index} aria-controls={`${id}-axo-panel`} className={levelIndex === index ? 'is-active' : ''} onClick={() => setLevelIndex(index)}>
+            {item.label}
+          </button>
+        ))}
+      </div>
+      <div
+        className="floor-plan-axo-viewport"
+        id={`${id}-axo-panel`}
+        role="tabpanel"
+        aria-labelledby={`${id}-axo-tab-${levelIndex}`}
+        onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }}
+        onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}
+      >
+        <div className="floor-plan-axo-image">
+          <PlanImage image={level.image} sizes="(max-width: 760px) 74vw, 20vw" alt={`${configuration.title} ${level.label.toLowerCase()} axonometric diagram`} emptyLabel="Axonometric view" />
+        </div>
+        <button className="floor-plan-axo-arrow is-previous" type="button" aria-label="Show previous level" disabled={levelIndex === 0} onClick={() => setLevelIndex(0)}><SliderArrowIcon direction="previous" /></button>
+        <button className="floor-plan-axo-arrow is-next" type="button" aria-label="Show next level" disabled={levelIndex === levels.length - 1} onClick={() => setLevelIndex(1)}><SliderArrowIcon direction="next" /></button>
+        <div className="floor-plan-axo-status" aria-live="polite">
+          <span>{level.label} · {levelIndex + 1} of {levels.length}</span>
+          <span className="floor-plan-axo-dots" aria-hidden="true">
+            {levels.map((item, index) => <i className={levelIndex === index ? 'is-active' : ''} key={item.label} />)}
+          </span>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -57,9 +117,6 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   const [configurationIndex, setConfigurationIndex] = useState(0)
   const [floorMenuOpen, setFloorMenuOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
-  const [isInView, setIsInView] = useState(false)
-  const [hasSelectedConfiguration, setHasSelectedConfiguration] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
   const id = useId()
   const floor = floors[Math.min(floorIndex, Math.max(floors.length - 1, 0))]
   const configuration = floor?.configurations[Math.min(configurationIndex, Math.max(floor?.configurations.length - 1, 0))]
@@ -74,28 +131,6 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [])
 
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsInView(entry.isIntersecting),
-      { threshold: 0.25 },
-    )
-    observer.observe(section)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    if (!isInView || hasSelectedConfiguration || !floor || floor.configurations.length < 2) return
-
-    const interval = window.setInterval(() => {
-      setConfigurationIndex((current) => (current + 1) % floor.configurations.length)
-    }, 5000)
-
-    return () => window.clearInterval(interval)
-  }, [floor, hasSelectedConfiguration, isInView])
-
   if (!floor || !configuration) return null
 
   const selectFloor = (index: number) => {
@@ -107,15 +142,14 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   const ctaUrl = stegaClean(content.ctaUrl) || '#viewing'
 
   return (
-    <section className="floor-plans" id="floor-plans" aria-label="Floor-plan configurator" ref={sectionRef}>
+    <section className="floor-plans" id="floor-plans" aria-label="Floor-plan configurator">
       <div className="floor-plan-configurator">
         <button className={`floor-plan-backdrop${detailsOpen ? ' is-open' : ''}`} type="button" aria-label="Dismiss floor-plan details" tabIndex={detailsOpen ? 0 : -1} onClick={() => setDetailsOpen(false)} />
 
         <aside className={`floor-plan-details${detailsOpen ? ' is-open' : ''}`} id={`${id}-details`} aria-label="Selected floor-plan details">
           <button className="floor-plan-details-close" type="button" aria-label="Close floor-plan details" onClick={() => setDetailsOpen(false)}><CloseIcon /></button>
           <div className="floor-plan-exploded-preview" aria-label={`${floor.label}, ${configuration.title} axonometric views`}>
-            <LevelPlan label={configuration.mainLevelLabel || 'Main level'} image={configuration.explodedImage} sizes="(max-width: 760px) 64vw, 20vw" />
-            <LevelPlan label={configuration.mezzanineLevelLabel || 'Mezzanine'} image={configuration.mezzanineExplodedImage} sizes="(max-width: 760px) 64vw, 20vw" />
+            <AxoSlider configuration={configuration} id={`${id}-${floorIndex}-${configurationIndex}`} key={`${floor._key || floor.label}-${configuration._key || configuration.title}`} />
           </div>
           <div className="floor-plan-details-copy" aria-live="polite">
             <p className="floor-plan-eyebrow">{floor.label}</p>
@@ -134,7 +168,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
             <div className="floor-plan-configurations-row">
               <div role="tablist" aria-label={`${floor.label} configurations`}>
                 {floor.configurations.map((item, index) => (
-                  <button type="button" role="tab" id={`${id}-configuration-${index}`} aria-selected={configurationIndex === index} aria-controls={`${id}-plan`} aria-label={item.title || `Configuration ${String(index + 1).padStart(2, '0')}`} className={configurationIndex === index ? 'is-active' : ''} onClick={() => { setHasSelectedConfiguration(true); setConfigurationIndex(index) }} key={item._key || item.title}>
+                  <button type="button" role="tab" id={`${id}-configuration-${index}`} aria-selected={configurationIndex === index} aria-controls={`${id}-plan`} aria-label={item.title || `Configuration ${String(index + 1).padStart(2, '0')}`} className={configurationIndex === index ? 'is-active' : ''} onClick={() => setConfigurationIndex(index)} key={item._key || item.title}>
                     {String(index + 1).padStart(2, '0')}
                   </button>
                 ))}
@@ -144,8 +178,8 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           </div>
 
           <div className="floor-plan-preview-pair" id={`${id}-plan`} role="tabpanel" aria-labelledby={`${id}-configuration-${configurationIndex}`} aria-label={`${floor.label}, ${configuration.title}, main level and mezzanine`}>
-            <LevelPlan label={configuration.mainLevelLabel || 'Main level'} image={configuration.planImage} sizes="(max-width: 760px) 100vw, 39vw" />
-            <LevelPlan label={configuration.mezzanineLevelLabel || 'Mezzanine'} image={configuration.mezzaninePlanImage} sizes="(max-width: 760px) 100vw, 39vw" />
+            <LevelPlan label={configuration.mainLevelLabel || 'Main level'} image={configuration.planImage} sizes="(max-width: 760px) 100vw, 39vw" alt={`${configuration.title} main-level floor plan`} />
+            <LevelPlan label={configuration.mezzanineLevelLabel || 'Mezzanine'} image={configuration.mezzaninePlanImage} sizes="(max-width: 760px) 100vw, 39vw" alt={`${configuration.title} mezzanine floor plan`} />
           </div>
 
           <div className="floor-plan-floor-selector">
