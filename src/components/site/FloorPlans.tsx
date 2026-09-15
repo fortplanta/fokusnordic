@@ -29,6 +29,17 @@ function PlanImage({ image, sizes, emptyLabel = 'Floor-plan drawing' }: { image?
   return <Image src={image.asset.url} alt={image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
 }
 
+function LevelPlan({ label, image, sizes }: { label: string; image?: SanityImage; sizes: string }) {
+  return (
+    <figure className="floor-plan-level">
+      <div className="floor-plan-level-image">
+        <PlanImage image={image} sizes={sizes} emptyLabel={`${label} floor plan`} />
+      </div>
+      <figcaption>{label}</figcaption>
+    </figure>
+  )
+}
+
 function ConfigurationFacts({ configuration }: { configuration: FloorPlanConfiguration }) {
   if (!configuration.facts?.length) return null
   return (
@@ -102,8 +113,9 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
 
         <aside className={`floor-plan-details${detailsOpen ? ' is-open' : ''}`} id={`${id}-details`} aria-label="Selected floor-plan details">
           <button className="floor-plan-details-close" type="button" aria-label="Close floor-plan details" onClick={() => setDetailsOpen(false)}><CloseIcon /></button>
-          <div className="floor-plan-exploded-preview" aria-label={`${floor.label}, ${configuration.title} exploded view`}>
-            <PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 64vw, 20vw" emptyLabel="Exploded view" />
+          <div className="floor-plan-exploded-preview" aria-label={`${floor.label}, ${configuration.title} axonometric views`}>
+            <LevelPlan label={configuration.mainLevelLabel || 'Main level'} image={configuration.explodedImage} sizes="(max-width: 760px) 64vw, 20vw" />
+            <LevelPlan label={configuration.mezzanineLevelLabel || 'Mezzanine'} image={configuration.mezzanineExplodedImage} sizes="(max-width: 760px) 64vw, 20vw" />
           </div>
           <div className="floor-plan-details-copy" aria-live="polite">
             <p className="floor-plan-eyebrow">{floor.label}</p>
@@ -131,8 +143,9 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
             <p aria-live="polite">{configuration.name || configuration.title}</p>
           </div>
 
-          <div className="floor-plan-preview" id={`${id}-plan`} role="tabpanel" aria-labelledby={`${id}-configuration-${configurationIndex}`} aria-label={`${floor.label}, ${configuration.title}`}>
-            <PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 78vw" />
+          <div className="floor-plan-preview-pair" id={`${id}-plan`} role="tabpanel" aria-labelledby={`${id}-configuration-${configurationIndex}`} aria-label={`${floor.label}, ${configuration.title}, main level and mezzanine`}>
+            <LevelPlan label={configuration.mainLevelLabel || 'Main level'} image={configuration.planImage} sizes="(max-width: 760px) 100vw, 39vw" />
+            <LevelPlan label={configuration.mezzanineLevelLabel || 'Mezzanine'} image={configuration.mezzaninePlanImage} sizes="(max-width: 760px) 100vw, 39vw" />
           </div>
 
           <div className="floor-plan-floor-selector">

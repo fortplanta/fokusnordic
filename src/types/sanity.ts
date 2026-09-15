@@ -45,8 +45,12 @@ export type FloorPlanConfiguration = {
     name?: string
     body?: string
     facts?: Array<{ _key?: string; label: string; value: string }>
+    mainLevelLabel?: string
     planImage?: SanityImage
     explodedImage?: SanityImage
+    mezzanineLevelLabel?: string
+    mezzaninePlanImage?: SanityImage
+    mezzanineExplodedImage?: SanityImage
 }
 
 export type FloorPlanSection = {
