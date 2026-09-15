@@ -90,7 +90,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
         <button className={`floor-plan-backdrop${detailsOpen ? ' is-open' : ''}`} type="button" aria-label="Dismiss suite details" tabIndex={detailsOpen ? 0 : -1} onClick={() => setDetailsOpen(false)} />
         <aside className={`floor-plan-details${detailsOpen ? ' is-open' : ''}`} id={`${id}-details`} aria-label={`${suiteTitle} details`}>
           <header className="floor-plan-details-header">
-            <div><p>{floor.label}</p><h3>{suiteTitle}</h3></div>
+            <p>Suite details</p>
             <button className="floor-plan-details-close" type="button" aria-label="Close suite details" onClick={() => setDetailsOpen(false)}><CloseIcon /></button>
           </header>
           <div className="floor-plan-details-copy" aria-live="polite">
@@ -110,7 +110,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           <nav className="floor-plan-suite-navigation" aria-label="Select suite">
             <button type="button" className="floor-plan-suite-arrow" onClick={previousSuite} aria-label="Previous suite"><SliderArrowIcon direction="previous" /></button>
             <div className="floor-plan-suite-status" aria-live="polite">
-              <span>{selectedIndex + 1} of {suites.length}</span>
+              <span>{String(selectedIndex + 1).padStart(2, '0')} / {String(suites.length).padStart(2, '0')}</span>
               <div className="floor-plan-suite-dots" aria-label="Suites">
                 {suites.map((item, index) => <button type="button" aria-current={selectedIndex === index ? 'true' : undefined} aria-controls={`${id}-suite-panel`} aria-label={item.configuration.name || item.configuration.title || `Suite ${index + 1}`} className={selectedIndex === index ? 'is-active' : ''} onClick={() => selectSuite(index)} key={`${item.floor._key || item.floor.label}-${item.configuration._key || item.configuration.title}`} />)}
               </div>
