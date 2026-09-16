@@ -45,6 +45,14 @@ export type FloorPlanConfiguration = {
     name?: string
     body?: string
     facts?: Array<{ _key?: string; label: string; value: string }>
+    detailTables?: Array<{
+        _key?: string
+        title: string
+        labelHeading?: string
+        valueHeading?: string
+        rows?: Array<{ _key?: string; label: string; value: string; accent?: boolean }>
+        footer?: string
+    }>
     mainLevelLabel?: string
     planImage?: SanityImage
     explodedImage?: SanityImage
