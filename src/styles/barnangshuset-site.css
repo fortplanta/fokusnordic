@@ -122,3 +122,24 @@
 @media (width<=760px){
   .volume-technical .volume-groups{row-gap:var(--bh-space-5)}
 }
+
+/* Calm, tactile controls share one interaction language across the site. */
+.bh-site :is(.desktop-nav a,.header-action,.menu-button,.text-link,.floor-plan-desktop-cta,.floor-plan-enquire,.floor-plan-suite-dots button,.area-map-drawer-open,.map-nearby-trigger,.map-disclosure-trigger,.map-drawer-close,.specification-toggle){
+  transition-property:opacity,scale,background-color,color;
+  transition-duration:var(--bh-motion-control);
+  transition-timing-function:cubic-bezier(.2,0,0,1);
+}
+@media (hover:hover) and (pointer:fine){
+  .bh-site :is(.desktop-nav a,.header-action,.menu-button,.text-link,.floor-plan-desktop-cta,.floor-plan-enquire,.area-map-drawer-open,.map-nearby-trigger,.map-disclosure-trigger,.specification-toggle):hover{opacity:.72}
+  .bh-site .floor-plan-suite-dots button:hover::before{transform:translate(-50%,-50%) scale(1.35)}
+}
+.bh-site :is(.desktop-nav a,.header-action,.menu-button,.text-link,.floor-plan-desktop-cta,.floor-plan-enquire,.floor-plan-suite-dots button,.area-map-drawer-open,.map-nearby-trigger,.map-disclosure-trigger,.map-drawer-close,.specification-toggle):active{scale:.96}
+.floor-plan-suite-dots button::before{transition:transform var(--bh-motion-control) cubic-bezier(.2,0,0,1),background-color var(--bh-motion-control) cubic-bezier(.2,0,0,1)}
+
+/* Hero text reveal: visible by default, enhanced only after motion is enabled. */
+.hero-word-mask{display:inline-block;overflow:hidden;vertical-align:bottom}
+.hero-word-mask:not(:last-child){margin-inline-end:.22em}
+.hero-word{display:inline-block}
+.motion-enabled .hero-word{opacity:0;transform:translateY(105%);transition:opacity .7s var(--bh-ease) calc(.18s + var(--hero-word-order,0) * 70ms),transform 1s var(--bh-ease) calc(.18s + var(--hero-word-order,0) * 70ms);will-change:opacity,transform}
+.motion-enabled.hero-ready .hero-word{opacity:1;transform:none;will-change:auto}
+@media (prefers-reduced-motion:reduce){.motion-enabled .hero-word{opacity:1!important;transform:none!important;transition-duration:.001ms!important}}

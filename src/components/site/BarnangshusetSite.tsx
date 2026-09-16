@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import type { CSSProperties } from 'react'
 import type { CurrentHomePage, FloorPlanSection } from '@/types/sanity'
 import { gallerySide, gallerySize } from '@/lib/sanityControls'
 import AreaMap from './AreaMap'
@@ -45,12 +46,13 @@ function TextLink({ href, children }: { href: string; children: React.ReactNode 
 
 export default function BarnangshusetSite({ content, contact, identity }: { content: Content; contact: Contact; identity?: Identity }) {
   const mailto = `mailto:${contact.email}?subject=Viewing%20at%20Barn%C3%A4ngshuset`
+  const heroWords = content.hero.heading.split(/\s+/)
   return <div className="bh-site">
     <SiteHeader />
     <main id="top">
       <section className="hero" aria-labelledby="hero-title">
         <Media image={content.hero.image} fallback={fallbacks.hero} className="hero-media" priority />
-        <div className="hero-heading" data-motion-hero><h1 id="hero-title">{content.hero.heading}</h1></div>
+        <div className="hero-heading" data-motion-hero><h1 id="hero-title" aria-label={content.hero.heading}>{heroWords.map((word, index) => <span className="hero-word-mask" aria-hidden="true" key={`${word}-${index}`}><span className="hero-word" style={{ '--hero-word-order': index } as CSSProperties}>{word}</span></span>)}</h1></div>
         <div className="hero-summary" data-motion-hero><p className="lede">{content.hero.body}</p><TextLink href="#spaces">{content.hero.ctaLabel}</TextLink></div>
       </section>
       <section className="origin grid-section" id="building">

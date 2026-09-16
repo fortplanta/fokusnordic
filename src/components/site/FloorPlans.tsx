@@ -5,16 +5,8 @@ import { stegaClean } from '@sanity/client/stega'
 import { useEffect, useId, useRef, useState } from 'react'
 import type { FloorPlanConfiguration, FloorPlanSection, SanityImage } from '@/types/sanity'
 
-function CloseIcon() {
-  return <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg>
-}
-
 function ArrowIcon() {
   return <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M6 3h7v7" /></svg>
-}
-
-function SliderArrowIcon({ direction }: { direction: 'previous' | 'next' }) {
-  return <svg className={direction === 'previous' ? 'is-previous' : ''} viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
 }
 
 function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; alt?: string; emptyLabel?: string }) {
@@ -22,31 +14,6 @@ function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { i
     return <div className="floor-plan-empty"><span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span><small className="text-xs font-semibold">To be added in Sanity</small></div>
   }
   return <Image src={image.asset.url} alt={alt || image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
-}
-
-function LevelPlan({ label, title, planImage, axoImage }: { label: string; title: string; planImage?: SanityImage; axoImage?: SanityImage }) {
-  const [showAxo, setShowAxo] = useState(false)
-  const displayedImage = showAxo ? axoImage : planImage
-  const previewImage = showAxo ? planImage : axoImage
-  const displayedType = showAxo ? 'axonometric view' : 'floor plan'
-  const previewType = showAxo ? 'floor plan' : 'AXO'
-
-  useEffect(() => setShowAxo(false), [title, label])
-
-  return (
-    <figure className="floor-plan-level">
-      <div className="floor-plan-level-image">
-        <PlanImage image={displayedImage} sizes="(max-width: 760px) 100vw, 35vw" alt={`${title} ${label.toLowerCase()} ${displayedType}`} emptyLabel={`${label} ${displayedType}`} />
-        {previewImage?.asset?.url && (
-          <button className="floor-plan-view-toggle" type="button" aria-pressed={showAxo} aria-label={`View ${previewType} for ${title}, ${label}`} onClick={() => setShowAxo((current) => !current)}>
-            <span className="floor-plan-view-thumbnail" aria-hidden="true"><PlanImage image={previewImage} sizes="(max-width: 760px) 28vw, 9vw" alt="" /></span>
-            <span>View {previewType}</span>
-          </button>
-        )}
-      </div>
-      <figcaption><span>{label}</span><span>{showAxo ? 'Axonometric view' : 'Floor plan'}</span></figcaption>
-    </figure>
-  )
 }
 
 function ConfigurationFacts({ configuration }: { configuration: FloorPlanConfiguration }) {
@@ -57,21 +24,37 @@ function ConfigurationFacts({ configuration }: { configuration: FloorPlanConfigu
 export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   const suites = (content.floors || []).flatMap((floor) => (floor.configurations || []).map((configuration) => ({ floor, configuration })))
   const [suiteIndex, setSuiteIndex] = useState(0)
-  const [detailsOpen, setDetailsOpen] = useState(false)
   const touchStartX = useRef<number | null>(null)
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const sectionIsActive = useRef(false)
   const id = useId()
   const selectedIndex = Math.min(suiteIndex, Math.max(suites.length - 1, 0))
   const selected = suites[selectedIndex]
 
   useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setDetailsOpen(false) }
-    window.addEventListener('keydown', closeOnEscape)
-    return () => window.removeEventListener('keydown', closeOnEscape)
+    const section = sectionRef.current
+    if (!section) return
+    const observer = new IntersectionObserver(([entry]) => { sectionIsActive.current = entry?.isIntersecting ?? false }, { threshold: 0.35 })
+    observer.observe(section)
+    return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    const changeSuiteWithKeyboard = (event: KeyboardEvent) => {
+      if (!sectionIsActive.current || suites.length < 2 || event.altKey || event.ctrlKey || event.metaKey) return
+      const target = event.target as HTMLElement | null
+      if (target?.matches('input, textarea, select, [contenteditable="true"]')) return
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+      event.preventDefault()
+      setSuiteIndex((current) => event.key === 'ArrowRight' ? (current + 1) % suites.length : (current - 1 + suites.length) % suites.length)
+    }
+    window.addEventListener('keydown', changeSuiteWithKeyboard)
+    return () => window.removeEventListener('keydown', changeSuiteWithKeyboard)
+  }, [suites.length])
 
   if (!selected) return null
   const { floor, configuration } = selected
-  const selectSuite = (index: number) => { setSuiteIndex(index); setDetailsOpen(false) }
+  const selectSuite = (index: number) => { setSuiteIndex(index) }
   const previousSuite = () => selectSuite((selectedIndex - 1 + suites.length) % suites.length)
   const nextSuite = () => selectSuite((selectedIndex + 1) % suites.length)
   const finishSwipe = (clientX: number) => {
@@ -83,39 +66,51 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   }
   const ctaUrl = stegaClean(content.ctaUrl) || '#viewing'
   const suiteTitle = configuration.name || configuration.title
+  const mainLevelLabel = configuration.mainLevelLabel || 'Main level'
+  const mezzanineLevelLabel = configuration.mezzanineLevelLabel || 'Mezzanine'
 
   return (
-    <section className="floor-plans" id="floor-plans" aria-label="Floor-plan selector">
+    <section className="floor-plans" id="floor-plans" aria-label="Floor-plan selector" ref={sectionRef}>
       <div className="floor-plan-configurator">
-        <button className={`floor-plan-backdrop${detailsOpen ? ' is-open' : ''}`} type="button" aria-label="Dismiss suite details" tabIndex={detailsOpen ? 0 : -1} onClick={() => setDetailsOpen(false)} />
-        <aside className={`floor-plan-details${detailsOpen ? ' is-open' : ''}`} id={`${id}-details`} aria-label={`${suiteTitle} details`}>
-          <header className="floor-plan-details-header">
-            <p>Suite details</p>
-            <button className="floor-plan-details-close" type="button" aria-label="Close suite details" onClick={() => setDetailsOpen(false)}><CloseIcon /></button>
+        <div className="floor-plan-stage" onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
+          <header className="floor-plan-suite-header">
+            <div className="floor-plan-suite-title"><h2>{floor.label}</h2><p>{suiteTitle}</p></div>
+            <div className="floor-plan-desktop-summary">
+              {configuration.body && <p>{configuration.body}</p>}
+              <ConfigurationFacts configuration={configuration} />
+            </div>
           </header>
-          <div className="floor-plan-details-copy" aria-live="polite">
-            {configuration.name && configuration.title !== configuration.name && <p className="floor-plan-option-name">{configuration.title}</p>}
-            {configuration.body && <p className="floor-plan-description">{configuration.body}</p>}
+          <div className="floor-plan-controls">
+            <a className="floor-plan-desktop-cta" href={ctaUrl}><span>{content.ctaLabel || 'Discuss this suite'}</span><ArrowIcon /></a>
+          </div>
+          <div className="floor-plan-architectural-plate" id={`${id}-suite-panel`} role="group" aria-label={`${floor.label}, ${suiteTitle} floor plans`}>
+            <figure className="floor-plan-level-view">
+              <figcaption><span>{mainLevelLabel}</span><span>Floor plan</span></figcaption>
+              <div className="floor-plan-canvas">
+                <PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 48vw" alt={`${suiteTitle} ${mainLevelLabel.toLowerCase()} floor plan`} emptyLabel={`${mainLevelLabel} floor plan`} />
+              </div>
+              {configuration.explodedImage?.asset?.url && <aside className="floor-plan-axo-context" aria-label={`${mainLevelLabel} spatial context`}><PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 72vw, 20vw" alt={`${suiteTitle} ${mainLevelLabel.toLowerCase()} axonometric context`} /></aside>}
+            </figure>
+            <figure className="floor-plan-level-view">
+              <figcaption><span>{mezzanineLevelLabel}</span><span>Floor plan</span></figcaption>
+              <div className="floor-plan-canvas">
+                <PlanImage image={configuration.mezzaninePlanImage} sizes="(max-width: 760px) 100vw, 48vw" alt={`${suiteTitle} ${mezzanineLevelLabel.toLowerCase()} floor plan`} emptyLabel={`${mezzanineLevelLabel} floor plan`} />
+              </div>
+              {configuration.mezzanineExplodedImage?.asset?.url && <aside className="floor-plan-axo-context" aria-label={`${mezzanineLevelLabel} spatial context`}><PlanImage image={configuration.mezzanineExplodedImage} sizes="(max-width: 760px) 72vw, 20vw" alt={`${suiteTitle} ${mezzanineLevelLabel.toLowerCase()} axonometric context`} /></aside>}
+            </figure>
+          </div>
+          <div className="floor-plan-mobile-details">
+            {configuration.body && <p>{configuration.body}</p>}
             <ConfigurationFacts configuration={configuration} />
             <a className="floor-plan-enquire" href={ctaUrl}><span>{content.ctaLabel || 'Discuss this suite'}</span><ArrowIcon /></a>
           </div>
-        </aside>
-        <div className="floor-plan-stage" onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
-          <div className="floor-plan-suite-header"><p>{floor.label}</p><h3>{suiteTitle}</h3></div>
-          <button className="floor-plan-details-open" type="button" aria-controls={`${id}-details`} aria-expanded={detailsOpen} onClick={() => setDetailsOpen(true)}><span>{content.detailsLabel || 'Suite details'}</span><ArrowIcon /></button>
-          <div className="floor-plan-preview-pair" id={`${id}-suite-panel`} role="group" aria-label={`${floor.label}, ${suiteTitle}, main level and mezzanine`}>
-            <LevelPlan key={`${selectedIndex}-main`} label={configuration.mainLevelLabel || 'Main level'} title={suiteTitle} planImage={configuration.planImage} axoImage={configuration.explodedImage} />
-            <LevelPlan key={`${selectedIndex}-mezzanine`} label={configuration.mezzanineLevelLabel || 'Mezzanine'} title={suiteTitle} planImage={configuration.mezzaninePlanImage} axoImage={configuration.mezzanineExplodedImage} />
-          </div>
           <nav className="floor-plan-suite-navigation" aria-label="Select suite">
-            <button type="button" className="floor-plan-suite-arrow" onClick={previousSuite} aria-label="Previous suite"><SliderArrowIcon direction="previous" /></button>
             <div className="floor-plan-suite-status" aria-live="polite">
               <span>{String(selectedIndex + 1).padStart(2, '0')} / {String(suites.length).padStart(2, '0')}</span>
               <div className="floor-plan-suite-dots" aria-label="Suites">
                 {suites.map((item, index) => <button type="button" aria-current={selectedIndex === index ? 'true' : undefined} aria-controls={`${id}-suite-panel`} aria-label={item.configuration.name || item.configuration.title || `Suite ${index + 1}`} className={selectedIndex === index ? 'is-active' : ''} onClick={() => selectSuite(index)} key={`${item.floor._key || item.floor.label}-${item.configuration._key || item.configuration.title}`} />)}
               </div>
             </div>
-            <button type="button" className="floor-plan-suite-arrow" onClick={nextSuite} aria-label="Next suite"><SliderArrowIcon direction="next" /></button>
           </nav>
         </div>
       </div>
