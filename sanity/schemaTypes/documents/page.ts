@@ -117,6 +117,31 @@ export default defineType({
                       name: 'facts', title: 'Facts', type: 'array',
                       of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
                     }),
+                    defineField({
+                      name: 'detailTables', title: 'Information tables', type: 'array',
+                      description: 'Compact specification tables shown in the lower-left desktop panel.',
+                      of: [{
+                        type: 'object',
+                        fields: [
+                          copy('title', 'Table title', 1),
+                          copy('labelHeading', 'Left column heading', 1),
+                          copy('valueHeading', 'Right column heading', 1),
+                          defineField({
+                            name: 'rows', title: 'Rows', type: 'array',
+                            of: [{
+                              type: 'object',
+                              fields: [
+                                copy('label', 'Label', 1),
+                                copy('value', 'Value', 1),
+                                defineField({ name: 'accent', title: 'Show colour key', type: 'boolean', initialValue: false }),
+                              ],
+                            }],
+                          }),
+                          copy('footer', 'Footer value', 1),
+                        ],
+                        preview: { select: { title: 'title', rows: 'rows' }, prepare: ({ title, rows }) => ({ title: title || 'Information table', subtitle: `${rows?.length || 0} rows` }) },
+                      }],
+                    }),
                     copy('mainLevelLabel', 'Main level label', 1),
                     image('planImage', "Main level bird's-eye floor plan"),
                     image('explodedImage', 'Main level axonometric view'),
