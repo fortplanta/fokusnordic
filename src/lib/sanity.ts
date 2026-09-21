@@ -44,26 +44,26 @@ export const SITE_SETTINGS_QUERY = /* groq */ `
 export const CURRENT_HOME_QUERY = /* groq */ `
   *[_type == "page" && _id == "homePage"][0] {
     title,
-    hero { heading, body, ctaLabel, image { ${IMAGE_FIELDS} } },
-    building { kicker, heading, body, image { ${IMAGE_FIELDS} } },
+    hero { isVisible, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } },
+    building { isVisible, kicker, heading, body, image { ${IMAGE_FIELDS} } },
     volume {
-      kicker, heading, body,
+      isVisible, kicker, heading, body,
       featureStatements[] { _key, heading, body }
     },
     gallery {
-      kicker, heading, body,
+      isVisible, kicker, heading, body,
       items[] { _key, caption, layout, image { ${IMAGE_FIELDS} } }
     },
     mosaicGallery {
-      kicker, heading,
+      isVisible, kicker, heading,
       items[] { _key, caption, size, side, image { ${IMAGE_FIELDS} } }
     },
     opportunity {
-      kicker, heading, body, ctaLabel,
+      isVisible, kicker, heading, body, ctaLabel,
       facts[] { _key, label, value }, image { ${IMAGE_FIELDS} }
     },
     floorPlans {
-      kicker, heading, body, detailsLabel, ctaLabel, ctaUrl,
+      isVisible, kicker, heading, body, detailsLabel, ctaLabel, ctaUrl,
       floors[] {
         _key, label,
         configurations[] {
@@ -74,15 +74,15 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       }
     },
     materials {
-      kicker, heading, body,
+      isVisible, kicker, heading, body,
       mainImage { ${IMAGE_FIELDS} }, detailImage { ${IMAGE_FIELDS} }
     },
     place {
-      kicker, heading, body, nearby[] { _key, name, detail },
+      isVisible, kicker, heading, body, nearby[] { _key, name, detail },
       image { ${IMAGE_FIELDS} }
     },
     areaMap {
-      kicker, heading, supportingLine,
+      isVisible, kicker, heading, supportingLine,
       mapImage { ${IMAGE_FIELDS} },
       buildingX, buildingY,
       pois[]-> {
@@ -91,10 +91,10 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       }
     },
     specifications {
-      kicker, heading, body,
+      isVisible, kicker, heading, body,
       specificationGroups[] { _key, title, facts[] { _key, label, value } }
     },
-    viewing { kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }
+    viewing { isVisible, kicker, heading, body, ctaLabel, image { ${IMAGE_FIELDS} } }
   }
 `
 

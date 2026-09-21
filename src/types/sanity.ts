@@ -59,6 +59,7 @@ export type FloorPlanConfiguration = {
 }
 
 export type FloorPlanSection = {
+    isVisible?: boolean
     kicker: string
     heading: string
     body: string
@@ -74,15 +75,17 @@ export type FloorPlanSection = {
 
 export type CurrentHomePage = {
     title?: string
-    hero: { heading: string; body: string; ctaLabel: string; image?: SanityImage }
-    building: { kicker: string; heading: string; body: string; image?: SanityImage }
+    hero: { isVisible?: boolean; heading: string; body: string; ctaLabel: string; image?: SanityImage }
+    building: { isVisible?: boolean; kicker: string; heading: string; body: string; image?: SanityImage }
     volume: {
+        isVisible?: boolean
         kicker: string
         heading: string
         body?: string
         featureStatements: Array<{ _key?: string; heading: string; body: string }>
     }
     specifications: {
+        isVisible?: boolean
         kicker: string
         heading: string
         body?: string
@@ -93,17 +96,20 @@ export type CurrentHomePage = {
         }>
     }
     gallery: {
+        isVisible?: boolean
         kicker: string
         heading: string
         body: string
         items: Array<{ _key?: string; caption: string; layout?: string; image?: SanityImage }>
     }
     mosaicGallery?: {
+        isVisible?: boolean
         kicker?: string
         heading?: string
         items: Array<{ _key?: string; caption: string; size?: string; side?: string; image?: SanityImage }>
     }
     opportunity: {
+        isVisible?: boolean
         kicker: string
         heading: string
         body: string
@@ -113,6 +119,7 @@ export type CurrentHomePage = {
     }
     floorPlans?: FloorPlanSection
     materials: {
+        isVisible?: boolean
         kicker: string
         heading: string
         body: string
@@ -120,6 +127,7 @@ export type CurrentHomePage = {
         detailImage?: SanityImage
     }
     place: {
+        isVisible?: boolean
         kicker: string
         heading: string
         body: string
@@ -127,6 +135,7 @@ export type CurrentHomePage = {
         image?: SanityImage
     }
     areaMap?: {
+        isVisible?: boolean
         kicker?: string
         heading?: string
         supportingLine?: string
@@ -135,7 +144,7 @@ export type CurrentHomePage = {
         buildingY?: number
         pois?: POI[]
     }
-    viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
+    viewing: { isVisible?: boolean; kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
 }
 
 export type Floor = {

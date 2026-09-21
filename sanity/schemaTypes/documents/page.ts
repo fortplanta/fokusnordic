@@ -17,6 +17,14 @@ const image = (name: string, title: string) => defineField({
 
 const sectionCopy = [copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), copy('body', 'Body')]
 
+const visibility = defineField({
+  name: 'isVisible',
+  title: 'Show this section on the site',
+  type: 'boolean',
+  initialValue: true,
+  description: 'Turn off to hide this section without deleting its content.',
+})
+
 export default defineType({
   name: 'page',
   title: 'Home Page',
@@ -28,14 +36,14 @@ export default defineType({
     defineField({
       name: 'hero', title: 'Hero', type: 'object',
       fields: [
-        copy('heading', 'Heading', 1), copy('body', 'Body'), copy('ctaLabel', 'CTA label', 1), image('image', 'Background image'),
+        visibility, copy('heading', 'Heading', 1), copy('body', 'Body'), copy('ctaLabel', 'CTA label', 1), image('image', 'Background image'),
       ],
     }),
 
     // ─── 2. Building ───────────────────────────────────────────────────────────
     defineField({
       name: 'building', title: 'Building', type: 'object',
-      fields: [...sectionCopy, image('image', 'Historical image')],
+      fields: [visibility, ...sectionCopy, image('image', 'Historical image')],
     }),
 
     // ─── 3. Light and volume — editorial ──────────────────────────────────────
@@ -43,6 +51,7 @@ export default defineType({
       name: 'volume', title: 'Light and volume — editorial', type: 'object',
       description: 'Kicker, heading and key building conditions. Spec groups live in "Property specifications" below.',
       fields: [
+        visibility,
         ...sectionCopy,
         defineField({
           name: 'featureStatements', title: 'Key building conditions', type: 'array',
@@ -60,6 +69,7 @@ export default defineType({
     defineField({
       name: 'gallery', title: 'Gallery', type: 'object',
       fields: [
+        visibility,
         ...sectionCopy,
         defineField({
           name: 'items', title: 'Images', type: 'array',
@@ -78,7 +88,7 @@ export default defineType({
     defineField({
       name: 'opportunity', title: 'Opportunity', type: 'object',
       fields: [
-        ...sectionCopy, copy('ctaLabel', 'CTA label', 1), image('image', 'Opportunity image'),
+        visibility, ...sectionCopy, copy('ctaLabel', 'CTA label', 1), image('image', 'Opportunity image'),
         defineField({
           name: 'facts', title: 'Facts', type: 'array',
           of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
@@ -90,6 +100,7 @@ export default defineType({
     defineField({
       name: 'floorPlans', title: 'Floor plans', type: 'object',
       fields: [
+        visibility,
         ...sectionCopy,
         copy('detailsLabel', 'Mobile details button label', 1),
         copy('ctaLabel', 'Enquiry link label', 1),
@@ -169,14 +180,14 @@ export default defineType({
     // ─── 7. Materials ──────────────────────────────────────────────────────────
     defineField({
       name: 'materials', title: 'Materials', type: 'object',
-      fields: [...sectionCopy, image('mainImage', 'Main material image'), image('detailImage', 'Material detail')],
+      fields: [visibility, ...sectionCopy, image('mainImage', 'Main material image'), image('detailImage', 'Material detail')],
     }),
 
     // ─── 8. Address / place ────────────────────────────────────────────────────
     defineField({
       name: 'place', title: 'Address', type: 'object',
       fields: [
-        ...sectionCopy, image('image', 'Neighbourhood image'),
+        visibility, ...sectionCopy, image('image', 'Neighbourhood image'),
         defineField({
           name: 'nearby', title: 'Nearby', type: 'array',
           of: [{ type: 'object', fields: [copy('name', 'Place', 1), copy('detail', 'Distance / detail', 1)] }],
@@ -189,7 +200,7 @@ export default defineType({
       name: 'mosaicGallery', title: 'Scrolling gallery — after address', type: 'object',
       description: 'Shown directly after the Address section on the website.',
       fields: [
-        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1),
+        visibility, copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1),
         defineField({
           name: 'items', title: 'Images', type: 'array',
           description: 'Add, remove and reorder images freely. Size and side are controlled per image.',
@@ -228,6 +239,7 @@ export default defineType({
       name: 'areaMap', title: 'Area map', type: 'object',
       description: 'A static map image with numbered pins positioned by percentage. Points come from the Points of Interest list — set each one’s map position there. Add, remove and reorder POIs there to change both the map pins and the numbered list.',
       fields: [
+        visibility,
         copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), copy('supportingLine', 'Supporting line', 2),
         image('mapImage', 'Map image'),
         defineField({
@@ -253,6 +265,7 @@ export default defineType({
       name: 'specifications', title: 'Property specifications', type: 'object',
       description: 'The lower technical register — separate heading and spec groups from the editorial section above.',
       fields: [
+        visibility,
         ...sectionCopy,
         defineField({
           name: 'specificationGroups', title: 'Specification groups', type: 'array',
@@ -278,7 +291,7 @@ export default defineType({
     // ─── 12. Viewing ───────────────────────────────────────────────────────────
     defineField({
       name: 'viewing', title: 'Viewing', type: 'object',
-      fields: [...sectionCopy, copy('ctaLabel', 'CTA label', 1), image('image', 'Viewing image')],
+      fields: [visibility, ...sectionCopy, copy('ctaLabel', 'CTA label', 1), image('image', 'Viewing image')],
     }),
   ],
   preview: { prepare: () => ({ title: 'Home Page' }) },
