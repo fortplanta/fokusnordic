@@ -13,14 +13,24 @@ const credentialedOrigins = [
 const allowedGallerySizes = new Set(['compact', 'wide', 'portrait'])
 const allowedGallerySides = new Set(['left', 'right'])
 const allowedMapTones = new Set(['wine', 'coral', 'sage', 'ink'])
-const expectedSuiteTables: Record<string, { areas: string[]; total: string; rooms: string[]; seating: string[] }> = {
-  'Suite 1': {areas: ['Floor 0=864', 'Floor 0 [Mezzanine]=423'], total: '1 287 m²', rooms: ['Focus=3', 'Meeting 4=1', 'Meeting 6=4', 'Meeting 8=1'], seating: ['Lunch room=29', 'Open workstation=69', 'Touch down=34']},
-  'Suite 2': {areas: ['Floor 0=1 007', 'Floor 0 [Mezzanine]=417'], total: '1 424 m²', rooms: ['Meeting 10=3', 'Meeting 12=1', 'Meeting 14=1', 'Meeting 4=1', 'Meeting 6=4', 'Meeting 8=1', 'Phone=2'], seating: ['Lunch room=71', 'Open workstation=90', 'Touch down=16']},
-  'Suite 3': {areas: ['Floor 1=989', 'Floor 1 [Mezzanine]=341'], total: '1 330 m²', rooms: ['Focus=1', 'Meeting 12=2', 'Meeting 18=1', 'Meeting 4=4', 'Meeting 6=3'], seating: ['Lunch room=66', 'Open workstation=76', 'Touch down=21']},
-  'Suite 4': {areas: ['Floor 1=952', 'Floor 1 [Mezzanine]=303'], total: '1 255 m²', rooms: ['Focus=1', 'Meeting 14=1', 'Meeting 4=4', 'Meeting 6=2', 'Meeting 8=1', 'Phone=1'], seating: ['Lunch room=60', 'Open workstation=82', 'Touch down=46']},
-  'Suite 5': {areas: ['Floor 2=1 292', 'Floor 2 [Mezzanine]=821'], total: '2 113 m²', rooms: ['Focus=15', 'Meeting 10=1', 'Meeting 14=1', 'Meeting 16=1', 'Meeting 4=3', 'Meeting 6=5', 'Meeting 8=2', 'Phone=6'], seating: ['Lunch room=71', 'Open workstation=120', 'Touch down=33']},
-  'Suite 6': {areas: ['Floor 2=859', 'Floor 2 [Mezzanine]=393'], total: '1 252 m²', rooms: ['Focus=3', 'Meeting 10=1', 'Meeting 10/studio=1', 'Meeting 12=1', 'Meeting 2=2', 'Meeting 4=3', 'Meeting 6=2'], seating: ['Lunch room=32', 'Open workstation=90', 'Touch down=24']},
-  'Suite 7': {areas: ['Floor 2=755', 'Floor 2 [Mezzanine]=347'], total: '1 102 m²', rooms: ['Focus=2', 'Meeting 14=1', 'Meeting 4=3', 'Meeting 6=2', 'Meeting 8=3', 'Phone=3'], seating: ['Lunch room=48', 'Open workstation=80', 'Touch down=22']},
+
+// Main level and mezzanine are separate, independently rentable configurations
+// that happen to share a floor — never merge them back into one listing.
+const expectedSuiteTables: Record<string, { areas: string[]; total: string; rooms?: string[]; seating?: string[] }> = {
+  'Suite 1': {areas: ['Floor 0=864'], total: '864 m²', rooms: ['Focus=3', 'Meeting 4=1', 'Meeting 6=4', 'Meeting 8=1'], seating: ['Lunch room=29', 'Open workstation=69', 'Touch down=34']},
+  'Suite 1 Mezzanine': {areas: ['Floor 0 [Mezzanine]=423'], total: '423 m²'},
+  'Suite 2': {areas: ['Floor 0=1 007'], total: '1 007 m²', rooms: ['Meeting 10=3', 'Meeting 12=1', 'Meeting 14=1', 'Meeting 4=1', 'Meeting 6=4', 'Meeting 8=1', 'Phone=2'], seating: ['Lunch room=71', 'Open workstation=90', 'Touch down=16']},
+  'Suite 2 Mezzanine': {areas: ['Floor 0 [Mezzanine]=417'], total: '417 m²'},
+  'Suite 3': {areas: ['Floor 1=989'], total: '989 m²', rooms: ['Focus=1', 'Meeting 12=2', 'Meeting 18=1', 'Meeting 4=4', 'Meeting 6=3'], seating: ['Lunch room=66', 'Open workstation=76', 'Touch down=21']},
+  'Suite 3 Mezzanine': {areas: ['Floor 1 [Mezzanine]=341'], total: '341 m²'},
+  'Suite 4': {areas: ['Floor 1=952'], total: '952 m²', rooms: ['Focus=1', 'Meeting 14=1', 'Meeting 4=4', 'Meeting 6=2', 'Meeting 8=1', 'Phone=1'], seating: ['Lunch room=60', 'Open workstation=82', 'Touch down=46']},
+  'Suite 4 Mezzanine': {areas: ['Floor 1 [Mezzanine]=303'], total: '303 m²'},
+  'Suite 5': {areas: ['Floor 2=1 292'], total: '1 292 m²', rooms: ['Focus=15', 'Meeting 10=1', 'Meeting 14=1', 'Meeting 16=1', 'Meeting 4=3', 'Meeting 6=5', 'Meeting 8=2', 'Phone=6'], seating: ['Lunch room=71', 'Open workstation=120', 'Touch down=33']},
+  'Suite 5 Mezzanine': {areas: ['Floor 2 [Mezzanine]=821'], total: '821 m²'},
+  'Suite 6': {areas: ['Floor 2=859'], total: '859 m²', rooms: ['Focus=3', 'Meeting 10=1', 'Meeting 10/studio=1', 'Meeting 12=1', 'Meeting 2=2', 'Meeting 4=3', 'Meeting 6=2'], seating: ['Lunch room=32', 'Open workstation=90', 'Touch down=24']},
+  'Suite 6 Mezzanine': {areas: ['Floor 2 [Mezzanine]=393'], total: '393 m²'},
+  'Suite 7': {areas: ['Floor 2=755'], total: '755 m²', rooms: ['Focus=2', 'Meeting 14=1', 'Meeting 4=3', 'Meeting 6=2', 'Meeting 8=3', 'Phone=3'], seating: ['Lunch room=48', 'Open workstation=80', 'Touch down=22']},
+  'Suite 7 Mezzanine': {areas: ['Floor 2 [Mezzanine]=347'], total: '347 m²'},
 }
 
 type GalleryItem = { _key?: string; size?: string; side?: string; image?: { asset?: { _ref?: string } } }
@@ -49,13 +59,10 @@ type HomeDocument = {
       configurations?: Array<{
         title?: string
         name?: string
+        levelLabel?: string
         detailTables?: Array<{ title?: string; rows?: Array<{ label?: string; value?: string }>; footer?: string }>
-        mainLevelLabel?: string
         planImage?: { asset?: { _ref?: string } }
         explodedImage?: { alt?: string; asset?: { _ref?: string }; originalFilename?: string }
-        mezzanineLevelLabel?: string
-        mezzaninePlanImage?: { asset?: { _ref?: string } }
-        mezzanineExplodedImage?: { alt?: string; asset?: { _ref?: string }; originalFilename?: string }
       }>
     }>
   }
@@ -138,35 +145,42 @@ function verifyFloorPlans(document: HomeDocument) {
   assert(section?.detailsLabel, `${document._id}: Floor plans has no mobile details label`)
   assert(section?.ctaLabel && section.ctaUrl, `${document._id}: Floor plans has no enquiry link`)
   assert(floors.length > 0, `${document._id}: Floor plans has no floors`)
+  let totalConfigurations = 0
   floors.forEach((floor, floorIndex) => {
     assert(floor.label, `${document._id}: Floor ${floorIndex + 1} has no label`)
     assert(floor.configurations?.length, `${document._id}: ${floor.label || `Floor ${floorIndex + 1}`} has no configurations`)
+    totalConfigurations += floor.configurations.length
     floor.configurations.forEach((configuration, configurationIndex) => {
-      assert(configuration.title, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no title`)
-      assert(configuration.detailTables?.length === 3, `${document._id}: ${configuration.name || configuration.title} must contain the three supplied information tables`)
-      configuration.detailTables?.forEach((table, tableIndex) => {
-        assert(table.title && table.rows?.length, `${document._id}: ${configuration.name || configuration.title} information table ${tableIndex + 1} is incomplete`)
-      })
       const suiteName = configuration.name || configuration.title || ''
+      assert(configuration.title, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no title`)
       const expected = expectedSuiteTables[suiteName]
       assert(expected, `${document._id}: unexpected suite name ${suiteName}`)
+
+      // Main level and mezzanine are separate, independently rentable listings —
+      // a mezzanine configuration must never carry the main level's own room and
+      // seating counts, since it does not include that space.
+      const isMezzanine = suiteName.endsWith('Mezzanine')
+      assert(isMezzanine === !expected.rooms, `${document._id}: ${suiteName} main/mezzanine split does not match its expected table shape`)
+      assert(configuration.levelLabel === (isMezzanine ? 'Mezzanine' : 'Main level'), `${document._id}: ${suiteName} has an incorrect or missing level label`)
+
+      const expectedTableCount = expected.rooms ? 3 : 1
+      assert(configuration.detailTables?.length === expectedTableCount, `${document._id}: ${suiteName} must contain exactly ${expectedTableCount} information table(s)`)
+      configuration.detailTables?.forEach((table, tableIndex) => {
+        assert(table.title && table.rows?.length, `${document._id}: ${suiteName} information table ${tableIndex + 1} is incomplete`)
+      })
       const tableRows = (index: number) => configuration.detailTables?.[index]?.rows?.map((row) => `${row.label}=${row.value}`) ?? []
       assert(JSON.stringify(tableRows(0)) === JSON.stringify(expected.areas), `${document._id}: ${suiteName} area values do not match the supplied PDF`)
       assert(configuration.detailTables?.[0]?.footer === expected.total, `${document._id}: ${suiteName} total area does not match the supplied PDF`)
-      assert(JSON.stringify(tableRows(1)) === JSON.stringify(expected.rooms), `${document._id}: ${suiteName} room values do not match the supplied PDF`)
-      assert(JSON.stringify(tableRows(2)) === JSON.stringify(expected.seating), `${document._id}: ${suiteName} seating values do not match the supplied PDF`)
-      assert(configuration.mainLevelLabel, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no main-level label`)
+      if (expected.rooms) assert(JSON.stringify(tableRows(1)) === JSON.stringify(expected.rooms), `${document._id}: ${suiteName} room values do not match the supplied PDF`)
+      if (expected.seating) assert(JSON.stringify(tableRows(2)) === JSON.stringify(expected.seating), `${document._id}: ${suiteName} seating values do not match the supplied PDF`)
+
       assert(configuration.planImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no plan image`)
       assert(configuration.explodedImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no AXO diagram`)
       assert(configuration.explodedImage?.originalFilename?.toLowerCase().endsWith('.svg'), `${document._id}: ${floor.label} configuration ${configurationIndex + 1} AXO diagram is not an SVG`)
       assert(configuration.explodedImage?.alt, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} AXO diagram has no alt text`)
-      assert(configuration.mezzanineLevelLabel, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no mezzanine label`)
-      assert(configuration.mezzaninePlanImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no mezzanine plan image`)
-      assert(configuration.mezzanineExplodedImage?.asset?._ref, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} has no mezzanine AXO diagram`)
-      assert(configuration.mezzanineExplodedImage?.originalFilename?.toLowerCase().endsWith('.svg'), `${document._id}: ${floor.label} configuration ${configurationIndex + 1} mezzanine AXO diagram is not an SVG`)
-      assert(configuration.mezzanineExplodedImage?.alt, `${document._id}: ${floor.label} configuration ${configurationIndex + 1} mezzanine AXO diagram has no alt text`)
     })
   })
+  assert(totalConfigurations === Object.keys(expectedSuiteTables).length, `${document._id}: expected ${Object.keys(expectedSuiteTables).length} independently rentable configurations, found ${totalConfigurations}`)
 }
 
 function verifyPresentationControls() {
@@ -201,7 +215,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,name,detailTables[]{title,rows[]{label,value},footer},mainLevelLabel,planImage{asset},explodedImage{alt,asset,"originalFilename":asset->originalFilename},mezzanineLevelLabel,mezzaninePlanImage{asset},mezzanineExplodedImage{alt,asset,"originalFilename":asset->originalFilename}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,name,levelLabel,detailTables[]{title,rows[]{label,value},footer},planImage{asset},explodedImage{alt,asset,"originalFilename":asset->originalFilename}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 

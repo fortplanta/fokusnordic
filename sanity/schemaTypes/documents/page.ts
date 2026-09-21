@@ -106,6 +106,7 @@ export default defineType({
               copy('label', 'Floor label', 1),
               defineField({
                 name: 'configurations', title: 'Configurations', type: 'array',
+                description: 'Each entry is one independently rentable unit — e.g. "Suite 1" (the main level) and "Suite 1 Mezzanine" are separate configurations, not one combined listing, even though they sit on the same floor.',
                 validation: (rule) => rule.min(1),
                 of: [{
                   type: 'object',
@@ -113,6 +114,7 @@ export default defineType({
                     copy('title', 'Configuration title', 1),
                     copy('name', 'Suite or option name', 1),
                     copy('body', 'Description'),
+                    copy('levelLabel', 'Level label (e.g. "Main level" or "Mezzanine")', 1),
                     defineField({
                       name: 'facts', title: 'Facts', type: 'array',
                       of: [{ type: 'object', fields: [copy('label', 'Label', 1), copy('value', 'Value', 1)] }],
@@ -142,12 +144,8 @@ export default defineType({
                         preview: { select: { title: 'title', rows: 'rows' }, prepare: ({ title, rows }) => ({ title: title || 'Information table', subtitle: `${rows?.length || 0} rows` }) },
                       }],
                     }),
-                    copy('mainLevelLabel', 'Main level label', 1),
-                    image('planImage', "Main level bird's-eye floor plan"),
-                    image('explodedImage', 'Main level axonometric view'),
-                    copy('mezzanineLevelLabel', 'Mezzanine level label', 1),
-                    image('mezzaninePlanImage', "Mezzanine bird's-eye floor plan"),
-                    image('mezzanineExplodedImage', 'Mezzanine axonometric view'),
+                    image('planImage', "Bird's-eye floor plan"),
+                    image('explodedImage', 'Axonometric view'),
                   ],
                   preview: {
                     select: { title: 'title', media: 'planImage' },
