@@ -84,19 +84,11 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       image { ${IMAGE_FIELDS} }
     },
     areaMap {
-      kicker, heading, drawerTitle, drawerOpenDesktop, drawerOpenMobile,
-      nearbyTitle, nearbyOpenDesktop, nearbyOpenMobile,
-      mapImage { ${IMAGE_FIELDS} },
-      buildingMarker {
-        _type, alt, x, y, width,
-        icon { asset->{ _id, url, originalFilename, mimeType } }
-      },
-      categories[] {
-        _key, title, tone, openDesktop, openMobile,
-        locations[] { _key, name, detail, url, x, y }
-      },
-      travelTitle, travelOpenDesktop, travelOpenMobile,
-      travelTimes[] { _key, name, duration }
+      kicker, heading, supportingLine,
+      pois[]-> {
+        _id, name, description, category,
+        walkingMinutes, lat, lng, sortOrder, showRoute
+      }
     },
     specifications {
       kicker, heading, body,
@@ -169,7 +161,7 @@ export const HOME_PAGE_QUERY = /* groq */ `
         heading, label, supportingLine,
         pois[]-> {
           _id, name, description, category,
-          walkingMinutes, lat, lng, sortOrder
+          walkingMinutes, lat, lng, sortOrder, showRoute
         }
       },
 

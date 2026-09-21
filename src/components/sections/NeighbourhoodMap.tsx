@@ -6,7 +6,7 @@ import type { POI } from '@/types/sanity'
 // Palette tokens (mirrors CSS custom properties — kept in sync manually)
 // Used for runtime map paint overrides post-load.
 const PALETTE = {
-  paper:   '#FAF7F3',   // --c-paper
+  paper:   '#F5F2EB',   // --c-paper / --blekang
   paper2:  '#F5F2EB',   // --c-paper-2
   stone3:  '#C2BBB1',   // --c-stone-3
   stone4:  '#DCD8D1',   // --c-stone-4
@@ -20,6 +20,7 @@ interface Props {
   pois: POI[]
   buildingLat: number
   buildingLng: number
+  propertyName?: string
   hoveredPoiId: string | null
   onPoiHover: (id: string | null) => void
 }
@@ -28,6 +29,7 @@ export default function NeighbourhoodMap({
   pois,
   buildingLat,
   buildingLng,
+  propertyName = 'Barnängshuset',
   hoveredPoiId,
   onPoiHover,
 }: Props) {
@@ -157,20 +159,29 @@ export default function NeighbourhoodMap({
       // Apply paper-palette colour overrides to the loaded style
       applyPaperTone(map as Parameters<typeof applyPaperTone>[0])
 
-      // ── Building pin ──────────────────────────────────────────────────
+      // ── Building pin — the one coral element on the map ─────────────────
       const buildingEl = document.createElement('div')
       buildingEl.className = 'map-marker building'
-      buildingEl.setAttribute('aria-label', 'Barnängshuset')
+      buildingEl.setAttribute('aria-label', propertyName)
+      const buildingLabel = document.createElement('span')
+      buildingLabel.className = 'map-marker-building-label'
+      buildingLabel.textContent = propertyName
+      buildingEl.appendChild(buildingLabel)
       new sdk.Marker({ element: buildingEl })
         .setLngLat([buildingLng, buildingLat])
         .addTo(map)
 
-      // ── POI markers ───────────────────────────────────────────────────
-      pois.forEach((poi) => {
+      // ── POI markers — numbered to match the list ────────────────────────
+      pois.forEach((poi, index) => {
         const el = document.createElement('div')
         el.className = 'map-marker'
         el.setAttribute('aria-label', poi.name)
         el.title = `${poi.name} — ${poi.walkingMinutes} min`
+
+        const number = document.createElement('span')
+        number.className = 'map-marker-number'
+        number.textContent = String(index + 1)
+        el.appendChild(number)
 
         el.addEventListener('mouseenter', () => onPoiHover(poi._id))
         el.addEventListener('mouseleave', () => onPoiHover(null))
@@ -181,10 +192,48 @@ export default function NeighbourhoodMap({
           .setLngLat([poi.lng, poi.lat])
           .addTo(map)
       })
+
+      // ── Walking routes — dashed line + time label, used sparingly ───────
+      const routePois = pois.filter((poi) => poi.showRoute)
+      if (routePois.length) {
+        map.addSource('walk-routes', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: routePois.map((poi) => ({
+              type: 'Feature' as const,
+              properties: {},
+              geometry: {
+                type: 'LineString' as const,
+                coordinates: [[buildingLng, buildingLat], [poi.lng, poi.lat]],
+              },
+            })),
+          },
+        })
+        map.addLayer({
+          id: 'walk-routes-line',
+          type: 'line',
+          source: 'walk-routes',
+          paint: {
+            'line-color': PALETTE.ink30,
+            'line-width': 1.5,
+            'line-dasharray': [1, 1.6],
+          },
+        })
+
+        routePois.forEach((poi) => {
+          const labelEl = document.createElement('div')
+          labelEl.className = 'map-route-label'
+          labelEl.textContent = `${poi.walkingMinutes} min`
+          new sdk.Marker({ element: labelEl })
+            .setLngLat([(buildingLng + poi.lng) / 2, (buildingLat + poi.lat) / 2])
+            .addTo(map)
+        })
+      }
     })
 
     return () => map.remove()
-  }, [hasKey, apiKey, buildingLat, buildingLng, pois, onPoiHover, applyPaperTone])
+  }, [hasKey, apiKey, buildingLat, buildingLng, propertyName, pois, onPoiHover, applyPaperTone])
 
   useEffect(() => {
     let cleanup: (() => void) | undefined

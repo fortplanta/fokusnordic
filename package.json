@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "verify:sanity": "sanity exec scripts/verify-sanity.ts --with-user-token && sanity schema list"
+        "verify:sanity": "sanity exec scripts/verify-sanity.ts --with-user-token && sanity schema list",
+        "seed:pois": "sanity exec scripts/seed-neighbourhood-pois.ts --with-user-token"
     },
     "dependencies": {
         "@maptiler/sdk": "^4.0.2",

@@ -65,6 +65,13 @@ export default defineType({
       type: 'number',
       initialValue: 0,
     }),
+    defineField({
+      name: 'showRoute',
+      title: 'Show walking route on map',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Draws a dashed line from the building to this point, labelled with the walking time. Use sparingly — one or two points make it a fact; every point makes it noise.',
+    }),
   ],
 
   orderings: [
