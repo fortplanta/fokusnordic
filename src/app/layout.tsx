@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import '../styles/barnangshuset-site.css'
 import '../styles/floor-plans.css'
+import '../styles/area-map.css'
 import SiteMotion            from '@/components/motion/SiteMotion'
 import SkipLink              from '@/components/layout/SkipLink'
 

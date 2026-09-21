@@ -106,7 +106,9 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
           </div>
         </section>
       ) : null}
-      {content.areaMap?.categories?.some((category) => category.locations?.length) ? <AreaMap content={content.areaMap} fallback={fallbacks.place} /> : null}
+      {content.areaMap?.pois?.length ? (
+        <AreaMap content={content.areaMap} propertyName={identity?.propertyName} />
+      ) : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>
           <p className="kicker">{content.specifications.kicker}</p>

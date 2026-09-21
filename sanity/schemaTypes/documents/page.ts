@@ -226,91 +226,24 @@ export default defineType({
     // ─── 10. Area map ──────────────────────────────────────────────────────────
     defineField({
       name: 'areaMap', title: 'Area map', type: 'object',
+      description: 'A static map image with numbered pins positioned by percentage. Points come from the Points of Interest list — set each one’s map position there. Add, remove and reorder POIs there to change both the map pins and the numbered list.',
       fields: [
-        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), image('mapImage', 'Static map image'),
-        copy('drawerTitle', 'Drawer title', 1),
-        defineField({ name: 'drawerOpenDesktop', title: 'Drawer open on desktop', type: 'boolean', initialValue: true }),
-        defineField({ name: 'drawerOpenMobile', title: 'Drawer open on mobile', type: 'boolean', initialValue: false }),
-        copy('nearbyTitle', 'Nearby panel title', 1),
-        defineField({ name: 'nearbyOpenDesktop', title: 'Nearby panel open on desktop', type: 'boolean', initialValue: true }),
-        defineField({ name: 'nearbyOpenMobile', title: 'Nearby panel open on mobile', type: 'boolean', initialValue: true }),
+        copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), copy('supportingLine', 'Supporting line', 2),
+        image('mapImage', 'Map image'),
         defineField({
-          name: 'buildingMarker', title: 'Barnängshuset marker', type: 'object',
-          description: 'Upload the building SVG, then position and size it over the map.',
-          fields: [
-            defineField({
-              name: 'icon', title: 'Building SVG', type: 'file',
-              options: { accept: 'image/svg+xml' },
-              validation: (r) => r.required(),
-            }),
-            copy('alt', 'Accessible label', 1),
-            defineField({
-              name: 'x', title: 'Horizontal position (%)', type: 'number', initialValue: 50,
-              description: '0 is the left edge; 100 is the right edge. Decimals are supported.',
-              validation: (r) => r.required().min(0).max(100).precision(2),
-            }),
-            defineField({
-              name: 'y', title: 'Vertical position (%)', type: 'number', initialValue: 50,
-              description: '0 is the top edge; 100 is the bottom edge. Decimals are supported.',
-              validation: (r) => r.required().min(0).max(100).precision(2),
-            }),
-            defineField({
-              name: 'width', title: 'Marker width (% of map)', type: 'number', initialValue: 10,
-              description: 'Controls the displayed SVG width relative to the map.',
-              validation: (r) => r.required().min(2).max(30).precision(2),
-            }),
-          ],
+          name: 'buildingX', title: 'Building pin — horizontal (%)', type: 'number',
+          description: '0 is the left edge, 100 is the right edge.',
+          validation: (r) => r.min(0).max(100).precision(2),
         }),
         defineField({
-          name: 'categories', title: 'Location categories', type: 'array',
-          description: 'Each category is an independent accordion. Its locations create both the map dots and the corresponding list items.',
-          of: [{
-            type: 'object',
-            fields: [
-              copy('title', 'Category title', 1),
-              defineField({ name: 'openDesktop', title: 'Open on desktop', type: 'boolean', initialValue: true }),
-              defineField({ name: 'openMobile', title: 'Open on mobile', type: 'boolean', initialValue: false }),
-              defineField({
-                name: 'tone', title: 'Marker tone', type: 'string', initialValue: 'wine',
-                options: { list: [
-                  { title: 'Wine', value: 'wine' },
-                  { title: 'Coral', value: 'coral' },
-                  { title: 'Sage', value: 'sage' },
-                  { title: 'Ink', value: 'ink' },
-                ], layout: 'radio' },
-              }),
-              defineField({
-                name: 'locations', title: 'Locations', type: 'array',
-                description: 'Add, remove and reorder locations here. Every item is linked to one map dot.',
-                of: [{ type: 'object', fields: [
-                  copy('name', 'Name', 1), copy('detail', 'Distance / detail', 1),
-                  defineField({ name: 'url', title: 'Link', type: 'url' }),
-                  defineField({
-                    name: 'x', title: 'Horizontal position (%)', type: 'number',
-                    description: '0 is the left edge; 100 is the right edge. Decimals are supported.',
-                    validation: (r) => r.required().min(0).max(100).precision(2),
-                  }),
-                  defineField({
-                    name: 'y', title: 'Vertical position (%)', type: 'number',
-                    description: '0 is the top edge; 100 is the bottom edge. Decimals are supported.',
-                    validation: (r) => r.required().min(0).max(100).precision(2),
-                  }),
-                ], preview: { select: { title: 'name', subtitle: 'detail' } } }],
-              }),
-            ],
-            preview: {
-              select: { title: 'title', locations: 'locations' },
-              prepare: ({ title, locations }) => ({ title, subtitle: `${locations?.length || 0} locations` }),
-            },
-          }],
+          name: 'buildingY', title: 'Building pin — vertical (%)', type: 'number',
+          description: '0 is the top edge, 100 is the bottom edge.',
+          validation: (r) => r.min(0).max(100).precision(2),
         }),
-        copy('travelTitle', 'Travel times panel title', 1),
-        defineField({ name: 'travelOpenDesktop', title: 'Travel times open on desktop', type: 'boolean', initialValue: true }),
-        defineField({ name: 'travelOpenMobile', title: 'Travel times open on mobile', type: 'boolean', initialValue: false }),
         defineField({
-          name: 'travelTimes', title: 'Travel times', type: 'array',
-          description: 'Independent travel-time rows. These do not create map dots.',
-          of: [{ type: 'object', fields: [copy('name', 'Destination', 1), copy('duration', 'Travel time', 1)], preview: { select: { title: 'name', subtitle: 'duration' } } }],
+          name: 'pois', title: 'Points of interest', type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'poi' }] }],
+          description: 'Order here sets both the numbered list and the matching numbered map pins.',
         }),
       ],
     }),

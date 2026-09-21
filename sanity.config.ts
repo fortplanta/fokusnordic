@@ -43,6 +43,13 @@ export default defineConfig({
                   .schemaType('page')
                   .documentId('homePage')
               ),
+
+            S.divider(),
+
+            // Collections editors manage directly — no developer required.
+            S.documentTypeListItem('poi').title('Neighbourhood — Points of Interest'),
+            S.documentTypeListItem('floor').title('Floors'),
+            S.documentTypeListItem('journalPost').title('Journal'),
           ]),
     }),
 

@@ -127,34 +127,13 @@ export type CurrentHomePage = {
         image?: SanityImage
     }
     areaMap?: {
-        kicker: string
-        heading: string
-        drawerTitle?: string
-        drawerOpenDesktop?: boolean
-        drawerOpenMobile?: boolean
-        nearbyTitle?: string
-        nearbyOpenDesktop?: boolean
-        nearbyOpenMobile?: boolean
+        kicker?: string
+        heading?: string
+        supportingLine?: string
         mapImage?: SanityImage
-        buildingMarker?: {
-            alt?: string
-            x: number
-            y: number
-            width: number
-            icon?: { asset?: { url?: string; originalFilename?: string; mimeType?: string } }
-        }
-        categories?: Array<{
-            _key?: string
-            title: string
-            tone?: 'wine' | 'coral' | 'sage' | 'ink'
-            openDesktop?: boolean
-            openMobile?: boolean
-            locations: Array<{ _key?: string; name: string; detail?: string; url?: string; x: number; y: number }>
-        }>
-        travelTitle?: string
-        travelOpenDesktop?: boolean
-        travelOpenMobile?: boolean
-        travelTimes?: Array<{ _key?: string; name: string; duration: string }>
+        buildingX?: number
+        buildingY?: number
+        pois?: POI[]
     }
     viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
 }
@@ -178,9 +157,12 @@ export type POI = {
     description?: string
     category: string
     walkingMinutes: number
-    lat: number
-    lng: number
+    mapX?: number
+    mapY?: number
+    lat?: number
+    lng?: number
     sortOrder: number
+    showRoute?: boolean
 }
 
 export type JournalPost = {
