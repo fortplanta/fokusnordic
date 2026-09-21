@@ -83,9 +83,11 @@ export const CURRENT_HOME_QUERY = /* groq */ `
     },
     areaMap {
       kicker, heading, supportingLine,
+      mapImage { ${IMAGE_FIELDS} },
+      buildingX, buildingY,
       pois[]-> {
         _id, name, description, category,
-        walkingMinutes, lat, lng, sortOrder, showRoute
+        walkingMinutes, mapX, mapY, sortOrder, showRoute
       }
     },
     specifications {

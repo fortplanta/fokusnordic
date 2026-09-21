@@ -226,9 +226,20 @@ export default defineType({
     // ─── 10. Area map ──────────────────────────────────────────────────────────
     defineField({
       name: 'areaMap', title: 'Area map', type: 'object',
-      description: 'A real, interactive map — no static image. Points come from the Points of Interest list; add, remove and reorder them there to change both the map pins and the numbered list.',
+      description: 'A static map image with numbered pins positioned by percentage. Points come from the Points of Interest list — set each one’s map position there. Add, remove and reorder POIs there to change both the map pins and the numbered list.',
       fields: [
         copy('kicker', 'Kicker', 1), copy('heading', 'Heading', 1), copy('supportingLine', 'Supporting line', 2),
+        image('mapImage', 'Map image'),
+        defineField({
+          name: 'buildingX', title: 'Building pin — horizontal (%)', type: 'number',
+          description: '0 is the left edge, 100 is the right edge.',
+          validation: (r) => r.min(0).max(100).precision(2),
+        }),
+        defineField({
+          name: 'buildingY', title: 'Building pin — vertical (%)', type: 'number',
+          description: '0 is the top edge, 100 is the bottom edge.',
+          validation: (r) => r.min(0).max(100).precision(2),
+        }),
         defineField({
           name: 'pois', title: 'Points of interest', type: 'array',
           of: [{ type: 'reference', to: [{ type: 'poi' }] }],

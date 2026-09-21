@@ -27,11 +27,7 @@ type Content = {
 }
 
 type Contact = { name: string; role?: string; email: string; phone?: string; photo?: CmsImage }
-type Identity = { propertyName?: string; address?: string; coordinates?: { lat: number; lng: number } }
-
-// Fallback building coordinates — Nackagatan 4, Södermalm — used until
-// siteSettings.coordinates is set in Sanity.
-const BUILDING = { lat: 59.3148, lng: 18.0717 }
+type Identity = { propertyName?: string; address?: string }
 
 const fallbacks = {
   hero: '/assets/img-hero.jpg', building: '/assets/img-editorial.jpg', volume: '/assets/img-lifestyle.png',
@@ -111,12 +107,7 @@ export default function BarnangshusetSite({ content, contact, identity }: { cont
         </section>
       ) : null}
       {content.areaMap?.pois?.length ? (
-        <AreaMap
-          content={content.areaMap}
-          propertyName={identity?.propertyName}
-          buildingLat={identity?.coordinates?.lat ?? BUILDING.lat}
-          buildingLng={identity?.coordinates?.lng ?? BUILDING.lng}
-        />
+        <AreaMap content={content.areaMap} propertyName={identity?.propertyName} />
       ) : null}
       <section className="volume volume-technical grid-section" aria-labelledby="volume-technical-title">
         <div className="volume-copy" data-motion-copy>

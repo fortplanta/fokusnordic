@@ -1,7 +1,7 @@
 /*
-  Neighbourhood map — a real, interactive map (MapTiler/MapLibre), never a
-  static image. Numbered pins on the map match the numbered list on the
-  left one-for-one; the building is the single coral element on the map.
+  Neighbourhood map — a static map image (client requirement) with numbered
+  pins positioned by percentage. Pins match the numbered list on the left
+  one-for-one; the building is the single coral element on the map.
   Scoped under .bh-site so it can use the shared --bh-* spacing tokens
   alongside the global design tokens (--c-ink, --c-coral, --c-sage, …).
 */
@@ -37,7 +37,7 @@
   .bh-site .area-map-support { grid-column: 1 / 13 }
 }
 
-/* ─── Stage: numbered list + real map, side by side ─────────────────────── */
+/* ─── Stage: numbered list + static map, side by side ────────────────────── */
 
 .bh-site .area-map-stage {
   display: grid;
@@ -55,6 +55,8 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   min-height: 26rem;
+  overflow: hidden;
+  background: var(--c-paper-2);
 }
 
 .bh-site .area-map-list {
@@ -111,33 +113,12 @@
   padding-top: 0.2em;
 }
 
-/* ─── The map surface itself ─────────────────────────────────────────────── */
+/* ─── The map surface itself — a static image, positioned pins on top ────── */
 
-.bh-site .map-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: var(--c-paper-2);
-  overflow: hidden;
+.bh-site .area-map-image {
+  object-fit: cover;
+  filter: saturate(0.85) contrast(0.96);
 }
-
-/*
-  Canvas filter — warms the WebGL render to match the paper palette.
-  Targets only the canvas, not the DOM marker elements or attribution.
-*/
-.bh-site .map-container .maplibregl-canvas-container {
-  filter: sepia(0.06) saturate(0.8) brightness(0.98);
-}
-.bh-site .maplibregl-ctrl-attrib { background: transparent !important; box-shadow: none !important }
-.bh-site .maplibregl-ctrl-attrib-inner,
-.bh-site .maplibregl-ctrl-attrib-inner a {
-  font-size: var(--step-micro) !important;
-  opacity: 0.5;
-  color: var(--c-stone) !important;
-  text-decoration: none !important;
-}
-.bh-site .maplibregl-ctrl-attrib-button { background-color: transparent !important; opacity: 0.4 }
-.bh-site .maplibregl-ctrl-logo { opacity: 0.35 !important }
 
 .bh-site .map-placeholder {
   display: flex;
@@ -146,16 +127,34 @@
   justify-content: center;
   gap: 1rem;
   height: 100%;
+  background: var(--c-paper-2);
   color: var(--c-stone);
   text-align: center;
   padding: 2rem;
 }
 .bh-site .map-placeholder p { font-size: var(--step-00); letter-spacing: 0.02em; line-height: 1.6; max-width: 32ch; overflow-wrap: anywhere }
-.bh-site .map-placeholder a { font-size: var(--step-00); color: var(--c-sage); text-decoration: underline; text-underline-offset: 3px }
 
-/* ─── Markers — numbered pins match the list; building is the one coral dot ─ */
+/* Dashed walking routes — drawn under the pins, used sparingly */
+.bh-site .area-map-routes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.bh-site .area-map-routes line {
+  stroke: var(--c-ink);
+  stroke-opacity: 0.3;
+  stroke-width: 0.3;
+  stroke-dasharray: 1 1.2;
+  vector-effect: non-scaling-stroke;
+}
 
-.bh-site .map-marker {
+/* ─── Pins — numbered pins match the list; building is the one coral dot ─── */
+
+.bh-site .area-map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
   width: 26px;
   height: 26px;
   display: flex;
@@ -172,25 +171,22 @@
   box-shadow: var(--bh-shadow-marker);
   transition: background var(--bh-motion-fast) var(--bh-ease), transform var(--bh-motion-fast) var(--bh-ease);
 }
-.bh-site .map-marker-number { pointer-events: none }
-.bh-site .map-marker.hovered,
-.bh-site .map-marker:hover {
+.bh-site .area-map-pin:hover,
+.bh-site .area-map-pin.is-active {
   background: var(--c-sage);
-  transform: scale(1.15);
+  transform: translate(-50%, -50%) scale(1.15);
 }
 
-.bh-site .map-marker.building {
-  position: relative;
+.bh-site .area-map-pin--building {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
   background: var(--c-coral);
   border: 2px solid var(--c-paper);
   box-shadow: var(--bh-shadow-marker);
   cursor: default;
   animation: area-map-pulse 2.8s infinite;
 }
-.bh-site .map-marker-building-label {
+.bh-site .area-map-pin-label {
   position: absolute;
   bottom: calc(100% + 8px);
   left: 50%;
@@ -205,7 +201,7 @@
   padding: 4px 8px;
   pointer-events: none;
 }
-.bh-site .map-marker-building-label::after {
+.bh-site .area-map-pin-label::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -220,7 +216,9 @@
 }
 
 /* Walking-time label at the midpoint of a dashed route — used sparingly */
-.bh-site .map-route-label {
+.bh-site .area-map-route-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
   background: var(--c-paper);
   color: var(--c-ink);
   font-family: var(--font-sans);
@@ -234,5 +232,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bh-site .map-marker.building { animation: none }
+  .bh-site .area-map-pin--building { animation: none }
 }

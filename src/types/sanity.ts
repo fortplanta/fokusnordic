@@ -130,6 +130,9 @@ export type CurrentHomePage = {
         kicker?: string
         heading?: string
         supportingLine?: string
+        mapImage?: SanityImage
+        buildingX?: number
+        buildingY?: number
         pois?: POI[]
     }
     viewing: { kicker: string; heading: string; body: string; ctaLabel: string; image?: SanityImage }
@@ -154,8 +157,10 @@ export type POI = {
     description?: string
     category: string
     walkingMinutes: number
-    lat: number
-    lng: number
+    mapX?: number
+    mapY?: number
+    lat?: number
+    lng?: number
     sortOrder: number
     showRoute?: boolean
 }

@@ -172,7 +172,10 @@ export default function NeighbourhoodMap({
         .addTo(map)
 
       // ── POI markers — numbered to match the list ────────────────────────
-      pois.forEach((poi, index) => {
+      const geoPois = pois.filter(
+        (poi): poi is typeof poi & { lat: number; lng: number } => poi.lat != null && poi.lng != null,
+      )
+      geoPois.forEach((poi, index) => {
         const el = document.createElement('div')
         el.className = 'map-marker'
         el.setAttribute('aria-label', poi.name)
@@ -194,7 +197,7 @@ export default function NeighbourhoodMap({
       })
 
       // ── Walking routes — dashed line + time label, used sparingly ───────
-      const routePois = pois.filter((poi) => poi.showRoute)
+      const routePois = geoPois.filter((poi) => poi.showRoute)
       if (routePois.length) {
         map.addSource('walk-routes', {
           type: 'geojson',

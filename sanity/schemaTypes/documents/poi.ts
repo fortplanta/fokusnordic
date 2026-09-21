@@ -1,9 +1,10 @@
 import { defineField, defineType } from 'sanity'
 
 /*
-  Point of interest — feeds both the neighbourhood list and the Maptiler map.
-  Coordinates must be verified against Google Maps / actual walking routes
-  before launch (see PRODUCTION-BRIEF.md §11).
+  Point of interest — feeds both the numbered neighbourhood list and its
+  matching pin on the static map image (see areaMap.mapImage on the page
+  document). mapX/mapY position the pin on that image; lat/lng are kept as
+  a real-world reference for verifying walking times, not for rendering.
 */
 export default defineType({
   name: 'poi',
@@ -48,16 +49,30 @@ export default defineType({
       validation: (r) => r.required().positive(),
     }),
     defineField({
-      name: 'lat',
-      title: 'Latitude',
+      name: 'mapX',
+      title: 'Map position — horizontal (%)',
       type: 'number',
-      validation: (r) => r.required(),
+      description: 'Position on the static map image. 0 is the left edge, 100 is the right edge.',
+      validation: (r) => r.min(0).max(100).precision(2),
+    }),
+    defineField({
+      name: 'mapY',
+      title: 'Map position — vertical (%)',
+      type: 'number',
+      description: 'Position on the static map image. 0 is the top edge, 100 is the bottom edge.',
+      validation: (r) => r.min(0).max(100).precision(2),
+    }),
+    defineField({
+      name: 'lat',
+      title: 'Latitude (reference only)',
+      type: 'number',
+      description: 'Not used for rendering — kept to verify walking times against a real map.',
     }),
     defineField({
       name: 'lng',
-      title: 'Longitude',
+      title: 'Longitude (reference only)',
       type: 'number',
-      validation: (r) => r.required(),
+      description: 'Not used for rendering — kept to verify walking times against a real map.',
     }),
     defineField({
       name: 'sortOrder',
