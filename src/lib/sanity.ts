@@ -67,11 +67,9 @@ export const CURRENT_HOME_QUERY = /* groq */ `
       floors[] {
         _key, label,
         configurations[] {
-          _key, title, name, body, facts[] { _key, label, value },
+          _key, title, name, body, levelLabel, facts[] { _key, label, value },
           detailTables[] { _key, title, labelHeading, valueHeading, rows[] { _key, label, value, accent }, footer },
-          mainLevelLabel, planImage { ${IMAGE_FIELDS} }, explodedImage { ${IMAGE_FIELDS} },
-          mezzanineLevelLabel, mezzaninePlanImage { ${IMAGE_FIELDS} },
-          mezzanineExplodedImage { ${IMAGE_FIELDS} }
+          planImage { ${IMAGE_FIELDS} }, explodedImage { ${IMAGE_FIELDS} }
         }
       }
     },
