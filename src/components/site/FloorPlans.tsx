@@ -147,8 +147,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           <figure className="floor-plan-drawing" id={`${id}-plan`} role={hasLevels ? 'tabpanel' : undefined} aria-labelledby={hasLevels ? `${id}-level-tab-${selectedLevelIndex}` : undefined} onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
             <div className="floor-plan-canvas"><PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 62vw" alt={`${suiteTitle} floor plan`} emptyLabel="Floor plan" /></div>
             <div className="floor-plan-axo-pin" aria-hidden="true">
-              <div className="floor-plan-axo-canvas"><PlanImage image={configuration.explodedImage} sizes="12vw" emptyLabel="" /></div>
-              <span className="floor-plan-axo-tag">AXO</span>
+              <PlanImage image={configuration.explodedImage} sizes="9vw" emptyLabel="" />
             </div>
             {configuration.planImage?.asset?.url && <a className="floor-plan-open" href={configuration.planImage.asset.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${suiteTitle} floor plan at full size in a new tab`}>View full-size plan ↗</a>}
           </figure>
