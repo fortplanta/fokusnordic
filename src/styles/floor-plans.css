@@ -4,6 +4,10 @@
      ground — see .floor-plan-info below. */
   --bh-plan-muted: var(--bh-soft);
   --bh-plan-rule: var(--bh-rule);
+  /* No warm token in the palette reads as an opaque "cutout" against the
+     paper ground behind it — paper and inverse are both close to it in
+     tone. This is a deliberate, singular exception to the token rule. */
+  --bh-plan-cutout: #fff;
   /* Capped regardless of suite: the longest room/seating table across all
      suites must fit without forcing the section (and everything below it
      on the page) to change height as the visitor browses — that reflow read
@@ -11,9 +15,9 @@
      below; suites that outgrow it scroll internally instead. */
   --bh-plan-info-height: clamp(28rem, 44vw, 40rem);
   scroll-margin-top: var(--bh-space-7);
-  padding: var(--bh-space-7) var(--bh-gutter);
   background: var(--bh-paper);
   color: var(--bh-ink);
+  overflow: clip;
 }
 
 .floor-plan-configurator {
@@ -23,61 +27,74 @@
   margin-inline: auto;
   grid-template-columns: minmax(0, 8fr) minmax(0, 3.5fr);
   align-items: stretch;
-  gap: var(--bh-space-4) var(--bh-space-5);
+  gap: 0 var(--bh-space-5);
 }
 
 /* ─── Stage: the plan drawing, its pinned AXO note, and the filmstrip ────── */
 
-.floor-plan-stage { display: grid; grid-column: 1; align-content: start; gap: var(--bh-space-3); min-width: 0; touch-action: pan-y; }
+.floor-plan-stage { display: grid; grid-column: 1; align-content: start; gap: var(--bh-space-3); min-width: 0; padding: var(--bh-space-7) 0 var(--bh-space-7) var(--bh-gutter); touch-action: pan-y; }
 .floor-plan-drawing { position: relative; width: 100%; min-width: 0; margin: 0; }
 .floor-plan-canvas { position: relative; width: 100%; aspect-ratio: 1.68; background: var(--bh-paper); }
 .floor-plan-image { object-fit: contain; }
 .floor-plan-empty { position: absolute; inset: 0; display: grid; place-content: center; gap: var(--bh-space-1); padding: var(--bh-space-4); color: var(--bh-ink); text-align: center; }
 
-/* A floating note, not a card: no backing, just a drop-shadow so it reads as
-   pinned above the drawing without boxing it in or covering more of the
-   plan than it has to. */
-.floor-plan-axo-pin { position: absolute; top: var(--bh-space-2); left: var(--bh-space-2); width: clamp(4.5rem, 8vw, 6.5rem); aspect-ratio: .78; filter: drop-shadow(0 6px 14px rgb(0 0 0 / .28)); }
+/* A pinned note, not a card: an opaque cutout so the diagram reads clearly
+   above the drawing without a heavy frame, and small enough that it covers
+   as little of the plan as possible. */
+.floor-plan-axo-pin { position: absolute; top: var(--bh-space-2); left: var(--bh-space-2); width: clamp(4.5rem, 8vw, 6.5rem); aspect-ratio: .78; background: var(--bh-plan-cutout); box-shadow: 0 6px 14px rgb(0 0 0 / .28); }
 
 .floor-plan-open { display: flex; justify-content: flex-end; align-items: center; min-height: var(--bh-control-size); font-size: var(--bh-body-size); color: var(--bh-ink); text-decoration: underline; text-underline-offset: .2em; }
 
-/* ─── Filmstrip: a swiper of plan thumbnails standing in for page numbers ── */
+/* Crossfade on every slide change — masks the pop between plans of
+   differing density/framing instead of trying to eliminate it. Keyed to
+   remount on each change, which restarts the CSS animation for free. */
+@keyframes floor-plan-fade { from { opacity: 0; } to { opacity: 1; } }
+.floor-plan-canvas .floor-plan-image, .floor-plan-axo-pin .floor-plan-image { animation: floor-plan-fade .32s var(--bh-ease); }
+
+/* ─── Filmstrip: a swiper of plan thumbnails ──────────────────────────────── */
 
 .floor-plan-filmstrip { display: flex; width: 100%; align-items: center; gap: var(--bh-space-2); min-width: 0; }
+.floor-plan-filmstrip-track { display: grid; gap: var(--bh-space-1); min-width: 0; }
+.floor-plan-filmstrip-caption { color: var(--bh-plan-muted); font-size: var(--bh-label-size); font-variant-numeric: tabular-nums; letter-spacing: var(--bh-control-tracking); text-transform: uppercase; }
 .floor-plan-filmstrip-list { display: flex; align-items: center; gap: var(--bh-space-2); min-width: 0; overflow-x: auto; scrollbar-width: none; list-style: none; scroll-padding-inline: var(--bh-space-6); }
 .floor-plan-filmstrip-list::-webkit-scrollbar { display: none; }
 .floor-plan-filmstrip-list li { display: flex; flex: none; }
-.floor-plan-filmstrip-list button { display: grid; flex: none; gap: calc(var(--bh-space-1) / 2); padding: calc(var(--bh-space-1) / 2); border: var(--bh-rule-width) solid transparent; color: var(--bh-plan-muted); transition: border-color var(--bh-motion-control) var(--bh-ease), color var(--bh-motion-control) var(--bh-ease); }
-.floor-plan-filmstrip-list button.is-active { border-color: var(--bh-ink); color: var(--bh-ink); }
-.floor-plan-filmstrip-thumb { position: relative; width: var(--bh-space-7); aspect-ratio: 1.68; background: var(--bh-paper); border: var(--bh-rule-width) solid var(--bh-plan-rule); overflow: hidden; }
+.floor-plan-filmstrip-list button { display: grid; flex: none; padding: 3px; border: 2px solid transparent; opacity: .55; transition: border-color var(--bh-motion-control) var(--bh-ease), opacity var(--bh-motion-control) var(--bh-ease), transform var(--bh-motion-control) var(--bh-ease); }
+.floor-plan-filmstrip-list button.is-active { border-color: var(--bh-wine); opacity: 1; transform: scale(1.05); }
+.floor-plan-filmstrip-thumb { position: relative; width: var(--bh-space-7); aspect-ratio: 1.68; background: var(--bh-plan-cutout); }
 .floor-plan-filmstrip-thumb .floor-plan-image { padding: 3px; }
-.floor-plan-filmstrip-label { font-size: 10px; font-variant-numeric: tabular-nums; letter-spacing: var(--bh-control-tracking); text-align: center; text-transform: uppercase; }
 .floor-plan-page-ellipsis { display: grid; flex: none; place-items: center; width: var(--bh-space-4); color: var(--bh-plan-muted); }
 .floor-plan-page-arrow { display: grid; flex: none; place-items: center; width: var(--bh-control-size); height: var(--bh-control-size); color: var(--bh-plan-muted); transition: color var(--bh-motion-control) var(--bh-ease); }
 .floor-plan-page-arrow svg { width: var(--bh-space-2); height: var(--bh-space-2); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .floor-plan-page-arrow:disabled { opacity: .35; cursor: default; }
 
-/* ─── Info: a distinct wine-ground panel — suite header, tabs, tables, CTA ── */
+/* ─── Info: a full-height, full-bleed wine panel — not an inset card ─────── */
 
 .floor-plan-info {
   --bh-plan-muted: var(--bh-muted-inverse);
   --bh-plan-rule: var(--bh-rule-inverse);
+  position: relative;
+  isolation: isolate;
   grid-column: 2;
   min-width: 0;
-  padding: var(--bh-space-4);
-  background: var(--bh-wine);
+  padding: var(--bh-space-7) var(--bh-gutter) var(--bh-space-7) var(--bh-space-4);
   color: var(--bh-inverse);
+}
+.floor-plan-info::before {
+  content: "";
+  position: absolute;
+  /* Bleed to the true viewport edge regardless of the section's own
+     max-width, and to the section's full height, so this reads as a
+     sidebar pane rather than a padded card floating in the paper ground. */
+  inset: 0 -50vw 0 0;
+  background: var(--bh-wine);
+  z-index: -1;
 }
 .floor-plan-suite-header { display: flex; align-items: start; justify-content: space-between; gap: var(--bh-space-2); }
 .floor-plan-suite-header h2 { max-width: none; color: var(--bh-inverse); font-size: clamp(1.6rem, 2.1vw, 2.25rem); line-height: 1.15; text-transform: uppercase; }
 .floor-plan-info-toggle { display: none; }
 
-.floor-plan-level-label { margin-top: var(--bh-space-2); color: var(--bh-plan-muted); font-size: var(--bh-body-size); line-height: var(--bh-register-leading); }
-.floor-plan-level-tabs { display: flex; width: fit-content; margin-top: calc(var(--bh-space-1) / 2); border-bottom: var(--bh-rule-width) solid var(--bh-plan-rule); }
-.floor-plan-level-tabs button { min-width: 7rem; min-height: var(--bh-control-size); padding-inline: var(--bh-space-1); color: var(--bh-quiet-inverse); font-size: var(--bh-body-size); line-height: var(--bh-register-leading); text-align: left; transition: color var(--bh-motion-control) var(--bh-ease), box-shadow var(--bh-motion-control) var(--bh-ease); }
-.floor-plan-level-tabs button[aria-selected="true"] { color: var(--bh-inverse); box-shadow: 0 var(--bh-rule-width) 0 var(--bh-inverse); }
-
-.floor-plan-description { margin-top: var(--bh-space-4); max-width: 42ch; color: var(--bh-plan-muted); font-size: var(--bh-body-size); line-height: var(--bh-register-leading); }
+.floor-plan-description { color: var(--bh-plan-muted); font-size: var(--bh-body-size); line-height: var(--bh-register-leading); max-width: 42ch; }
 
 /* Ghost button — ordinary for this panel, not a scarce accent. */
 .floor-plan-enquire { display: flex; width: fit-content; min-height: var(--bh-control-size); align-items: center; gap: var(--bh-space-3); margin-top: var(--bh-space-4); padding-inline: var(--bh-space-2); background: transparent; border: var(--bh-rule-width) solid var(--bh-inverse); color: var(--bh-inverse); font-size: var(--bh-label-size); font-weight: 600; line-height: var(--bh-control-leading); letter-spacing: var(--bh-control-tracking); text-transform: uppercase; transition: background var(--bh-motion-control) var(--bh-ease); }
@@ -100,8 +117,7 @@
 .floor-plan-table-key { display: inline-block; width: var(--bh-space-1); height: var(--bh-space-1); margin-right: var(--bh-space-1); background: var(--c-coral); vertical-align: .05em; }
 
 @media (hover: hover) and (pointer: fine) {
-  .floor-plan-level-tabs button:hover { color: var(--bh-inverse); }
-  .floor-plan-filmstrip-list button:not(.is-active):hover { color: var(--bh-ink); border-color: var(--bh-plan-rule); }
+  .floor-plan-filmstrip-list button:not(.is-active):hover { opacity: .8; }
   .floor-plan-page-arrow:not(:disabled):hover { color: var(--bh-ink); }
   .floor-plan-enquire:hover { background: color-mix(in srgb, var(--bh-inverse) 12%, transparent); }
   .floor-plan-enquire:hover svg { transform: translate(2px, -2px); }
@@ -110,14 +126,16 @@
 @media (max-width: 1100px) {
   .floor-plan-configurator { grid-template-columns: minmax(0, 1fr); }
   .floor-plan-info { grid-column: 1; }
+  .floor-plan-info::before { inset: 0; }
   .floor-plan-axo-pin { width: clamp(4rem, 11vw, 5.5rem); }
 }
 
 @media (max-width: 760px) {
-  .floor-plans { min-height: 0; padding: var(--bh-space-6) var(--bh-gutter); }
+  .floor-plans { min-height: 0; }
+  .floor-plan-stage { padding: var(--bh-space-6) var(--bh-gutter); }
   .floor-plan-configurator { gap: var(--bh-space-4); }
   .floor-plan-canvas { aspect-ratio: 1.5; }
-  .floor-plan-info { padding: var(--bh-space-3); }
+  .floor-plan-info { padding: var(--bh-space-6) var(--bh-gutter); }
   /* The plan is the whole point on a phone screen — the AXO note is a
      desktop-only orientation aid, not essential information. */
   .floor-plan-axo-pin { display: none; }
@@ -131,5 +149,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floor-plan-level-tabs button, .floor-plan-filmstrip-list button, .floor-plan-page-arrow, .floor-plan-enquire, .floor-plan-enquire svg, .floor-plan-info-body { transition-duration: .001ms; }
+  .floor-plan-filmstrip-list button, .floor-plan-page-arrow, .floor-plan-enquire, .floor-plan-enquire svg, .floor-plan-info-body { transition-duration: .001ms; }
+  .floor-plan-canvas .floor-plan-image, .floor-plan-axo-pin .floor-plan-image { animation-duration: .001ms; }
 }

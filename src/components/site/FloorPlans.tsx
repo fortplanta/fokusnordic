@@ -17,20 +17,29 @@ function CaretIcon({ direction }: { direction: 'up' | 'down' }) {
   return <svg viewBox="0 0 16 16" aria-hidden="true"><path d={direction === 'up' ? 'M4 10l4-4 4 4' : 'M4 6l4 4 4-4'} /></svg>
 }
 
-// Classic truncated-pagination range: first, last, a window around the
-// current page, and an ellipsis for whatever falls outside that window —
-// keeps the control's width constant as more suites are added in Sanity.
+// Gap-filling pagination range: near either edge the visible window widens
+// to fill the slot an ellipsis would have taken, so the control always
+// renders the same number of slots (once there are enough items to
+// truncate at all) — no reflow as the visitor swipes toward either end.
 function paginationRange(current: number, total: number, siblingCount = 1): Array<number | 'ellipsis'> {
   const totalSlots = siblingCount * 2 + 5
   if (total <= totalSlots) return Array.from({ length: total }, (_, index) => index)
-  const left = Math.max(current - siblingCount, 1)
-  const right = Math.min(current + siblingCount, total - 2)
-  const range: Array<number | 'ellipsis'> = [0]
-  if (left > 1) range.push('ellipsis')
-  for (let index = left; index <= right; index += 1) range.push(index)
-  if (right < total - 2) range.push('ellipsis')
-  range.push(total - 1)
-  return range
+  const leftSibling = Math.max(current - siblingCount, 0)
+  const rightSibling = Math.min(current + siblingCount, total - 1)
+  const showLeftEllipsis = leftSibling > 1
+  const showRightEllipsis = rightSibling < total - 2
+  const lastIndex = total - 1
+
+  if (!showLeftEllipsis && showRightEllipsis) {
+    const leftItemCount = 3 + siblingCount * 2
+    return [...Array.from({ length: leftItemCount }, (_, index) => index), 'ellipsis', lastIndex]
+  }
+  if (showLeftEllipsis && !showRightEllipsis) {
+    const rightItemCount = 3 + siblingCount * 2
+    return [0, 'ellipsis', ...Array.from({ length: rightItemCount }, (_, index) => total - rightItemCount + index)]
+  }
+  const middleRange = Array.from({ length: rightSibling - leftSibling + 1 }, (_, index) => leftSibling + index)
+  return [0, 'ellipsis', ...middleRange, 'ellipsis', lastIndex]
 }
 
 function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; alt?: string; emptyLabel?: string }) {
@@ -55,30 +64,17 @@ function ConfigurationTables({ configuration }: { configuration: FloorPlanConfig
   </table>)}</div>
 }
 
-// Main level and mezzanine are separate, independently rentable configurations
-// that happen to share a floor — grouped here only so the UI can offer a level
-// tab, never merged into a single listing's data.
-type SuiteGroup = { key: string; floorLabel: string; levels: FloorPlanConfiguration[] }
+// Every configuration — main level or mezzanine — is its own independently
+// rentable listing and its own slide. "Suite 1" and "Suite 1 Mezzanine" are
+// never merged into one entry with a level switch.
+type Slide = { key: string; floorLabel: string; configuration: FloorPlanConfiguration }
 
 export default function FloorPlans({ content }: { content: FloorPlanSection }) {
-  const groups = useMemo<SuiteGroup[]>(() => {
-    const result: SuiteGroup[] = []
-    for (const floor of content.floors || []) {
-      for (const configuration of floor.configurations || []) {
-        const isMezzanine = (configuration.levelLabel || '').toLowerCase() === 'mezzanine'
-        const previous = result[result.length - 1]
-        if (isMezzanine && previous?.floorLabel === floor.label) {
-          previous.levels.push(configuration)
-        } else {
-          result.push({ key: configuration._key || configuration.title, floorLabel: floor.label, levels: [configuration] })
-        }
-      }
-    }
-    return result
-  }, [content.floors])
+  const slides = useMemo<Slide[]>(() => (content.floors || []).flatMap((floor) =>
+    (floor.configurations || []).map((configuration) => ({ key: configuration._key || configuration.title, floorLabel: floor.label, configuration }))
+  ), [content.floors])
 
-  const [suiteIndex, setSuiteIndex] = useState(0)
-  const [levelIndex, setLevelIndex] = useState(0)
+  const [slideIndex, setSlideIndex] = useState(0)
   // Expanded by default: the drawer collapse is a JS convenience for tight
   // mobile screens, not a gate on content — collapsing by default would hide
   // suite details from anyone before hydration finishes, or without JS at all.
@@ -88,9 +84,8 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   const sectionIsActive = useRef(false)
   const activeThumbRef = useRef<HTMLLIElement | null>(null)
   const id = useId()
-  const selectedGroupIndex = Math.min(suiteIndex, Math.max(groups.length - 1, 0))
-  const group = groups[selectedGroupIndex]
-  const selectedLevelIndex = Math.min(levelIndex, Math.max((group?.levels.length || 1) - 1, 0))
+  const selectedIndex = Math.min(slideIndex, Math.max(slides.length - 1, 0))
+  const slide = slides[selectedIndex]
 
   useEffect(() => {
     const section = sectionRef.current
@@ -101,71 +96,71 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   }, [])
 
   useEffect(() => {
-    const changeSuiteWithKeyboard = (event: KeyboardEvent) => {
-      if (!sectionIsActive.current || groups.length < 2 || event.altKey || event.ctrlKey || event.metaKey) return
+    const changeSlideWithKeyboard = (event: KeyboardEvent) => {
+      if (!sectionIsActive.current || slides.length < 2 || event.altKey || event.ctrlKey || event.metaKey) return
       const target = event.target as HTMLElement | null
-      if (target?.closest('input, textarea, select, [contenteditable="true"], [role="tablist"]')) return
+      if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
       event.preventDefault()
-      setSuiteIndex((current) => event.key === 'ArrowRight' ? Math.min(current + 1, groups.length - 1) : Math.max(current - 1, 0))
-      setLevelIndex(0)
+      setSlideIndex((current) => event.key === 'ArrowRight' ? Math.min(current + 1, slides.length - 1) : Math.max(current - 1, 0))
     }
-    window.addEventListener('keydown', changeSuiteWithKeyboard)
-    return () => window.removeEventListener('keydown', changeSuiteWithKeyboard)
-  }, [groups.length])
+    window.addEventListener('keydown', changeSlideWithKeyboard)
+    return () => window.removeEventListener('keydown', changeSlideWithKeyboard)
+  }, [slides.length])
 
   useEffect(() => {
     // On narrow viewports the filmstrip scrolls horizontally rather than
     // wrapping or shrinking to illegibility — keep the active thumbnail in view.
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     activeThumbRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' })
-  }, [suiteIndex])
+  }, [selectedIndex])
 
-  if (!group) return null
-  const configuration = group.levels[selectedLevelIndex]
-  const hasLevels = group.levels.length > 1
+  if (!slide) return null
+  const { configuration } = slide
   const suiteTitle = configuration.name || configuration.title
   const description = configuration.body || content.body
   const ctaUrl = stegaClean(content.ctaUrl) || '#viewing'
 
-  const selectSuite = (index: number) => { setSuiteIndex(index); setLevelIndex(0) }
-  const previousSuite = () => selectSuite(Math.max(selectedGroupIndex - 1, 0))
-  const nextSuite = () => selectSuite(Math.min(selectedGroupIndex + 1, groups.length - 1))
+  const selectSlide = (index: number) => setSlideIndex(index)
+  const previousSlide = () => selectSlide(Math.max(selectedIndex - 1, 0))
+  const nextSlide = () => selectSlide(Math.min(selectedIndex + 1, slides.length - 1))
   const finishSwipe = (clientX: number) => {
-    if (touchStartX.current === null || groups.length < 2) return
+    if (touchStartX.current === null || slides.length < 2) return
     const distance = clientX - touchStartX.current
     touchStartX.current = null
     if (Math.abs(distance) < 48) return
-    if (distance < 0) nextSuite(); else previousSuite()
+    if (distance < 0) nextSlide(); else previousSlide()
   }
-  const pageItems = paginationRange(selectedGroupIndex, groups.length)
+  const pageItems = paginationRange(selectedIndex, slides.length)
 
   return (
     <section className="floor-plans" id="floor-plans" aria-label="Floor-plan configurator" ref={sectionRef}>
       <div className="floor-plan-configurator">
         <div className="floor-plan-stage">
-          <figure className="floor-plan-drawing" id={`${id}-plan`} role={hasLevels ? 'tabpanel' : undefined} aria-labelledby={hasLevels ? `${id}-level-tab-${selectedLevelIndex}` : undefined} onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
-            <div className="floor-plan-canvas"><PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 62vw" alt={`${suiteTitle} floor plan`} emptyLabel="Floor plan" /></div>
+          <figure className="floor-plan-drawing" aria-label={`${slide.floorLabel}, ${suiteTitle} floor plan`} onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
+            <div className="floor-plan-canvas"><PlanImage key={configuration._key} image={configuration.planImage} sizes="(max-width: 760px) 100vw, 62vw" alt={`${suiteTitle} floor plan`} emptyLabel="Floor plan" /></div>
             <div className="floor-plan-axo-pin" aria-hidden="true">
-              <PlanImage image={configuration.explodedImage} sizes="9vw" emptyLabel="" />
+              <PlanImage key={configuration._key} image={configuration.explodedImage} sizes="9vw" emptyLabel="" />
             </div>
             {configuration.planImage?.asset?.url && <a className="floor-plan-open" href={configuration.planImage.asset.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${suiteTitle} floor plan at full size in a new tab`}>View full-size plan ↗</a>}
           </figure>
 
-          {groups.length > 1 && (
+          {slides.length > 1 && (
             <nav className="floor-plan-filmstrip" aria-label="Choose suite">
-              <button type="button" className="floor-plan-page-arrow" onClick={previousSuite} disabled={selectedGroupIndex === 0} aria-label="Previous suite"><ChevronIcon direction="previous" /></button>
-              <ol className="floor-plan-filmstrip-list">
-                {pageItems.map((item, index) => item === 'ellipsis'
-                  ? <li key={`ellipsis-${index}`} className="floor-plan-page-ellipsis" aria-hidden="true">…</li>
-                  : <li key={groups[item].key} ref={item === selectedGroupIndex ? activeThumbRef : undefined}>
-                      <button type="button" className={item === selectedGroupIndex ? 'is-active' : undefined} aria-current={item === selectedGroupIndex ? 'true' : undefined} aria-label={`Show ${groups[item].levels[0].name || groups[item].levels[0].title}`} onClick={() => selectSuite(item)}>
-                        <span className="floor-plan-filmstrip-thumb"><PlanImage image={groups[item].levels[0].planImage} sizes="64px" emptyLabel="" /></span>
-                        <span className="floor-plan-filmstrip-label">{String(item + 1).padStart(2, '0')}</span>
-                      </button>
-                    </li>)}
-              </ol>
-              <button type="button" className="floor-plan-page-arrow" onClick={nextSuite} disabled={selectedGroupIndex === groups.length - 1} aria-label="Next suite"><ChevronIcon direction="next" /></button>
+              <button type="button" className="floor-plan-page-arrow" onClick={previousSlide} disabled={selectedIndex === 0} aria-label="Previous suite"><ChevronIcon direction="previous" /></button>
+              <div className="floor-plan-filmstrip-track">
+                <p className="floor-plan-filmstrip-caption" aria-live="polite">{String(selectedIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')} — {suiteTitle}</p>
+                <ol className="floor-plan-filmstrip-list">
+                  {pageItems.map((item, index) => item === 'ellipsis'
+                    ? <li key={`ellipsis-${index}`} className="floor-plan-page-ellipsis" aria-hidden="true">…</li>
+                    : <li key={slides[item].key} ref={item === selectedIndex ? activeThumbRef : undefined}>
+                        <button type="button" className={item === selectedIndex ? 'is-active' : undefined} aria-current={item === selectedIndex ? 'true' : undefined} aria-label={`Show ${slides[item].configuration.name || slides[item].configuration.title}`} onClick={() => selectSlide(item)}>
+                          <span className="floor-plan-filmstrip-thumb"><PlanImage image={slides[item].configuration.planImage} sizes="64px" emptyLabel="" /></span>
+                        </button>
+                      </li>)}
+                </ol>
+              </div>
+              <button type="button" className="floor-plan-page-arrow" onClick={nextSlide} disabled={selectedIndex === slides.length - 1} aria-label="Next suite"><ChevronIcon direction="next" /></button>
             </nav>
           )}
         </div>
@@ -181,25 +176,6 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
 
           <div className="floor-plan-info-body" id={`${id}-info-body`} data-collapsed={infoCollapsed}>
             <div className="floor-plan-info-body-inner">
-              {hasLevels && (
-                <>
-                  <p className="floor-plan-level-label">Available areas:</p>
-                  <div className="floor-plan-level-tabs" role="tablist" aria-label="Choose level" onKeyDown={(event) => {
-                    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
-                    event.preventDefault()
-                    const lastIndex = group.levels.length - 1
-                    const next = event.key === 'Home' ? 0 : event.key === 'End' ? lastIndex : selectedLevelIndex === 0 ? lastIndex : 0
-                    setLevelIndex(next)
-                    document.getElementById(`${id}-level-tab-${next}`)?.focus()
-                  }}>
-                    {group.levels.map((entry, index) => (
-                      <button key={entry._key || index} id={`${id}-level-tab-${index}`} type="button" role="tab" aria-selected={index === selectedLevelIndex} aria-controls={`${id}-plan`} onClick={() => setLevelIndex(index)}>
-                        {entry.levelLabel || (index === 0 ? 'Main level' : 'Mezzanine')}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
               {description && <p className="floor-plan-description">{description}</p>}
               <div className="floor-plan-suite-information">
                 <ConfigurationTables configuration={configuration} />
