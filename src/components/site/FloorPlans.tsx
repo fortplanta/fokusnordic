@@ -13,6 +13,10 @@ function ChevronIcon({ direction }: { direction: 'previous' | 'next' }) {
   return <svg viewBox="0 0 16 16" aria-hidden="true"><path d={direction === 'previous' ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5'} /></svg>
 }
 
+function CaretIcon({ direction }: { direction: 'up' | 'down' }) {
+  return <svg viewBox="0 0 16 16" aria-hidden="true"><path d={direction === 'up' ? 'M4 10l4-4 4 4' : 'M4 6l4 4 4-4'} /></svg>
+}
+
 // Classic truncated-pagination range: first, last, a window around the
 // current page, and an ellipsis for whatever falls outside that window —
 // keeps the control's width constant as more suites are added in Sanity.
@@ -31,7 +35,7 @@ function paginationRange(current: number, total: number, siblingCount = 1): Arra
 
 function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; alt?: string; emptyLabel?: string }) {
   if (!image?.asset?.url) {
-    return <div className="floor-plan-empty"><span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span><small className="text-xs font-semibold">To be added in Sanity</small></div>
+    return <div className="floor-plan-empty"><span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span>{emptyLabel && <small className="text-xs font-semibold">To be added in Sanity</small>}</div>
   }
   return <Image src={image.asset.url} alt={alt || image.alt || ''} fill sizes={sizes} className="floor-plan-image" unoptimized={image.asset.url.toLowerCase().endsWith('.svg')} />
 }
@@ -75,10 +79,14 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
 
   const [suiteIndex, setSuiteIndex] = useState(0)
   const [levelIndex, setLevelIndex] = useState(0)
+  // Expanded by default: the drawer collapse is a JS convenience for tight
+  // mobile screens, not a gate on content — collapsing by default would hide
+  // suite details from anyone before hydration finishes, or without JS at all.
+  const [infoCollapsed, setInfoCollapsed] = useState(false)
   const touchStartX = useRef<number | null>(null)
   const sectionRef = useRef<HTMLElement | null>(null)
   const sectionIsActive = useRef(false)
-  const activePageRef = useRef<HTMLLIElement | null>(null)
+  const activeThumbRef = useRef<HTMLLIElement | null>(null)
   const id = useId()
   const selectedGroupIndex = Math.min(suiteIndex, Math.max(groups.length - 1, 0))
   const group = groups[selectedGroupIndex]
@@ -107,10 +115,10 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   }, [groups.length])
 
   useEffect(() => {
-    // On narrow viewports the numbered list scrolls horizontally rather than
-    // wrapping or shrinking to illegibility — keep the active page in view.
+    // On narrow viewports the filmstrip scrolls horizontally rather than
+    // wrapping or shrinking to illegibility — keep the active thumbnail in view.
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    activePageRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' })
+    activeThumbRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' })
   }, [suiteIndex])
 
   if (!group) return null
@@ -135,59 +143,72 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   return (
     <section className="floor-plans" id="floor-plans" aria-label="Floor-plan configurator" ref={sectionRef}>
       <div className="floor-plan-configurator">
-        <header className="floor-plan-suite-header">
-          <h2 className="section-display">{suiteTitle}</h2>
-          {hasLevels && (
-            <>
-              <p className="floor-plan-level-label">Available areas:</p>
-              <div className="floor-plan-level-tabs" role="tablist" aria-label="Choose level" onKeyDown={(event) => {
-                if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
-                event.preventDefault()
-                const lastIndex = group.levels.length - 1
-                const next = event.key === 'Home' ? 0 : event.key === 'End' ? lastIndex : selectedLevelIndex === 0 ? lastIndex : 0
-                setLevelIndex(next)
-                document.getElementById(`${id}-level-tab-${next}`)?.focus()
-              }}>
-                {group.levels.map((entry, index) => (
-                  <button key={entry._key || index} id={`${id}-level-tab-${index}`} type="button" role="tab" aria-selected={index === selectedLevelIndex} aria-controls={`${id}-plan`} onClick={() => setLevelIndex(index)}>
-                    {entry.levelLabel || (index === 0 ? 'Main level' : 'Mezzanine')}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-          {description && <p className="floor-plan-description">{description}</p>}
-          <a className="floor-plan-enquire" href={ctaUrl}><span>{content.ctaLabel || 'Discuss this suite'}</span><ArrowIcon /></a>
-        </header>
+        <div className="floor-plan-stage">
+          <figure className="floor-plan-drawing" id={`${id}-plan`} role={hasLevels ? 'tabpanel' : undefined} aria-labelledby={hasLevels ? `${id}-level-tab-${selectedLevelIndex}` : undefined} onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
+            <div className="floor-plan-canvas"><PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 62vw" alt={`${suiteTitle} floor plan`} emptyLabel="Floor plan" /></div>
+            <div className="floor-plan-axo-pin" aria-hidden="true">
+              <div className="floor-plan-axo-canvas"><PlanImage image={configuration.explodedImage} sizes="12vw" emptyLabel="" /></div>
+              <span className="floor-plan-axo-tag">AXO</span>
+            </div>
+            {configuration.planImage?.asset?.url && <a className="floor-plan-open" href={configuration.planImage.asset.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${suiteTitle} floor plan at full size in a new tab`}>View full-size plan ↗</a>}
+          </figure>
 
-        <div className="floor-plan-suite-information">
-          <ConfigurationTables configuration={configuration} />
+          {groups.length > 1 && (
+            <nav className="floor-plan-filmstrip" aria-label="Choose suite">
+              <button type="button" className="floor-plan-page-arrow" onClick={previousSuite} disabled={selectedGroupIndex === 0} aria-label="Previous suite"><ChevronIcon direction="previous" /></button>
+              <ol className="floor-plan-filmstrip-list">
+                {pageItems.map((item, index) => item === 'ellipsis'
+                  ? <li key={`ellipsis-${index}`} className="floor-plan-page-ellipsis" aria-hidden="true">…</li>
+                  : <li key={groups[item].key} ref={item === selectedGroupIndex ? activeThumbRef : undefined}>
+                      <button type="button" className={item === selectedGroupIndex ? 'is-active' : undefined} aria-current={item === selectedGroupIndex ? 'true' : undefined} aria-label={`Show ${groups[item].levels[0].name || groups[item].levels[0].title}`} onClick={() => selectSuite(item)}>
+                        <span className="floor-plan-filmstrip-thumb"><PlanImage image={groups[item].levels[0].planImage} sizes="64px" emptyLabel="" /></span>
+                        <span className="floor-plan-filmstrip-label">{String(item + 1).padStart(2, '0')}</span>
+                      </button>
+                    </li>)}
+              </ol>
+              <button type="button" className="floor-plan-page-arrow" onClick={nextSuite} disabled={selectedGroupIndex === groups.length - 1} aria-label="Next suite"><ChevronIcon direction="next" /></button>
+            </nav>
+          )}
         </div>
 
-        <figure className="floor-plan-axo-view">
-          <div className="floor-plan-axo-canvas"><PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 32vw, 15vw" alt={`${suiteTitle} axonometric context`} emptyLabel="AXO" /></div>
-        </figure>
+        <aside className="floor-plan-info">
+          <header className="floor-plan-suite-header">
+            <h2 className="section-display">{suiteTitle}</h2>
+            <button type="button" className="floor-plan-info-toggle" aria-expanded={!infoCollapsed} aria-controls={`${id}-info-body`} onClick={() => setInfoCollapsed((collapsed) => !collapsed)}>
+              <span className="sr-only">{infoCollapsed ? 'Show suite details' : 'Hide suite details'}</span>
+              <CaretIcon direction={infoCollapsed ? 'down' : 'up'} />
+            </button>
+          </header>
 
-        <figure className="floor-plan-drawing" id={`${id}-plan`} role={hasLevels ? 'tabpanel' : undefined} aria-labelledby={hasLevels ? `${id}-level-tab-${selectedLevelIndex}` : undefined} onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
-          <div className="floor-plan-canvas"><PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 62vw" alt={`${suiteTitle} floor plan`} emptyLabel="Floor plan" /></div>
-          {configuration.planImage?.asset?.url && <a className="floor-plan-open" href={configuration.planImage.asset.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${suiteTitle} floor plan at full size in a new tab`}>View full-size plan ↗</a>}
-        </figure>
-
-        {groups.length > 1 && (
-          <nav className="floor-plan-pagination" aria-label="Choose suite">
-            <button type="button" className="floor-plan-page-arrow" onClick={previousSuite} disabled={selectedGroupIndex === 0} aria-label="Previous suite"><ChevronIcon direction="previous" /></button>
-            <ol className="floor-plan-page-list">
-              {pageItems.map((item, index) => item === 'ellipsis'
-                ? <li key={`ellipsis-${index}`} className="floor-plan-page-ellipsis" aria-hidden="true">…</li>
-                : <li key={groups[item].key} ref={item === selectedGroupIndex ? activePageRef : undefined}>
-                    <button type="button" className={item === selectedGroupIndex ? 'is-active' : undefined} aria-current={item === selectedGroupIndex ? 'true' : undefined} aria-label={`Show ${groups[item].levels[0].name || groups[item].levels[0].title}`} onClick={() => selectSuite(item)}>
-                      {String(item + 1).padStart(2, '0')}
-                    </button>
-                  </li>)}
-            </ol>
-            <button type="button" className="floor-plan-page-arrow" onClick={nextSuite} disabled={selectedGroupIndex === groups.length - 1} aria-label="Next suite"><ChevronIcon direction="next" /></button>
-          </nav>
-        )}
+          <div className="floor-plan-info-body" id={`${id}-info-body`} data-collapsed={infoCollapsed}>
+            <div className="floor-plan-info-body-inner">
+              {hasLevels && (
+                <>
+                  <p className="floor-plan-level-label">Available areas:</p>
+                  <div className="floor-plan-level-tabs" role="tablist" aria-label="Choose level" onKeyDown={(event) => {
+                    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+                    event.preventDefault()
+                    const lastIndex = group.levels.length - 1
+                    const next = event.key === 'Home' ? 0 : event.key === 'End' ? lastIndex : selectedLevelIndex === 0 ? lastIndex : 0
+                    setLevelIndex(next)
+                    document.getElementById(`${id}-level-tab-${next}`)?.focus()
+                  }}>
+                    {group.levels.map((entry, index) => (
+                      <button key={entry._key || index} id={`${id}-level-tab-${index}`} type="button" role="tab" aria-selected={index === selectedLevelIndex} aria-controls={`${id}-plan`} onClick={() => setLevelIndex(index)}>
+                        {entry.levelLabel || (index === 0 ? 'Main level' : 'Mezzanine')}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+              {description && <p className="floor-plan-description">{description}</p>}
+              <div className="floor-plan-suite-information">
+                <ConfigurationTables configuration={configuration} />
+              </div>
+              <a className="floor-plan-enquire" href={ctaUrl}><span>{content.ctaLabel || 'Discuss this suite'}</span><ArrowIcon /></a>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   )
