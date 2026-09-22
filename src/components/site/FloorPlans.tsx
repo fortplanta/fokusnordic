@@ -9,6 +9,26 @@ function ArrowIcon() {
   return <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M6 3h7v7" /></svg>
 }
 
+function ChevronIcon({ direction }: { direction: 'previous' | 'next' }) {
+  return <svg viewBox="0 0 16 16" aria-hidden="true"><path d={direction === 'previous' ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5'} /></svg>
+}
+
+// Classic truncated-pagination range: first, last, a window around the
+// current page, and an ellipsis for whatever falls outside that window —
+// keeps the control's width constant as more suites are added in Sanity.
+function paginationRange(current: number, total: number, siblingCount = 1): Array<number | 'ellipsis'> {
+  const totalSlots = siblingCount * 2 + 5
+  if (total <= totalSlots) return Array.from({ length: total }, (_, index) => index)
+  const left = Math.max(current - siblingCount, 1)
+  const right = Math.min(current + siblingCount, total - 2)
+  const range: Array<number | 'ellipsis'> = [0]
+  if (left > 1) range.push('ellipsis')
+  for (let index = left; index <= right; index += 1) range.push(index)
+  if (right < total - 2) range.push('ellipsis')
+  range.push(total - 1)
+  return range
+}
+
 function PlanImage({ image, sizes, alt, emptyLabel = 'Floor-plan drawing' }: { image?: SanityImage; sizes: string; alt?: string; emptyLabel?: string }) {
   if (!image?.asset?.url) {
     return <div className="floor-plan-empty"><span className="font-display text-2xl leading-tight md:text-3xl">{emptyLabel}</span><small className="text-xs font-semibold">To be added in Sanity</small></div>
@@ -58,6 +78,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   const touchStartX = useRef<number | null>(null)
   const sectionRef = useRef<HTMLElement | null>(null)
   const sectionIsActive = useRef(false)
+  const activePageRef = useRef<HTMLLIElement | null>(null)
   const id = useId()
   const selectedGroupIndex = Math.min(suiteIndex, Math.max(groups.length - 1, 0))
   const group = groups[selectedGroupIndex]
@@ -78,12 +99,19 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
       if (target?.closest('input, textarea, select, [contenteditable="true"], [role="tablist"]')) return
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
       event.preventDefault()
-      setSuiteIndex((current) => event.key === 'ArrowRight' ? (current + 1) % groups.length : (current - 1 + groups.length) % groups.length)
+      setSuiteIndex((current) => event.key === 'ArrowRight' ? Math.min(current + 1, groups.length - 1) : Math.max(current - 1, 0))
       setLevelIndex(0)
     }
     window.addEventListener('keydown', changeSuiteWithKeyboard)
     return () => window.removeEventListener('keydown', changeSuiteWithKeyboard)
   }, [groups.length])
+
+  useEffect(() => {
+    // On narrow viewports the numbered list scrolls horizontally rather than
+    // wrapping or shrinking to illegibility — keep the active page in view.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    activePageRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' })
+  }, [suiteIndex])
 
   if (!group) return null
   const configuration = group.levels[selectedLevelIndex]
@@ -93,13 +121,16 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
   const ctaUrl = stegaClean(content.ctaUrl) || '#viewing'
 
   const selectSuite = (index: number) => { setSuiteIndex(index); setLevelIndex(0) }
+  const previousSuite = () => selectSuite(Math.max(selectedGroupIndex - 1, 0))
+  const nextSuite = () => selectSuite(Math.min(selectedGroupIndex + 1, groups.length - 1))
   const finishSwipe = (clientX: number) => {
     if (touchStartX.current === null || groups.length < 2) return
     const distance = clientX - touchStartX.current
     touchStartX.current = null
     if (Math.abs(distance) < 48) return
-    selectSuite(distance < 0 ? (selectedGroupIndex + 1) % groups.length : (selectedGroupIndex - 1 + groups.length) % groups.length)
+    if (distance < 0) nextSuite(); else previousSuite()
   }
+  const pageItems = paginationRange(selectedGroupIndex, groups.length)
 
   return (
     <section className="floor-plans" id="floor-plans" aria-label="Floor-plan configurator" ref={sectionRef}>
@@ -133,13 +164,6 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           <ConfigurationTables configuration={configuration} />
         </div>
 
-        <nav className="floor-plan-suite-picker" aria-label="Choose suite">
-          {groups.map((option, index) => {
-            const label = option.levels[0].name || option.levels[0].title
-            return <button key={option.key} type="button" className={index === selectedGroupIndex ? 'is-active' : undefined} aria-current={index === selectedGroupIndex ? 'true' : undefined} aria-label={`Show ${label}`} onClick={() => selectSuite(index)}>{String(index + 1).padStart(2, '0')}</button>
-          })}
-        </nav>
-
         <figure className="floor-plan-axo-view">
           <div className="floor-plan-axo-canvas"><PlanImage image={configuration.explodedImage} sizes="(max-width: 760px) 32vw, 15vw" alt={`${suiteTitle} axonometric context`} emptyLabel="AXO" /></div>
         </figure>
@@ -148,6 +172,22 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
           <div className="floor-plan-canvas"><PlanImage image={configuration.planImage} sizes="(max-width: 760px) 100vw, 62vw" alt={`${suiteTitle} floor plan`} emptyLabel="Floor plan" /></div>
           {configuration.planImage?.asset?.url && <a className="floor-plan-open" href={configuration.planImage.asset.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${suiteTitle} floor plan at full size in a new tab`}>View full-size plan ↗</a>}
         </figure>
+
+        {groups.length > 1 && (
+          <nav className="floor-plan-pagination" aria-label="Choose suite">
+            <button type="button" className="floor-plan-page-arrow" onClick={previousSuite} disabled={selectedGroupIndex === 0} aria-label="Previous suite"><ChevronIcon direction="previous" /></button>
+            <ol className="floor-plan-page-list">
+              {pageItems.map((item, index) => item === 'ellipsis'
+                ? <li key={`ellipsis-${index}`} className="floor-plan-page-ellipsis" aria-hidden="true">…</li>
+                : <li key={groups[item].key} ref={item === selectedGroupIndex ? activePageRef : undefined}>
+                    <button type="button" className={item === selectedGroupIndex ? 'is-active' : undefined} aria-current={item === selectedGroupIndex ? 'true' : undefined} aria-label={`Show ${groups[item].levels[0].name || groups[item].levels[0].title}`} onClick={() => selectSuite(item)}>
+                      {String(item + 1).padStart(2, '0')}
+                    </button>
+                  </li>)}
+            </ol>
+            <button type="button" className="floor-plan-page-arrow" onClick={nextSuite} disabled={selectedGroupIndex === groups.length - 1} aria-label="Next suite"><ChevronIcon direction="next" /></button>
+          </nav>
+        )}
       </div>
     </section>
   )
