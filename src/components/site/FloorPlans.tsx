@@ -217,6 +217,7 @@ export default function FloorPlans({ content }: { content: FloorPlanSection }) {
               aria-label={`Open ${stegaClean(title)} drawing at full size`}
             >
               <PlanImage
+                key={active.key}
                 image={configuration.planImage}
                 alt={`${title}, ${active.floorLabel} floor plan`}
                 sizes="(max-width: 900px) 90vw, 62vw"
