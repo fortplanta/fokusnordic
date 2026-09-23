@@ -44,6 +44,7 @@ export type FloorPlanConfiguration = {
     title: string
     name?: string
     body?: string
+    informationNote?: string
     levelLabel?: string
     facts?: Array<{ _key?: string; label: string; value: string }>
     detailTables?: Array<{
