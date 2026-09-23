@@ -102,7 +102,7 @@ export default defineType({
       fields: [
         visibility,
         ...sectionCopy,
-        copy('detailsLabel', 'Mobile details button label', 1),
+        copy('detailsLabel', 'Mobile information heading', 1),
         copy('ctaLabel', 'Enquiry link label', 1),
         defineField({
           name: 'ctaUrl', title: 'Enquiry link', type: 'string',
@@ -125,6 +125,7 @@ export default defineType({
                     copy('title', 'Configuration title', 1),
                     copy('name', 'Suite or option name', 1),
                     copy('body', 'Description'),
+                    copy('informationNote', 'Information note (below the tables)'),
                     copy('levelLabel', 'Level label (e.g. "Main level" or "Mezzanine")', 1),
                     defineField({
                       name: 'facts', title: 'Facts', type: 'array',
@@ -132,7 +133,7 @@ export default defineType({
                     }),
                     defineField({
                       name: 'detailTables', title: 'Information tables', type: 'array',
-                      description: 'Compact specification tables shown in the lower-left desktop panel.',
+                      description: 'Tables in the right-hand desktop panel. On mobile, the first two tables appear on the left and the third on the right. Add, remove or reorder tables as needed.',
                       of: [{
                         type: 'object',
                         fields: [

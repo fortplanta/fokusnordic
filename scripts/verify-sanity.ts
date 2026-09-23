@@ -60,6 +60,7 @@ type HomeDocument = {
         title?: string
         name?: string
         levelLabel?: string
+        informationNote?: string
         detailTables?: Array<{ title?: string; rows?: Array<{ label?: string; value?: string }>; footer?: string }>
         planImage?: { asset?: { _ref?: string } }
         explodedImage?: { alt?: string; asset?: { _ref?: string }; originalFilename?: string }
@@ -68,21 +69,9 @@ type HomeDocument = {
   }
   areaMap?: {
     mapImage?: { asset?: { _ref?: string } }
-    drawerTitle?: string
-    travelTitle?: string
-    buildingMarker?: {
-      alt?: string
-      x?: number
-      y?: number
-      width?: number
-      icon?: { asset?: { _ref?: string } }
-    }
-    categories?: Array<{
-      title?: string
-      tone?: string
-      locations?: Array<{ name?: string; x?: number; y?: number }>
-    }>
-    travelTimes?: Array<{ name?: string; duration?: string }>
+    buildingX?: number
+    buildingY?: number
+    pois?: Array<{ _id?: string; name?: string; mapX?: number; mapY?: number } | null>
   }
 }
 
@@ -117,24 +106,14 @@ function verifyVolume(document: HomeDocument) {
 }
 
 function verifyAreaMap(document: HomeDocument) {
-  const categories = document.areaMap?.categories ?? []
-
-  assert(document.areaMap?.mapImage?.asset?._ref, `${document._id}: Area map has no image`)
-  assert(document.areaMap?.drawerTitle, `${document._id}: Area map has no drawer title`)
-  assert(document.areaMap?.buildingMarker?.icon?.asset?._ref, `${document._id}: Area map has no building marker SVG`)
-  assert(document.areaMap?.buildingMarker?.alt, `${document._id}: Area map building marker has no accessible label`)
-  assert(typeof document.areaMap?.buildingMarker?.x === 'number' && typeof document.areaMap?.buildingMarker?.y === 'number', `${document._id}: Area map building marker has no coordinates`)
-  assert(typeof document.areaMap?.buildingMarker?.width === 'number', `${document._id}: Area map building marker has no width`)
-  assert(categories.length > 0, `${document._id}: Area map has no location categories`)
-  assert(document.mosaicGallery?.items?.length === 3, `${document._id}: Scrolling gallery must contain the three supplied neighbourhood images`)
-  assert(document.areaMap?.travelTitle?.toLowerCase().includes('bus'), `${document._id}: Travel-time heading does not state the transport mode`)
-  categories.forEach((category, categoryIndex) => {
-    assert(category.title, `${document._id}: Area map category ${categoryIndex + 1} has no title`)
-    assert(category.locations?.length, `${document._id}: Area map category ${categoryIndex + 1} has no locations`)
-    category.locations.forEach((marker, markerIndex) => {
-      assert(marker.name, `${document._id}: Area map category ${categoryIndex + 1}, location ${markerIndex + 1} has no name`)
-      assert(typeof marker.x === 'number' && typeof marker.y === 'number', `${document._id}: Area map location ${marker.name || markerIndex + 1} has no coordinates`)
-    })
+  const map = document.areaMap
+  assert(map?.mapImage?.asset?._ref, `${document._id}: Area map has no image`)
+  const coordinate = (value: unknown) => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 100
+  assert(coordinate(map.buildingX) && coordinate(map.buildingY), `${document._id}: Building pin has missing or invalid coordinates`)
+  assert(map.pois?.length, `${document._id}: Area map has no points of interest`)
+  map.pois.forEach((poi, index) => {
+    assert(poi?._id && poi.name, `${document._id}: Map POI ${index + 1} is missing or unresolved`)
+    assert(coordinate(poi.mapX) && coordinate(poi.mapY), `${document._id}: ${poi.name} has missing or invalid map coordinates`)
   })
 }
 
@@ -162,6 +141,8 @@ function verifyFloorPlans(document: HomeDocument) {
       const isMezzanine = suiteName.endsWith('Mezzanine')
       assert(isMezzanine === !expected.rooms, `${document._id}: ${suiteName} main/mezzanine split does not match its expected table shape`)
       assert(configuration.levelLabel === (isMezzanine ? 'Mezzanine' : 'Main level'), `${document._id}: ${suiteName} has an incorrect or missing level label`)
+
+      if (isMezzanine) assert(configuration.informationNote, `${document._id}: ${suiteName} has no independent-rental information note`)
 
       const expectedTableCount = expected.rooms ? 3 : 1
       assert(configuration.detailTables?.length === expectedTableCount, `${document._id}: ${suiteName} must contain exactly ${expectedTableCount} information table(s)`)
@@ -215,7 +196,7 @@ async function main() {
   assert(config.dataset === expectedDataset, `Expected Sanity dataset ${expectedDataset}, received ${config.dataset}`)
 
   const documents = await client.fetch<HomeDocument[]>(
-    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,name,levelLabel,detailTables[]{title,rows[]{label,value},footer},planImage{asset},explodedImage{alt,asset,"originalFilename":asset->originalFilename}}}},areaMap{mapImage{asset},drawerTitle,buildingMarker{alt,x,y,width,icon{asset}},travelTitle,categories[]{title,tone,locations[]{name,x,y}},travelTimes[]{name,duration}}}',
+    '*[_id in ["homePage", "drafts.homePage"]]{_id,_type,mosaicGallery{items[]{_key,size,side,image{asset}}},volume{kicker,heading,body,featureStatements[]{heading,body}},specifications{kicker,heading,body,specificationGroups[]{title,facts[]{value}}},floorPlans{detailsLabel,ctaLabel,ctaUrl,floors[]{label,configurations[]{title,name,levelLabel,informationNote,detailTables[]{title,rows[]{label,value},footer},planImage{asset},explodedImage{alt,asset,"originalFilename":asset->originalFilename}}}},areaMap{mapImage{asset},buildingX,buildingY,pois[]->{_id,name,mapX,mapY}}}',
   )
   const published = documents.find((document) => document._id === 'homePage')
 

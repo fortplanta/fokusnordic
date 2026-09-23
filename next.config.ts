@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  // Sanity Workbench exports TypeScript source in development.
+  transpilePackages: ['@sanity/workbench'],
   // Prevent server/SSR webpack bundle from bundling Sanity at all.
   // Sanity packages are ESM-only and use browser APIs; externalising them lets
   // Node load them natively while the Studio (client-only via useEffect guard)
