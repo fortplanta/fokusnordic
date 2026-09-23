@@ -517,3 +517,62 @@
     grid-row: 1;
   }
 }
+
+/* Fit the desktop study beneath the fixed, scrolled site header. */
+@media (min-width: 901px) {
+  .fp-study {
+    --study-height: calc(100svh - var(--bh-space-7));
+    --study-inset: clamp(var(--s3), 2svh, var(--s8));
+    --study-gap: clamp(var(--s2), 1.5svh, var(--s6));
+    --table-inset: clamp(2px, 0.45svh, var(--s2));
+    height: var(--study-height);
+    min-height: 0;
+  }
+  .fp-study-stage {
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .fp-study-drawing {
+    min-height: 0;
+    padding-block: var(--study-inset);
+  }
+  .fp-study-drawing a {
+    height: 100%;
+    min-height: 0;
+  }
+  .fp-study-plan {
+    height: 100%;
+    object-fit: contain;
+  }
+  .fp-study-navigation {
+    padding-block: var(--study-inset);
+    gap: var(--study-gap);
+  }
+  .fp-study-thumbnails {
+    margin-top: 0;
+  }
+  .fp-study-track button {
+    height: clamp(var(--s12), 9svh, 88px);
+  }
+  .fp-study-info {
+    min-height: 0;
+    padding-block: var(--study-inset);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: var(--study-gap);
+  }
+  .fp-study-tables {
+    min-height: 0;
+    margin: 0;
+    padding-block: 0;
+    gap: var(--study-gap);
+    align-content: center;
+    overflow-y: auto;
+  }
+  .fp-study-contact {
+    margin: 0;
+  }
+  .fp-study-axo-track {
+    bottom: var(--study-inset);
+  }
+}
